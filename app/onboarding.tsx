@@ -90,7 +90,7 @@ export default function Onboarding() {
         <Touchable
           onPress={finish}
           accessibilityLabel="Skip onboarding"
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
         >
           <Text style={styles.skip}>Skip</Text>
         </Touchable>
