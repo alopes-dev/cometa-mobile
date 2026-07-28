@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Animated,
   KeyboardAvoidingView,
@@ -11,6 +11,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
+import { useNavigation } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HeaderDark } from '@/components/HeaderDark';
 import { QuickActionList } from '@/components/QuickActionList';
@@ -24,6 +25,7 @@ import { CATEGORIES, PRODUCTS, QUICK_ACTIONS, type CategoryId } from '@/data/cat
 import { colors, font, layout } from '@/constants/theme';
 import { useCart } from '@/store/cart';
 import { useStagger } from '@/hooks/useStagger';
+import { useFocusFade } from '@/hooks/useFocusFade';
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -38,6 +40,17 @@ export default function Home() {
 
   const [s1, s2, s3] = useStagger(3);
   const scrollY = useRef(new Animated.Value(0)).current;
+  const scrollRef = useRef<any>(null);
+  const { opacity: focusOpacity, translateY: focusTranslateY } = useFocusFade();
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    return (navigation as any).addListener('tabPress', () => {
+      if (navigation.isFocused()) {
+        scrollRef.current?.scrollTo?.({ y: 0, animated: true });
+      }
+    });
+  }, [navigation]);
 
   const cardWidth = (width - 2 * layout.screenPadding - layout.gridGap) / 2;
 
@@ -57,9 +70,11 @@ export default function Home() {
 
   return (
     <KeyboardAvoidingView style={styles.wrap} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+      <Animated.View style={{ flex: 1, opacity: focusOpacity, transform: [{ translateY: focusTranslateY }] }}>
       <HeaderDark query={query} onChangeQuery={setQuery} scrollY={scrollY} />
 
       <Animated.ScrollView
+        ref={scrollRef}
         style={styles.sheet}
         contentContainerStyle={[styles.sheetContent, { paddingBottom: layout.scrollBottomPadding }]}
         keyboardShouldPersistTaps="handled"
@@ -131,6 +146,7 @@ export default function Home() {
       />
 
       <HomeIndicator />
+      </Animated.View>
     </KeyboardAvoidingView>
   );
 }

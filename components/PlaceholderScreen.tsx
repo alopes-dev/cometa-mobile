@@ -1,9 +1,9 @@
 import { Animated, StyleSheet, Text, View } from 'react-native';
-import { useFadeIn } from '@/hooks/useFadeIn';
+import { useFocusFade } from '@/hooks/useFocusFade';
 import { colors, font, layout } from '@/constants/theme';
 
 export function PlaceholderScreen({ title }: { title: string }) {
-  const { opacity, translateY } = useFadeIn();
+  const { opacity, translateY } = useFocusFade();
   return (
     <View style={styles.wrap}>
       <Animated.View style={{ opacity, transform: [{ translateY }] }}>
