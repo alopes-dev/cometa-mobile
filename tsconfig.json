@@ -1,6 +1,8 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    // baseUrl is intentionally absent — TS 6.0 deprecates it; paths resolve
+    // relative to this file under moduleResolution: "bundler" inherited from expo/tsconfig.base.
     "strict": true,
     "paths": {
       "@/*": ["./*"]
