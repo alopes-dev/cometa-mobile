@@ -13,8 +13,20 @@ import {
   pressed,
 } from '@/constants/theme';
 
-const lightTheme = {
-  scheme: 'light' as const,
+interface ThemeShape {
+  scheme: 'light' | 'dark';
+  colors: Record<keyof typeof colors, string>;
+  typography: typeof typography;
+  spacing: typeof spacing;
+  radius: typeof radius;
+  elevation: typeof elevation;
+  opacity: typeof opacity;
+  motion: typeof motion;
+  pressed: typeof pressed;
+}
+
+const lightTheme: ThemeShape = {
+  scheme: 'light',
   colors,
   typography,
   spacing,
@@ -25,8 +37,8 @@ const lightTheme = {
   pressed,
 };
 
-const darkTheme = {
-  scheme: 'dark' as const,
+const darkTheme: ThemeShape = {
+  scheme: 'dark',
   colors: colorsDark,
   typography,
   spacing,
@@ -37,10 +49,10 @@ const darkTheme = {
   pressed,
 };
 
-export type Theme = typeof lightTheme;
+export type Theme = ThemeShape;
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const scheme = useColorScheme();
-  const theme = (scheme === 'dark' ? darkTheme : lightTheme) as unknown as Theme;
+  const theme = scheme === 'dark' ? darkTheme : lightTheme;
   return <StyledThemeProvider theme={theme}>{children}</StyledThemeProvider>;
 }
