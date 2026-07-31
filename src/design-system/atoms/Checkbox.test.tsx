@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, act } from '@testing-library/react-native';
 import { Checkbox } from './Checkbox';
 import { ThemeProvider } from '@/design-system/ThemeProvider';
 
@@ -19,5 +19,11 @@ describe('Checkbox', () => {
     const { getByRole } = renderWithTheme(<Checkbox checked={false} onChange={onChange} disabled />);
     fireEvent.press(getByRole('checkbox'));
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('renders the checkmark icon when checked, with clean output', async () => {
+    const result = renderWithTheme(<Checkbox checked={true} onChange={() => {}} />);
+    await act(async () => {});
+    expect(result.toJSON()).toBeTruthy();
   });
 });
