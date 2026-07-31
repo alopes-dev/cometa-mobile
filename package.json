@@ -7,7 +7,21 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest"
+    "test": "jest",
+    "eas:build:dev": "eas build --profile development",
+    "eas:build:dev:ios": "eas build --profile development --platform ios",
+    "eas:build:dev:android": "eas build --profile development --platform android",
+    "eas:build:preview": "eas build --profile preview",
+    "eas:build:preview:ios": "eas build --profile preview --platform ios",
+    "eas:build:preview:android": "eas build --profile preview --platform android",
+    "eas:build:prod": "eas build --profile production",
+    "eas:build:prod:ios": "eas build --profile production --platform ios",
+    "eas:build:prod:android": "eas build --profile production --platform android",
+    "eas:submit:ios": "eas submit --profile production --platform ios",
+    "eas:submit:android": "eas submit --profile production --platform android",
+    "eas:update": "eas update --auto",
+    "eas:update:preview": "eas update --branch preview",
+    "eas:update:prod": "eas update --branch production"
   },
   "jest": {
     "preset": "jest-expo",
@@ -20,9 +34,9 @@
     ]
   },
   "dependencies": {
-    "@expo-google-fonts/poppins": "^0.4.1",
+    "@expo-google-fonts/inter": "^0.4.2",
     "@react-native-async-storage/async-storage": "2.2.0",
-    "expo": "~57.0.8",
+    "expo": "^57.0.0",
     "expo-constants": "~57.0.7",
     "expo-font": "~57.0.1",
     "expo-image": "~57.0.1",
@@ -31,11 +45,13 @@
     "expo-router": "~57.0.8",
     "expo-splash-screen": "~57.0.5",
     "expo-status-bar": "~57.0.1",
+    "expo-updates": "~57.0.10",
     "lucide-react-native": "^1.27.0",
     "react": "19.2.3",
     "react-native": "0.86.0",
     "react-native-safe-area-context": "~5.7.0",
-    "react-native-svg": "15.15.4"
+    "react-native-svg": "15.15.4",
+    "styled-components": "^6.4.4"
   },
   "devDependencies": {
     "@react-native/jest-preset": "^0.86.0",
