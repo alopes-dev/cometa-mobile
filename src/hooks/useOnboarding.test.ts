@@ -36,4 +36,19 @@ describe('useOnboarding', () => {
     expect(result.current.hasSeenOnboarding).toBe(true);
     expect(await AsyncStorage.getItem('cometa:hasSeenOnboarding')).toBe('true');
   });
+
+  it('handles AsyncStorage.getItem failure gracefully', async () => {
+    // Mock getItem to reject
+    (AsyncStorage.getItem as jest.Mock).mockRejectedValueOnce(
+      new Error('Storage unavailable')
+    );
+
+    const { result } = renderHook(() => useOnboarding());
+    expect(result.current.isLoading).toBe(true);
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
+
+    // Should fall back to false instead of hanging
+    expect(result.current.hasSeenOnboarding).toBe(false);
+    expect(result.current.isLoading).toBe(false);
+  });
 });
