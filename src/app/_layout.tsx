@@ -3,23 +3,39 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import styled from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
 import {
   useFonts,
   Inter_400Regular,
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
-import { colors } from "@/constants/theme";
+import { ThemeProvider } from "@/design-system/ThemeProvider";
 
 const Root = styled.View`
   flex: 1;
-  background-color: ${colors.background};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 SplashScreen.preventAutoHideAsync().catch(() => {
   // Ignore — the splash may have already hidden if a prior boot failed.
 });
+
+function Navigation() {
+  const theme = useTheme();
+  return (
+    <Root>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: theme.colors.background },
+        }}
+      >
+        <Stack.Screen name="index" />
+      </Stack>
+    </Root>
+  );
+}
 
 export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
@@ -37,18 +53,11 @@ export default function RootLayout() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-    <SafeAreaProvider>
-      <StatusBar hidden />
-      <Root>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: { backgroundColor: colors.background },
-          }}
-        >
-          <Stack.Screen name="index" />
-        </Stack>
-      </Root>
-    </SafeAreaProvider>
+    <ThemeProvider>
+      <SafeAreaProvider>
+        <StatusBar hidden />
+        <Navigation />
+      </SafeAreaProvider>
+    </ThemeProvider>
   );
 }
