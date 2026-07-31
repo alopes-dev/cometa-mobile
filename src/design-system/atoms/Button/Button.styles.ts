@@ -1,28 +1,13 @@
-import type { ReactNode } from 'react';
-import { ActivityIndicator, Pressable, type GestureResponderEvent } from 'react-native';
-import styled, { useTheme } from 'styled-components/native';
-import * as Haptics from 'expo-haptics';
+import styled from 'styled-components/native';
 import type { Theme } from '@/design-system/ThemeProvider';
-import { Text } from './Text';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'outline' | 'text' | 'danger' | 'success';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonShape = 'default' | 'pill' | 'circle';
 
-export type ButtonProps = {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  shape?: ButtonShape;
-  loading?: boolean;
-  disabled?: boolean;
-  icon?: ReactNode;
-  onPress?: (event: GestureResponderEvent) => void;
-  children?: ReactNode;
-};
-
 type ColorKey = keyof Theme['colors'];
 
-const VARIANT_STYLE: Record<
+export const VARIANT_STYLE: Record<
   ButtonVariant,
   { background: ColorKey | 'transparent'; label: ColorKey; border: ColorKey | 'transparent' }
 > = {
@@ -35,27 +20,27 @@ const VARIANT_STYLE: Record<
   text: { background: 'transparent', label: 'primary', border: 'transparent' },
 };
 
-const SIZE_STYLE: Record<ButtonSize, { height: number; paddingHorizontal: number }> = {
+export const SIZE_STYLE: Record<ButtonSize, { height: number; paddingHorizontal: number }> = {
   sm: { height: 36, paddingHorizontal: 12 },
   md: { height: 44, paddingHorizontal: 16 },
   lg: { height: 52, paddingHorizontal: 20 },
 };
 
-const SIZE_TEXT_VARIANT: Record<ButtonSize, keyof Theme['typography']> = {
+export const SIZE_TEXT_VARIANT: Record<ButtonSize, keyof Theme['typography']> = {
   sm: 'footnote',
   md: 'bodyEmphasized',
   lg: 'bodyEmphasized',
 };
 
 const MIN_HIT_TARGET = 44;
-const SIZE_HIT_SLOP: Record<ButtonSize, number> = Object.fromEntries(
+export const SIZE_HIT_SLOP: Record<ButtonSize, number> = Object.fromEntries(
   Object.entries(SIZE_STYLE).map(([size, style]) => [
     size,
     Math.max(0, Math.ceil((MIN_HIT_TARGET - style.height) / 2)),
   ])
 ) as Record<ButtonSize, number>;
 
-const Container = styled.View<{
+export const Container = styled.View<{
   variant: ButtonVariant;
   size: ButtonSize;
   shape: ButtonShape;
@@ -80,50 +65,3 @@ const Container = styled.View<{
   }};
   opacity: ${({ theme, disabled }) => (disabled ? theme.opacity[40] : theme.opacity[100])};
 `;
-
-export function Button({
-  variant = 'primary',
-  size = 'md',
-  shape = 'default',
-  loading = false,
-  disabled = false,
-  icon,
-  onPress,
-  children,
-}: ButtonProps) {
-  const theme = useTheme();
-  const isDisabled = disabled || loading;
-  const labelColor = VARIANT_STYLE[variant].label;
-
-  const handlePress = (event: GestureResponderEvent) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-    onPress?.(event);
-  };
-
-  return (
-    <Pressable
-      onPress={isDisabled ? undefined : handlePress}
-      disabled={isDisabled}
-      accessibilityRole="button"
-      hitSlop={SIZE_HIT_SLOP[size]}
-      style={({ pressed: isPressed }) => ({
-        opacity: isPressed && !isDisabled ? theme.pressed.opacity : 1,
-      })}
-    >
-      <Container variant={variant} size={size} shape={shape} disabled={isDisabled}>
-        {loading ? (
-          <ActivityIndicator color={theme.colors[labelColor]} />
-        ) : (
-          <>
-            {icon}
-            {children ? (
-              <Text variant={SIZE_TEXT_VARIANT[size]} color={labelColor}>
-                {children}
-              </Text>
-            ) : null}
-          </>
-        )}
-      </Container>
-    </Pressable>
-  );
-}
