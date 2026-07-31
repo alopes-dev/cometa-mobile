@@ -10,7 +10,7 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
-import { ThemeProvider } from "@/design-system/ThemeProvider";
+import { ThemeProvider } from "@/components/design-system/ThemeProvider";
 import { AuthProvider } from "@/hooks/AuthProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { OnboardingProvider } from "@/hooks/OnboardingProvider";

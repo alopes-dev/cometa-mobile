@@ -1,7 +1,7 @@
 import { Text as RNText } from 'react-native';
 import { render } from '@testing-library/react-native';
 import { PlaceholderScreen } from './PlaceholderScreen';
-import { ThemeProvider } from '@/design-system/ThemeProvider';
+import { ThemeProvider } from '@/components/design-system/ThemeProvider';
 
 function renderWithTheme(ui: React.ReactElement) {
   return render(<ThemeProvider>{ui}</ThemeProvider>);

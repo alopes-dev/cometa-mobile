@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Button } from '@/design-system/atoms';
+import { Button } from '@/components/design-system/atoms';
 import { PlaceholderScreen } from '@/components/PlaceholderScreen';
 
 export default function Signup() {

@@ -1,14 +1,14 @@
-import styled from 'styled-components/native';
-import type { Theme } from '@/design-system/ThemeProvider';
+import styled from "styled-components/native";
+import type { Theme } from "@/components/design-system/ThemeProvider";
 
-export type BadgeVariant = 'primary' | 'error' | 'success' | 'neutral';
-export type ColorKey = keyof Theme['colors'];
+export type BadgeVariant = "primary" | "error" | "success" | "neutral";
+export type ColorKey = keyof Theme["colors"];
 
 export const VARIANT_COLOR: Record<BadgeVariant, ColorKey> = {
-  primary: 'primary',
-  error: 'error',
-  success: 'success',
-  neutral: 'textSecondary',
+  primary: "primary",
+  error: "error",
+  success: "success",
+  neutral: "textSecondary",
 };
 
 export const NumberBadge = styled.View<{ color: ColorKey }>`

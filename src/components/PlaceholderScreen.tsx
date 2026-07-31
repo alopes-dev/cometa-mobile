@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import styled from 'styled-components/native';
-import { Text } from '@/design-system/atoms';
+import { Text } from '@/components/design-system/atoms';
 
 export type PlaceholderScreenProps = {
   label: string;
