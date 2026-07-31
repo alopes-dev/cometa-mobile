@@ -1196,7 +1196,12 @@ const Container = styled.View<{ selected: boolean }>`
 
 export function Chip({ label, selected = false, onPress, icon }: ChipProps) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="button" accessibilityState={{ selected }}>
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+      hitSlop={6}
+    >
       <Container selected={selected}>
         {icon}
         <Text variant="footnote" color={selected ? 'primary' : 'textPrimary'}>
