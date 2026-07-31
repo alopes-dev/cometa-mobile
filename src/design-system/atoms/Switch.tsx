@@ -17,6 +17,7 @@ export function Switch({ value, onValueChange, disabled }: SwitchProps) {
       trackColor={{ false: theme.colors.border, true: theme.colors.primary }}
       thumbColor={theme.colors.background}
       ios_backgroundColor={theme.colors.border}
+      hitSlop={7}
     />
   );
 }

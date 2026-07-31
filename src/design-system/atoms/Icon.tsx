@@ -1,6 +1,5 @@
 import { Platform } from 'react-native';
-import { SymbolView } from 'expo-symbols';
-import type { SFSymbol } from 'sf-symbols-typescript';
+import { SymbolView, type SFSymbol } from 'expo-symbols';
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from 'styled-components/native';
 import type { Theme } from '@/design-system/ThemeProvider';

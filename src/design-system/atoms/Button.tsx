@@ -41,6 +41,20 @@ const SIZE_STYLE: Record<ButtonSize, { height: number; paddingHorizontal: number
   lg: { height: 52, paddingHorizontal: 20 },
 };
 
+const SIZE_TEXT_VARIANT: Record<ButtonSize, keyof Theme['typography']> = {
+  sm: 'footnote',
+  md: 'bodyEmphasized',
+  lg: 'bodyEmphasized',
+};
+
+const MIN_HIT_TARGET = 44;
+const SIZE_HIT_SLOP: Record<ButtonSize, number> = Object.fromEntries(
+  Object.entries(SIZE_STYLE).map(([size, style]) => [
+    size,
+    Math.max(0, Math.ceil((MIN_HIT_TARGET - style.height) / 2)),
+  ])
+) as Record<ButtonSize, number>;
+
 const Container = styled.View<{
   variant: ButtonVariant;
   size: ButtonSize;
@@ -51,7 +65,7 @@ const Container = styled.View<{
   align-items: center;
   justify-content: center;
   gap: 8px;
-  height: ${({ size }) => Math.max(SIZE_STYLE[size].height, 44)}px;
+  height: ${({ size }) => SIZE_STYLE[size].height}px;
   min-width: ${({ shape, size }) => (shape === 'circle' ? Math.max(SIZE_STYLE[size].height, 44) : 44)}px;
   padding-horizontal: ${({ shape, size }) => (shape === 'circle' ? 0 : SIZE_STYLE[size].paddingHorizontal)}px;
   border-radius: ${({ shape, theme }) => (shape === 'default' ? theme.radius.md : theme.radius.pill)}px;
@@ -91,6 +105,7 @@ export function Button({
       onPress={isDisabled ? undefined : handlePress}
       disabled={isDisabled}
       accessibilityRole="button"
+      hitSlop={SIZE_HIT_SLOP[size]}
       style={({ pressed: isPressed }) => ({
         opacity: isPressed && !isDisabled ? theme.pressed.opacity : 1,
       })}
@@ -102,7 +117,7 @@ export function Button({
           <>
             {icon}
             {children ? (
-              <Text variant="bodyEmphasized" color={labelColor}>
+              <Text variant={SIZE_TEXT_VARIANT[size]} color={labelColor}>
                 {children}
               </Text>
             ) : null}
