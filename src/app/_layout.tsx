@@ -11,6 +11,9 @@ import {
   Inter_700Bold,
 } from "@expo-google-fonts/inter";
 import { ThemeProvider } from "@/design-system/ThemeProvider";
+import { AuthProvider } from "@/hooks/AuthProvider";
+import { useAuth } from "@/hooks/useAuth";
+import { useOnboarding } from "@/hooks/useOnboarding";
 
 const Root = styled.View`
   flex: 1;
@@ -21,8 +24,10 @@ SplashScreen.preventAutoHideAsync().catch(() => {
   // Ignore — the splash may have already hidden if a prior boot failed.
 });
 
-function Navigation() {
+function Navigation({ hasSeenOnboarding }: { hasSeenOnboarding: boolean }) {
   const theme = useTheme();
+  const { isAuthenticated } = useAuth();
+
   return (
     <Root>
       <Stack
@@ -31,7 +36,15 @@ function Navigation() {
           contentStyle: { backgroundColor: theme.colors.background },
         }}
       >
-        <Stack.Screen name="index" />
+        <Stack.Protected guard={!hasSeenOnboarding}>
+          <Stack.Screen name="onboarding" />
+        </Stack.Protected>
+        <Stack.Protected guard={hasSeenOnboarding && !isAuthenticated}>
+          <Stack.Screen name="(auth)" />
+        </Stack.Protected>
+        <Stack.Protected guard={hasSeenOnboarding && isAuthenticated}>
+          <Stack.Screen name="(tabs)" />
+        </Stack.Protected>
       </Stack>
     </Root>
   );
@@ -43,21 +56,24 @@ export default function RootLayout() {
     Inter_600SemiBold,
     Inter_700Bold,
   });
+  const { hasSeenOnboarding, isLoading: onboardingLoading } = useOnboarding();
 
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    if ((fontsLoaded || fontError) && !onboardingLoading) {
       SplashScreen.hideAsync().catch(() => {});
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontsLoaded, fontError, onboardingLoading]);
 
-  if (!fontsLoaded && !fontError) return null;
+  if ((!fontsLoaded && !fontError) || onboardingLoading) return null;
 
   return (
     <ThemeProvider>
-      <SafeAreaProvider>
-        <StatusBar hidden />
-        <Navigation />
-      </SafeAreaProvider>
+      <AuthProvider>
+        <SafeAreaProvider>
+          <StatusBar hidden />
+          <Navigation hasSeenOnboarding={hasSeenOnboarding} />
+        </SafeAreaProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
