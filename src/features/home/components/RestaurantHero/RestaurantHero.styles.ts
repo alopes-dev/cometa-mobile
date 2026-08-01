@@ -1,15 +1,11 @@
 import styled from 'styled-components/native';
 
-export const Container = styled.View`
-  height: 340px;
-  background-color: ${({ theme }) => theme.colors.textPrimary};
-`;
-
 export const TopBar = styled.View<{ topInset: number }>`
   position: absolute;
   top: ${({ theme, topInset }) => topInset + theme.spacing.sm}px;
   left: ${({ theme }) => theme.spacing.md}px;
   right: ${({ theme }) => theme.spacing.md}px;
+  height: 36px;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
@@ -20,13 +16,31 @@ export const TopBarActions = styled.View`
   gap: ${({ theme }) => theme.spacing.sm}px;
 `;
 
+export const IconButtonStack = styled.View`
+  width: 36px;
+  height: 36px;
+`;
+
 export const IconButton = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 36px;
   height: 36px;
   border-radius: 18px;
   align-items: center;
   justify-content: center;
   background-color: ${({ theme }) => theme.colors.overlay};
+`;
+
+export const CompactTitleWrapper = styled.View<{ topInset: number }>`
+  position: absolute;
+  top: ${({ theme, topInset }) => topInset + theme.spacing.sm}px;
+  left: 56px;
+  right: 96px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const BottomContent = styled.View`

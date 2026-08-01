@@ -1,10 +1,20 @@
 import { render, fireEvent } from '@testing-library/react-native';
-import { RestaurantHero } from './RestaurantHero';
+import { useSharedValue } from 'react-native-reanimated';
+import { RestaurantHero, type RestaurantHeroProps } from './RestaurantHero';
 import { ThemeProvider } from '@/components/design-system/ThemeProvider';
 import type { Restaurant } from '../../types';
 
-function renderWithTheme(ui: React.ReactElement) {
-  return render(<ThemeProvider>{ui}</ThemeProvider>);
+function Wrapper(props: Omit<RestaurantHeroProps, 'scrollY'>) {
+  const scrollY = useSharedValue(0);
+  return <RestaurantHero {...props} scrollY={scrollY} />;
+}
+
+function renderHero(props: Omit<RestaurantHeroProps, 'scrollY'>) {
+  return render(
+    <ThemeProvider>
+      <Wrapper {...props} />
+    </ThemeProvider>
+  );
 }
 
 const restaurant: Restaurant = {
@@ -20,34 +30,39 @@ const restaurant: Restaurant = {
 
 describe('RestaurantHero', () => {
   it('renders the restaurant name, description, and rating', () => {
-    const { getByText } = renderWithTheme(
-      <RestaurantHero restaurant={restaurant} topInset={0} onBack={() => {}} />
-    );
-    expect(getByText('Sabores de Cabinda')).toBeTruthy();
+    const { getAllByText, getByText } = renderHero({ restaurant, topInset: 0, onBack: () => {} });
+    // The name renders twice: once in the large hero title, once in the
+    // compact sticky title that fades in on collapse — both coexist in the
+    // tree regardless of scroll position, only their opacity differs.
+    expect(getAllByText('Sabores de Cabinda').length).toBe(2);
     expect(getByText(restaurant.description)).toBeTruthy();
     expect(getByText('4.7')).toBeTruthy();
   });
 
   it('shows the "top rated" badge when rating is at or above the threshold', () => {
-    const { getByText } = renderWithTheme(
-      <RestaurantHero restaurant={{ ...restaurant, rating: 4.5 }} topInset={0} onBack={() => {}} />
-    );
+    const { getByText } = renderHero({ restaurant: { ...restaurant, rating: 4.5 }, topInset: 0, onBack: () => {} });
     expect(getByText('MAIS BEM AVALIADO')).toBeTruthy();
   });
 
   it('hides the "top rated" badge when rating is below the threshold', () => {
-    const { queryByText } = renderWithTheme(
-      <RestaurantHero restaurant={{ ...restaurant, rating: 4.4 }} topInset={0} onBack={() => {}} />
-    );
+    const { queryByText } = renderHero({ restaurant: { ...restaurant, rating: 4.4 }, topInset: 0, onBack: () => {} });
     expect(queryByText('MAIS BEM AVALIADO')).toBeNull();
   });
 
   it('fires onBack when the back button is pressed', () => {
     const onBack = jest.fn();
-    const { getByLabelText } = renderWithTheme(
-      <RestaurantHero restaurant={restaurant} topInset={0} onBack={onBack} />
-    );
+    const { getByLabelText } = renderHero({ restaurant, topInset: 0, onBack });
     fireEvent.press(getByLabelText('Voltar'));
     expect(onBack).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders search and share buttons and fires their handlers when provided', () => {
+    const onSearch = jest.fn();
+    const onShare = jest.fn();
+    const { getByLabelText } = renderHero({ restaurant, topInset: 0, onBack: () => {}, onSearch, onShare });
+    fireEvent.press(getByLabelText('Buscar no menu'));
+    fireEvent.press(getByLabelText('Partilhar'));
+    expect(onSearch).toHaveBeenCalledTimes(1);
+    expect(onShare).toHaveBeenCalledTimes(1);
   });
 });

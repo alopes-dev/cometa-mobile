@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { ScrollView } from 'react-native';
+import Animated, { scrollTo, useAnimatedRef, useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import { Text } from '@/components/design-system/atoms';
@@ -9,7 +9,7 @@ import { CartSummaryBar } from '@/features/home/components/CartSummaryBar';
 import { MenuGridCard } from '@/features/home/components/MenuGridCard';
 import { MenuItemRow } from '@/features/home/components/MenuItemRow';
 import { MenuTabs } from '@/features/home/components/MenuTabs';
-import { RestaurantHero } from '@/features/home/components/RestaurantHero';
+import { HEADER_COMPACT_HEIGHT, HERO_MAX_HEIGHT, RestaurantHero } from '@/features/home/components/RestaurantHero';
 import { getMenuItems, getRestaurantById } from '@/features/home/data';
 import { restaurantDetailPalette as palette } from '@/features/home/restaurantDetailPalette';
 import { buildMenuSections, POPULAR_SECTION_KEY } from '@/features/home/selectors';
@@ -63,10 +63,15 @@ export default function RestaurantDetail() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { setIsTabBarHidden } = useTabBarVisibility();
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  const scrollY = useSharedValue(0);
   const sectionOffsets = useRef<Record<string, number>>({});
   const [selectedTab, setSelectedTab] = useState<string>(POPULAR_SECTION_KEY);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
 
   useFocusEffect(
     useCallback(() => {
@@ -84,7 +89,8 @@ export default function RestaurantDetail() {
     setSelectedTab(key);
     const y = sectionOffsets.current[key];
     if (y !== undefined) {
-      scrollRef.current?.scrollTo({ y, animated: true });
+      const target = Math.max(0, y - (HEADER_COMPACT_HEIGHT + insets.top));
+      scrollTo(scrollRef, 0, target, true);
     }
   };
 
@@ -106,8 +112,13 @@ export default function RestaurantDetail() {
   return (
     <Screen>
       <Stack.Screen options={{ headerShown: false }} />
-      <RestaurantHero restaurant={restaurant} topInset={insets.top} onBack={() => router.back()} />
-      <ScrollView ref={scrollRef} style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 96 }}>
+      <Animated.ScrollView
+        ref={scrollRef}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingTop: HERO_MAX_HEIGHT + insets.top, paddingBottom: 96 }}
+      >
         <TabsWrapper>
           <MenuTabs tabs={tabs} selectedKey={selectedTab} onSelect={handleSelectTab} />
         </TabsWrapper>
@@ -139,7 +150,8 @@ export default function RestaurantDetail() {
             </SectionWrapper>
           );
         })}
-      </ScrollView>
+      </Animated.ScrollView>
+      <RestaurantHero restaurant={restaurant} topInset={insets.top} scrollY={scrollY} onBack={() => router.back()} />
       <CartBarWrapper bottomInset={insets.bottom}>
         <CartSummaryBar count={cartCount} total={cartTotal} />
       </CartBarWrapper>
