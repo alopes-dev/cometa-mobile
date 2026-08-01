@@ -2,6 +2,7 @@ import { Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import { Text, Icon } from '@/components/design-system/atoms';
 import { Card } from '@/components/design-system/molecules';
+import { formatKwanza } from '../../format';
 import type { Restaurant } from '../../types';
 import { InfoRow, MetaRow } from './RestaurantCard.styles';
 
@@ -32,7 +33,7 @@ export function RestaurantCard({ restaurant, onPress }: RestaurantCardProps) {
           {restaurant.cuisine}
         </Text>
         <Text variant="footnote" color="textSecondary">
-          {restaurant.deliveryTimeMinutes} min · {restaurant.deliveryFee} Kz
+          {restaurant.deliveryTimeMinutes} min · {formatKwanza(restaurant.deliveryFee)}
         </Text>
       </Card>
     </Pressable>

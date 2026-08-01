@@ -1,12 +1,14 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { FlatList } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import { Text } from '@/components/design-system/atoms';
 import { SearchBar } from '@/components/design-system/molecules';
 import { CategoryChipList } from '@/features/home/components/CategoryChipList';
 import { RestaurantCard } from '@/features/home/components/RestaurantCard';
 import { getCategories, getRestaurants } from '@/features/home/data';
+import { filterRestaurants } from '@/features/home/selectors';
 import type { Restaurant } from '@/features/home/types';
 
 const Screen = styled.View`
@@ -14,9 +16,9 @@ const Screen = styled.View`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-const Header = styled.View`
+const Header = styled.View<{ topInset: number }>`
   gap: ${({ theme }) => theme.spacing.sm}px;
-  padding-top: ${({ theme }) => theme.spacing.md}px;
+  padding-top: ${({ theme, topInset }) => theme.spacing.md + topInset}px;
   padding-horizontal: ${({ theme }) => theme.spacing.md}px;
 `;
 
@@ -29,27 +31,21 @@ const EmptyState = styled.View`
 
 export default function Home() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const restaurants = useMemo(() => getRestaurants(), []);
   const categories = useMemo(() => getCategories(), []);
 
-  const filteredRestaurants = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
-    return restaurants.filter((restaurant) => {
-      const matchesCategory = !selectedCategory || restaurant.cuisine === selectedCategory;
-      const matchesQuery =
-        !query ||
-        restaurant.name.toLowerCase().includes(query) ||
-        restaurant.cuisine.toLowerCase().includes(query);
-      return matchesCategory && matchesQuery;
-    });
-  }, [restaurants, searchQuery, selectedCategory]);
+  const filteredRestaurants = useMemo(
+    () => filterRestaurants(restaurants, { query: searchQuery, category: selectedCategory }),
+    [restaurants, searchQuery, selectedCategory]
+  );
 
   return (
     <Screen>
-      <Header>
+      <Header topInset={insets.top}>
         <SearchBar value={searchQuery} onChangeText={setSearchQuery} placeholder="Buscar restaurantes" />
         <CategoryChipList categories={categories} selected={selectedCategory} onSelect={setSelectedCategory} />
       </Header>

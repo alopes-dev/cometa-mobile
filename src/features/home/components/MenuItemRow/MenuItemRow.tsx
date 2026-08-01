@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { Text } from '@/components/design-system/atoms';
+import { formatKwanza } from '../../format';
 import type { MenuItem } from '../../types';
 import { Container, Info } from './MenuItemRow.styles';
 
@@ -21,7 +22,7 @@ export function MenuItemRow({ item }: MenuItemRowProps) {
           {item.description}
         </Text>
         <Text variant="footnote" color="primary">
-          {item.price} Kz
+          {formatKwanza(item.price)}
         </Text>
       </Info>
     </Container>

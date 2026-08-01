@@ -6,7 +6,8 @@ import styled from 'styled-components/native';
 import { Text, Icon } from '@/components/design-system/atoms';
 import { MenuItemRow } from '@/features/home/components/MenuItemRow';
 import { getMenuItems, getRestaurantById } from '@/features/home/data';
-import type { MenuItem } from '@/features/home/types';
+import { formatKwanza } from '@/features/home/format';
+import { groupMenuItemsByCategory } from '@/features/home/selectors';
 
 const Screen = styled.View`
   flex: 1;
@@ -42,25 +43,12 @@ const NotFoundScreen = styled.View`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-type MenuSection = {
-  title: string;
-  data: MenuItem[];
-};
-
 export default function RestaurantDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const restaurant = useMemo(() => getRestaurantById(id), [id]);
   const menuItems = useMemo(() => getMenuItems(id), [id]);
 
-  const sections = useMemo<MenuSection[]>(() => {
-    const byCategory = new Map<string, MenuItem[]>();
-    for (const item of menuItems) {
-      const existing = byCategory.get(item.category) ?? [];
-      existing.push(item);
-      byCategory.set(item.category, existing);
-    }
-    return Array.from(byCategory.entries()).map(([title, data]) => ({ title, data }));
-  }, [menuItems]);
+  const sections = useMemo(() => groupMenuItemsByCategory(menuItems), [menuItems]);
 
   if (!restaurant) {
     return (
@@ -96,7 +84,7 @@ export default function RestaurantDetail() {
                   {restaurant.cuisine}
                 </Text>
                 <Text variant="footnote" color="textSecondary">
-                  {restaurant.deliveryTimeMinutes} min · {restaurant.deliveryFee} Kz
+                  {restaurant.deliveryTimeMinutes} min · {formatKwanza(restaurant.deliveryFee)}
                 </Text>
               </MetaRow>
             </HeaderInfo>

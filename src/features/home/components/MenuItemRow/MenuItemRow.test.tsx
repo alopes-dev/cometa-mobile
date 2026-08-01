@@ -22,6 +22,6 @@ describe('MenuItemRow', () => {
     const { getByText } = renderWithTheme(<MenuItemRow item={item} />);
     expect(getByText('Calulu de Peixe')).toBeTruthy();
     expect(getByText(item.description)).toBeTruthy();
-    expect(getByText('4500 Kz')).toBeTruthy();
+    expect(getByText('4.500 Kz')).toBeTruthy();
   });
 });
