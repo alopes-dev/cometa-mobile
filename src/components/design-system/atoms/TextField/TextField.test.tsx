@@ -26,4 +26,14 @@ describe("TextField", () => {
     );
     expect(getByText("Invalid email")).toBeTruthy();
   });
+
+  it("renders the leading icon slot without breaking the input", () => {
+    const { getByLabelText } = renderWithTheme(
+      <TextField
+        leadingIcon={{ name: "search", sf: "magnifyingglass" }}
+        accessibilityLabel="Search"
+      />,
+    );
+    expect(getByLabelText("Search")).toBeTruthy();
+  });
 });
