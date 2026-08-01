@@ -55,6 +55,15 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTimeMinutes: 45,
     deliveryFee: 900,
   },
+  {
+    id: 'r7',
+    name: 'Moamba de Galinha Tradicional',
+    imageUrl: 'https://picsum.photos/seed/r7/400/300',
+    rating: 4.4,
+    cuisine: 'Angolana',
+    deliveryTimeMinutes: 35,
+    deliveryFee: 650,
+  },
 ];
 
 export const mockMenuItems: MenuItem[] = [
@@ -273,5 +282,23 @@ export const mockMenuItems: MenuItem[] = [
     price: 1100,
     imageUrl: 'https://picsum.photos/seed/r6-4/200/200',
     category: 'Bebidas',
+  },
+  {
+    id: 'r7-1',
+    restaurantId: 'r7',
+    name: 'Moamba de Galinha',
+    description: 'Galinha cozida em molho de ginguba com quiabo.',
+    price: 3800,
+    imageUrl: 'https://picsum.photos/seed/r7-1/200/200',
+    category: 'Pratos Principais',
+  },
+  {
+    id: 'r7-2',
+    restaurantId: 'r7',
+    name: 'Cacimba de Peixe',
+    description: 'Caldo tradicional de peixe com gengibre e alho.',
+    price: 4200,
+    imageUrl: 'https://picsum.photos/seed/r7-2/200/200',
+    category: 'Pratos Principais',
   },
 ];
