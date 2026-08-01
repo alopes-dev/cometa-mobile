@@ -3,31 +3,23 @@ import { restaurantDetailPalette as palette } from '../../restaurantDetailPalett
 
 export const Container = styled.View`
   flex-direction: row;
-  gap: ${({ theme }) => theme.spacing.sm}px;
-  padding-vertical: ${({ theme }) => theme.spacing.sm}px;
+  align-items: flex-end;
+  gap: ${({ theme }) => theme.spacing.md}px;
+  padding-vertical: ${({ theme }) => theme.spacing.md}px;
 `;
 
 export const Info = styled.View`
   flex: 1;
-  gap: 2px;
-`;
-
-export const ImageWrapper = styled.View`
-  position: relative;
+  gap: 4px;
 `;
 
 export const AddButton = styled.View`
-  position: absolute;
-  right: -6px;
-  bottom: -6px;
-  width: 28px;
-  height: 28px;
-  border-radius: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
   align-items: center;
   justify-content: center;
   background-color: ${palette.accent};
-  border-width: 2px;
-  border-color: ${palette.background};
 `;
 
 export const PriceText = styled.Text`

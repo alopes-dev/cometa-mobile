@@ -3,7 +3,7 @@ import { restaurantDetailPalette as palette } from '../../restaurantDetailPalett
 
 export const Container = styled.View`
   width: 48%;
-  gap: 4px;
+  gap: 6px;
 `;
 
 export const ImageWrapper = styled.View`

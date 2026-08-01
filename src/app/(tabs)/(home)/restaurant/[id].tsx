@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import { Text } from '@/components/design-system/atoms';
@@ -20,15 +20,21 @@ const Screen = styled.View`
 `;
 
 const TabsWrapper = styled.View`
-  padding-vertical: ${({ theme }) => theme.spacing.sm}px;
+  padding-vertical: ${({ theme }) => theme.spacing.md}px;
+`;
+
+const SectionWrapper = styled.View`
+  margin-bottom: ${({ theme }) => theme.spacing.lg}px;
 `;
 
 const SectionHeader = styled.View`
-  padding: ${({ theme }) => theme.spacing.sm}px ${({ theme }) => theme.spacing.md}px;
+  padding-horizontal: ${({ theme }) => theme.spacing.md}px;
+  padding-bottom: ${({ theme }) => theme.spacing.sm}px;
 `;
 
 const SectionBody = styled.View`
   padding-horizontal: ${({ theme }) => theme.spacing.md}px;
+  gap: ${({ theme }) => theme.spacing.sm}px;
 `;
 
 const GridWrap = styled.View`
@@ -100,15 +106,15 @@ export default function RestaurantDetail() {
   return (
     <Screen>
       <Stack.Screen options={{ headerShown: false }} />
-      <ScrollView ref={scrollRef} contentContainerStyle={{ paddingBottom: 96 }}>
-        <RestaurantHero restaurant={restaurant} topInset={insets.top} onBack={() => router.back()} />
+      <RestaurantHero restaurant={restaurant} topInset={insets.top} onBack={() => router.back()} />
+      <ScrollView ref={scrollRef} style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 96 }}>
         <TabsWrapper>
           <MenuTabs tabs={tabs} selectedKey={selectedTab} onSelect={handleSelectTab} />
         </TabsWrapper>
         {sections.map((section) => {
           const allowAdd = section.key !== POPULAR_SECTION_KEY;
           return (
-            <View
+            <SectionWrapper
               key={section.key}
               onLayout={(event) => {
                 sectionOffsets.current[section.key] = event.nativeEvent.layout.y;
@@ -130,7 +136,7 @@ export default function RestaurantDetail() {
                   ))
                 )}
               </SectionBody>
-            </View>
+            </SectionWrapper>
           );
         })}
       </ScrollView>

@@ -16,7 +16,7 @@ export function MenuGridCard({ item, onAdd }: MenuGridCardProps) {
       <ImageWrapper>
         <Image
           source={{ uri: item.imageUrl }}
-          style={{ width: '100%', height: 96, borderRadius: 12 }}
+          style={{ width: '100%', height: 120, borderRadius: 12 }}
           contentFit="cover"
         />
         {onAdd ? (
