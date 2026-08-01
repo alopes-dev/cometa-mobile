@@ -3,7 +3,7 @@ import { Image } from 'expo-image';
 import { Text, Icon } from '@/components/design-system/atoms';
 import { formatKwanza } from '../../format';
 import type { MenuItem } from '../../types';
-import { AddButton, Container, Info, PriceText } from './MenuItemRow.styles';
+import { AddButton, Container, Info, PriceText, Thumbnail, ThumbnailClip } from './MenuItemRow.styles';
 
 export type MenuItemRowProps = {
   item: MenuItem;
@@ -27,11 +27,11 @@ export function MenuItemRow({ item, onAdd }: MenuItemRowProps) {
           </AddButton>
         </Pressable>
       ) : null}
-      <Image
-        source={{ uri: item.imageUrl }}
-        style={{ width: 72, height: 72, borderRadius: 12 }}
-        contentFit="cover"
-      />
+      <Thumbnail>
+        <ThumbnailClip>
+          <Image source={{ uri: item.imageUrl }} style={{ width: '100%', height: '100%' }} contentFit="cover" />
+        </ThumbnailClip>
+      </Thumbnail>
     </Container>
   );
 }
