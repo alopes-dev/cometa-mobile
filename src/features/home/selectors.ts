@@ -31,3 +31,29 @@ export function groupMenuItemsByCategory(items: MenuItem[]): MenuSection[] {
   }
   return Array.from(byCategory.entries()).map(([title, data]) => ({ title, data }));
 }
+
+export const POPULAR_SECTION_KEY = 'popular';
+const POPULAR_ITEM_COUNT = 2;
+
+export type MenuDetailSection = {
+  key: string;
+  title: string;
+  icon?: string;
+  data: MenuItem[];
+};
+
+// Popular items are cross-listed here and in their own category section below, not excluded from it.
+export function buildMenuSections(items: MenuItem[]): MenuDetailSection[] {
+  const sections: MenuDetailSection[] = [];
+  const popular = items.slice(0, POPULAR_ITEM_COUNT);
+
+  if (popular.length > 0) {
+    sections.push({ key: POPULAR_SECTION_KEY, title: 'Populares agora', icon: '🔥', data: popular });
+  }
+
+  for (const { title, data } of groupMenuItemsByCategory(items)) {
+    sections.push({ key: title, title, data });
+  }
+
+  return sections;
+}

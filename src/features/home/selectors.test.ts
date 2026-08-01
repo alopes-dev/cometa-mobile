@@ -1,4 +1,4 @@
-import { filterRestaurants, groupMenuItemsByCategory } from './selectors';
+import { buildMenuSections, filterRestaurants, groupMenuItemsByCategory } from './selectors';
 import type { MenuItem, Restaurant } from './types';
 
 function makeRestaurant(overrides: Partial<Restaurant>): Restaurant {
@@ -10,6 +10,7 @@ function makeRestaurant(overrides: Partial<Restaurant>): Restaurant {
     cuisine: 'Italiana',
     deliveryTimeMinutes: 30,
     deliveryFee: 500,
+    description: 'The best pizza in town.',
     ...overrides,
   };
 }
@@ -99,5 +100,49 @@ describe('groupMenuItemsByCategory', () => {
     expect(sections).toHaveLength(1);
     expect(sections[0].title).toBe('Sobremesas');
     expect(sections[0].data).toHaveLength(3);
+  });
+});
+
+describe('buildMenuSections', () => {
+  it('cross-lists the first two items as a "Populares agora" section ahead of the category sections', () => {
+    const items: MenuItem[] = [
+      makeMenuItem({ id: '1', name: 'Margherita', category: 'Pizzas' }),
+      makeMenuItem({ id: '2', name: 'Pepperoni', category: 'Pizzas' }),
+      makeMenuItem({ id: '3', name: 'Coca-Cola', category: 'Bebidas' }),
+    ];
+
+    const sections = buildMenuSections(items);
+
+    expect(sections.map((section) => section.key)).toEqual(['popular', 'Pizzas', 'Bebidas']);
+    expect(sections[0].title).toBe('Populares agora');
+    expect(sections[0].icon).toBe('🔥');
+    expect(sections[0].data.map((item) => item.id)).toEqual(['1', '2']);
+    expect(sections[1].data.map((item) => item.id)).toEqual(['1', '2']);
+    expect(sections[2].data.map((item) => item.id)).toEqual(['3']);
+  });
+
+  it('caps the popular section at two items even with a larger menu', () => {
+    const items: MenuItem[] = [
+      makeMenuItem({ id: '1', category: 'Pizzas' }),
+      makeMenuItem({ id: '2', category: 'Pizzas' }),
+      makeMenuItem({ id: '3', category: 'Pizzas' }),
+    ];
+
+    const sections = buildMenuSections(items);
+
+    expect(sections[0].data.map((item) => item.id)).toEqual(['1', '2']);
+  });
+
+  it('still includes the popular section for a single-item menu', () => {
+    const items: MenuItem[] = [makeMenuItem({ id: '1', category: 'Bebidas' })];
+
+    const sections = buildMenuSections(items);
+
+    expect(sections.map((section) => section.key)).toEqual(['popular', 'Bebidas']);
+    expect(sections[0].data.map((item) => item.id)).toEqual(['1']);
+  });
+
+  it('returns an empty array for empty input', () => {
+    expect(buildMenuSections([])).toEqual([]);
   });
 });

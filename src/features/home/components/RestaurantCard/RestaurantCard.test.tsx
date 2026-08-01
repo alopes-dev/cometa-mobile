@@ -15,6 +15,7 @@ const restaurant: Restaurant = {
   cuisine: 'Angolana',
   deliveryTimeMinutes: 25,
   deliveryFee: 500,
+  description: 'Sabores autênticos de Cabinda, direto para a sua mesa.',
 };
 
 describe('RestaurantCard', () => {
