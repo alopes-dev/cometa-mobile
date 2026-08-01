@@ -4,7 +4,7 @@ export const mockRestaurants: Restaurant[] = [
   {
     id: 'r1',
     name: 'Sabores de Cabinda',
-    imageUrl: 'https://picsum.photos/seed/r1/400/300',
+    imageUrl: 'https://loremflickr.com/400/300/food,stew?lock=101',
     rating: 4.7,
     cuisine: 'Angolana',
     deliveryTimeMinutes: 25,
@@ -14,7 +14,7 @@ export const mockRestaurants: Restaurant[] = [
   {
     id: 'r2',
     name: 'Marisqueira do Kinaxixe',
-    imageUrl: 'https://picsum.photos/seed/r2/400/300',
+    imageUrl: 'https://loremflickr.com/400/300/food,seafood?lock=102',
     rating: 4.5,
     cuisine: 'Marisco',
     deliveryTimeMinutes: 35,
@@ -24,7 +24,7 @@ export const mockRestaurants: Restaurant[] = [
   {
     id: 'r3',
     name: 'Pizza Talatona',
-    imageUrl: 'https://picsum.photos/seed/r3/400/300',
+    imageUrl: 'https://loremflickr.com/400/300/food,pizza?lock=103',
     rating: 4.3,
     cuisine: 'Italiana',
     deliveryTimeMinutes: 30,
@@ -34,7 +34,7 @@ export const mockRestaurants: Restaurant[] = [
   {
     id: 'r4',
     name: 'Burger Ingombota',
-    imageUrl: 'https://picsum.photos/seed/r4/400/300',
+    imageUrl: 'https://loremflickr.com/400/300/food,burger?lock=104',
     rating: 4.2,
     cuisine: 'Fast Food',
     deliveryTimeMinutes: 20,
@@ -44,7 +44,7 @@ export const mockRestaurants: Restaurant[] = [
   {
     id: 'r5',
     name: 'Muxima Grill',
-    imageUrl: 'https://picsum.photos/seed/r5/400/300',
+    imageUrl: 'https://loremflickr.com/400/300/food,bbq?lock=105',
     rating: 4.8,
     cuisine: 'Grelhados',
     deliveryTimeMinutes: 40,
@@ -54,7 +54,7 @@ export const mockRestaurants: Restaurant[] = [
   {
     id: 'r6',
     name: 'Sushi Luanda',
-    imageUrl: 'https://picsum.photos/seed/r6/400/300',
+    imageUrl: 'https://loremflickr.com/400/300/food,sushi?lock=106',
     rating: 4.6,
     cuisine: 'Japonesa',
     deliveryTimeMinutes: 45,
@@ -64,7 +64,7 @@ export const mockRestaurants: Restaurant[] = [
   {
     id: 'r7',
     name: 'Moamba de Galinha Tradicional',
-    imageUrl: 'https://picsum.photos/seed/r7/400/300',
+    imageUrl: 'https://loremflickr.com/400/300/food,chicken?lock=107',
     rating: 4.4,
     cuisine: 'Angolana',
     deliveryTimeMinutes: 35,
@@ -80,7 +80,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Calulu de Peixe',
     description: 'Peixe seco cozinhado com quiabo, jinguba e óleo de palma.',
     price: 4500,
-    imageUrl: 'https://picsum.photos/seed/r1-1/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,fish?lock=1',
     category: 'Pratos Principais',
   },
   {
@@ -89,7 +89,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Funge com Feijão',
     description: 'Funge de bombó acompanhado de feijão de óleo de palma.',
     price: 3200,
-    imageUrl: 'https://picsum.photos/seed/r1-2/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,beans?lock=2',
     category: 'Pratos Principais',
   },
   {
@@ -98,7 +98,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Gindungo Frito',
     description: 'Entrada picante de pimenta gindungo frita.',
     price: 1500,
-    imageUrl: 'https://picsum.photos/seed/r1-3/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,pepper?lock=3',
     category: 'Entradas',
   },
   {
@@ -107,7 +107,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Kissangua',
     description: 'Bebida tradicional fermentada de milho.',
     price: 1000,
-    imageUrl: 'https://picsum.photos/seed/r1-4/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,drink?lock=4',
     category: 'Bebidas',
   },
   {
@@ -116,7 +116,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Camarão Grelhado',
     description: 'Camarão fresco grelhado com alho e limão.',
     price: 6500,
-    imageUrl: 'https://picsum.photos/seed/r2-1/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,shrimp?lock=5',
     category: 'Pratos Principais',
   },
   {
@@ -125,7 +125,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Caranguejo à Moda da Casa',
     description: 'Caranguejo cozido no molho da casa.',
     price: 7200,
-    imageUrl: 'https://picsum.photos/seed/r2-2/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,crab?lock=6',
     category: 'Pratos Principais',
   },
   {
@@ -134,7 +134,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Salada de Polvo',
     description: 'Polvo cozido com cebola, azeite e coentros.',
     price: 3800,
-    imageUrl: 'https://picsum.photos/seed/r2-3/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,octopus?lock=7',
     category: 'Entradas',
   },
   {
@@ -143,7 +143,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Sumo de Maboque',
     description: 'Sumo natural de fruta maboque.',
     price: 1200,
-    imageUrl: 'https://picsum.photos/seed/r2-4/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,juice?lock=8',
     category: 'Bebidas',
   },
   {
@@ -152,7 +152,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Pizza Margherita',
     description: 'Molho de tomate, mozzarella e manjericão fresco.',
     price: 4000,
-    imageUrl: 'https://picsum.photos/seed/r3-1/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,pizza?lock=9',
     category: 'Pratos Principais',
   },
   {
@@ -161,7 +161,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Pizza Pepperoni',
     description: 'Molho de tomate, mozzarella e pepperoni.',
     price: 4800,
-    imageUrl: 'https://picsum.photos/seed/r3-2/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,pizza?lock=10',
     category: 'Pratos Principais',
   },
   {
@@ -170,7 +170,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Bruschetta',
     description: 'Pão tostado com tomate, alho e azeite.',
     price: 2000,
-    imageUrl: 'https://picsum.photos/seed/r3-3/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,bruschetta?lock=11',
     category: 'Entradas',
   },
   {
@@ -179,7 +179,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Tiramisu',
     description: 'Sobremesa italiana com café e mascarpone.',
     price: 2500,
-    imageUrl: 'https://picsum.photos/seed/r3-4/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,dessert?lock=12',
     category: 'Sobremesas',
   },
   {
@@ -188,7 +188,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Cheeseburger Clássico',
     description: 'Hambúrguer de carne, queijo cheddar, alface e tomate.',
     price: 3000,
-    imageUrl: 'https://picsum.photos/seed/r4-1/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,burger?lock=13',
     category: 'Pratos Principais',
   },
   {
@@ -197,7 +197,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Burger Duplo Bacon',
     description: 'Duas carnes, bacon crocante e molho especial.',
     price: 3800,
-    imageUrl: 'https://picsum.photos/seed/r4-2/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,burger?lock=14',
     category: 'Pratos Principais',
   },
   {
@@ -206,7 +206,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Batata Frita',
     description: 'Porção de batata frita crocante.',
     price: 1200,
-    imageUrl: 'https://picsum.photos/seed/r4-3/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,fries?lock=15',
     category: 'Entradas',
   },
   {
@@ -215,7 +215,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Milkshake de Chocolate',
     description: 'Milkshake cremoso de chocolate.',
     price: 1800,
-    imageUrl: 'https://picsum.photos/seed/r4-4/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,milkshake?lock=16',
     category: 'Bebidas',
   },
   {
@@ -224,7 +224,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Espetada de Frango',
     description: 'Espetada de frango grelhado com pimentos.',
     price: 4200,
-    imageUrl: 'https://picsum.photos/seed/r5-1/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,chicken?lock=17',
     category: 'Pratos Principais',
   },
   {
@@ -233,7 +233,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Costela de Porco Grelhada',
     description: 'Costela suína grelhada com molho barbecue.',
     price: 5200,
-    imageUrl: 'https://picsum.photos/seed/r5-2/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,ribs?lock=18',
     category: 'Pratos Principais',
   },
   {
@@ -242,7 +242,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Salada Mista',
     description: 'Alface, tomate, cebola e pepino.',
     price: 1500,
-    imageUrl: 'https://picsum.photos/seed/r5-3/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,salad?lock=19',
     category: 'Entradas',
   },
   {
@@ -251,7 +251,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Cerveja Cuca',
     description: 'Cerveja angolana gelada.',
     price: 1000,
-    imageUrl: 'https://picsum.photos/seed/r5-4/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,beer?lock=20',
     category: 'Bebidas',
   },
   {
@@ -260,7 +260,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Combo Sashimi',
     description: '12 peças variadas de sashimi fresco.',
     price: 7500,
-    imageUrl: 'https://picsum.photos/seed/r6-1/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,sashimi?lock=21',
     category: 'Pratos Principais',
   },
   {
@@ -269,7 +269,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Uramaki Philadelphia',
     description: 'Salmão, queijo creme e pepino.',
     price: 5500,
-    imageUrl: 'https://picsum.photos/seed/r6-2/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,sushi?lock=22',
     category: 'Pratos Principais',
   },
   {
@@ -278,7 +278,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Edamame',
     description: 'Vagens de soja cozidas com sal marinho.',
     price: 1800,
-    imageUrl: 'https://picsum.photos/seed/r6-3/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,edamame?lock=23',
     category: 'Entradas',
   },
   {
@@ -287,7 +287,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Chá Verde Gelado',
     description: 'Chá verde japonês servido gelado.',
     price: 1100,
-    imageUrl: 'https://picsum.photos/seed/r6-4/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,tea?lock=24',
     category: 'Bebidas',
   },
   {
@@ -296,7 +296,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Moamba de Galinha',
     description: 'Galinha cozida em molho de ginguba com quiabo.',
     price: 3800,
-    imageUrl: 'https://picsum.photos/seed/r7-1/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,chicken?lock=25',
     category: 'Pratos Principais',
   },
   {
@@ -305,7 +305,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Cacimba de Peixe',
     description: 'Caldo tradicional de peixe com gengibre e alho.',
     price: 4200,
-    imageUrl: 'https://picsum.photos/seed/r7-2/200/200',
+    imageUrl: 'https://loremflickr.com/200/200/food,soup?lock=26',
     category: 'Pratos Principais',
   },
 ];

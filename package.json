@@ -29,6 +29,10 @@
       "**/*.test.ts",
       "**/*.test.tsx"
     ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest-setup.js"
+    ],
+    "resolver": "react-native-worklets/jest/resolver",
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg))"
     ]
@@ -51,8 +55,10 @@
     "expo-updates": "~57.0.10",
     "react": "19.2.3",
     "react-native": "0.86.0",
+    "react-native-reanimated": "4.5.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-svg": "15.15.4",
+    "react-native-worklets": "0.10.1",
     "styled-components": "^6.4.4"
   },
   "devDependencies": {
