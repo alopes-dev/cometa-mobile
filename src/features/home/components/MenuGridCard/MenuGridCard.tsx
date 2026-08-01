@@ -3,20 +3,20 @@ import { Image } from 'expo-image';
 import { Text, Icon } from '@/components/design-system/atoms';
 import { formatKwanza } from '../../format';
 import type { MenuItem } from '../../types';
-import { AddButton, Container, ImageWrapper, Info, PriceText } from './MenuItemRow.styles';
+import { AddButton, Container, ImageWrapper, PriceText } from './MenuGridCard.styles';
 
-export type MenuItemRowProps = {
+export type MenuGridCardProps = {
   item: MenuItem;
   onAdd?: () => void;
 };
 
-export function MenuItemRow({ item, onAdd }: MenuItemRowProps) {
+export function MenuGridCard({ item, onAdd }: MenuGridCardProps) {
   return (
     <Container>
       <ImageWrapper>
         <Image
           source={{ uri: item.imageUrl }}
-          style={{ width: 64, height: 64, borderRadius: 8 }}
+          style={{ width: '100%', height: 96, borderRadius: 12 }}
           contentFit="cover"
         />
         {onAdd ? (
@@ -32,13 +32,13 @@ export function MenuItemRow({ item, onAdd }: MenuItemRowProps) {
           </Pressable>
         ) : null}
       </ImageWrapper>
-      <Info>
-        <Text variant="bodyEmphasized">{item.name}</Text>
-        <Text variant="footnote" color="textSecondary" numberOfLines={2}>
-          {item.description}
-        </Text>
-        <PriceText>{formatKwanza(item.price)}</PriceText>
-      </Info>
+      <Text variant="footnote" numberOfLines={1}>
+        {item.name}
+      </Text>
+      <Text variant="caption" color="textSecondary" numberOfLines={1}>
+        {item.description}
+      </Text>
+      <PriceText>{formatKwanza(item.price)}</PriceText>
     </Container>
   );
 }

@@ -15,6 +15,7 @@ import { AuthProvider } from "@/hooks/AuthProvider";
 import { useAuth } from "@/hooks/useAuth";
 import { OnboardingProvider } from "@/hooks/OnboardingProvider";
 import { useOnboarding } from "@/hooks/useOnboarding";
+import { TabBarVisibilityProvider } from "@/hooks/TabBarVisibilityProvider";
 
 const Root = styled.View`
   flex: 1;
@@ -71,7 +72,9 @@ function Gate({ onReady }: { onReady: () => void }) {
   return (
     <SafeAreaProvider>
       <StatusBar hidden />
-      <Navigation hasSeenOnboarding={hasSeenOnboarding} />
+      <TabBarVisibilityProvider>
+        <Navigation hasSeenOnboarding={hasSeenOnboarding} />
+      </TabBarVisibilityProvider>
     </SafeAreaProvider>
   );
 }

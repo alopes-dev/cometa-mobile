@@ -6,6 +6,7 @@ export type Restaurant = {
   cuisine: string;
   deliveryTimeMinutes: number;
   deliveryFee: number;
+  description: string;
 };
 
 export type MenuItem = {

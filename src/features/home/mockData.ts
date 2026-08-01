@@ -9,6 +9,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: 'Angolana',
     deliveryTimeMinutes: 25,
     deliveryFee: 500,
+    description: 'Sabores autênticos de Cabinda, direto para a sua mesa.',
   },
   {
     id: 'r2',
@@ -18,6 +19,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: 'Marisco',
     deliveryTimeMinutes: 35,
     deliveryFee: 700,
+    description: 'Marisco fresco do dia, preparado à moda da casa.',
   },
   {
     id: 'r3',
@@ -27,6 +29,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: 'Italiana',
     deliveryTimeMinutes: 30,
     deliveryFee: 600,
+    description: 'Pizzas artesanais assadas em forno a lenha em Talatona.',
   },
   {
     id: 'r4',
@@ -36,6 +39,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: 'Fast Food',
     deliveryTimeMinutes: 20,
     deliveryFee: 400,
+    description: 'Hambúrgueres suculentos e batatas crocantes em Ingombota.',
   },
   {
     id: 'r5',
@@ -45,6 +49,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: 'Grelhados',
     deliveryTimeMinutes: 40,
     deliveryFee: 800,
+    description: 'Grelhados na brasa com o sabor tradicional angolano.',
   },
   {
     id: 'r6',
@@ -54,6 +59,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: 'Japonesa',
     deliveryTimeMinutes: 45,
     deliveryFee: 900,
+    description: 'Sushi fresco e combinados japoneses no coração de Luanda.',
   },
   {
     id: 'r7',
@@ -63,6 +69,7 @@ export const mockRestaurants: Restaurant[] = [
     cuisine: 'Angolana',
     deliveryTimeMinutes: 35,
     deliveryFee: 650,
+    description: 'Moamba de galinha tradicional, feita como em casa.',
   },
 ];
 
