@@ -2,8 +2,8 @@ import styled from 'styled-components/native';
 import { restaurantDetailPalette as palette } from '../../restaurantDetailPalette';
 
 export const TabPill = styled.View<{ selected: boolean }>`
-  height: 36px;
-  padding-horizontal: 16px;
+  height: 40px;
+  padding-horizontal: 18px;
   border-radius: ${({ theme }) => theme.radius.pill}px;
   align-items: center;
   justify-content: center;

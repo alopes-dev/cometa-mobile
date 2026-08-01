@@ -4,9 +4,9 @@ import { restaurantDetailPalette as palette } from '../../restaurantDetailPalett
 export const Container = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm}px;
-  padding-vertical: ${({ theme }) => theme.spacing.sm}px;
-  padding-horizontal: ${({ theme }) => theme.spacing.md}px;
+  gap: ${({ theme }) => theme.spacing.md}px;
+  padding-vertical: ${({ theme }) => theme.spacing.md}px;
+  padding-horizontal: ${({ theme }) => theme.spacing.lg}px;
   border-radius: ${({ theme }) => theme.radius.pill}px;
   background-color: ${palette.accent};
   shadow-color: #000000;
@@ -17,10 +17,10 @@ export const Container = styled.View`
 `;
 
 export const CountBadge = styled.View`
-  min-width: 24px;
-  height: 24px;
-  border-radius: 12px;
-  padding-horizontal: 4px;
+  min-width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  padding-horizontal: 6px;
   align-items: center;
   justify-content: center;
   background-color: ${palette.onAccent};
