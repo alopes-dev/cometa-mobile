@@ -1,7 +1,6 @@
 import { Pressable } from 'react-native';
-import { Text } from '@/components/design-system/atoms';
 import { formatKwanza } from '../../format';
-import { Container, CountBadge, Label } from './CartSummaryBar.styles';
+import { Container, CountBadge, CountText, Label, LabelText, TotalText } from './CartSummaryBar.styles';
 
 export type CartSummaryBarProps = {
   count: number;
@@ -16,18 +15,12 @@ export function CartSummaryBar({ count, total, onPress }: CartSummaryBarProps) {
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel="Ver carrinho">
       <Container>
         <CountBadge>
-          <Text variant="footnote" color="onSecondary">
-            {count > 99 ? '99+' : String(count)}
-          </Text>
+          <CountText>{count > 99 ? '99+' : String(count)}</CountText>
         </CountBadge>
         <Label>
-          <Text variant="bodyEmphasized" color="onPrimary">
-            Ver carrinho
-          </Text>
+          <LabelText>Ver carrinho</LabelText>
         </Label>
-        <Text variant="bodyEmphasized" color="onPrimary">
-          {formatKwanza(total)}
-        </Text>
+        <TotalText>{formatKwanza(total)}</TotalText>
       </Container>
     </Pressable>
   );

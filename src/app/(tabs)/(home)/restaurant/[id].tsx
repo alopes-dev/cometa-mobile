@@ -1,20 +1,22 @@
-import { useMemo, useRef, useState } from 'react';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { SectionList } from 'react-native';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import { Text } from '@/components/design-system/atoms';
+import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 import { CartSummaryBar } from '@/features/home/components/CartSummaryBar';
+import { MenuGridCard } from '@/features/home/components/MenuGridCard';
 import { MenuItemRow } from '@/features/home/components/MenuItemRow';
 import { MenuTabs } from '@/features/home/components/MenuTabs';
 import { RestaurantHero } from '@/features/home/components/RestaurantHero';
 import { getMenuItems, getRestaurantById } from '@/features/home/data';
-import { buildMenuSections, POPULAR_SECTION_KEY, type MenuDetailSection } from '@/features/home/selectors';
-import type { MenuItem } from '@/features/home/types';
+import { restaurantDetailPalette as palette } from '@/features/home/restaurantDetailPalette';
+import { buildMenuSections, POPULAR_SECTION_KEY } from '@/features/home/selectors';
 
 const Screen = styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: ${palette.background};
 `;
 
 const TabsWrapper = styled.View`
@@ -23,7 +25,17 @@ const TabsWrapper = styled.View`
 
 const SectionHeader = styled.View`
   padding: ${({ theme }) => theme.spacing.sm}px ${({ theme }) => theme.spacing.md}px;
-  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const SectionBody = styled.View`
+  padding-horizontal: ${({ theme }) => theme.spacing.md}px;
+`;
+
+const GridWrap = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spacing.md}px;
 `;
 
 const CartBarWrapper = styled.View<{ bottomInset: number }>`
@@ -37,16 +49,25 @@ const NotFoundScreen = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: ${palette.background};
 `;
 
 export default function RestaurantDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const listRef = useRef<SectionList<MenuItem, MenuDetailSection>>(null);
+  const { setIsTabBarHidden } = useTabBarVisibility();
+  const scrollRef = useRef<ScrollView>(null);
+  const sectionOffsets = useRef<Record<string, number>>({});
   const [selectedTab, setSelectedTab] = useState<string>(POPULAR_SECTION_KEY);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsTabBarHidden(true);
+      return () => setIsTabBarHidden(false);
+    }, [setIsTabBarHidden])
+  );
 
   const restaurant = useMemo(() => getRestaurantById(id), [id]);
   const menuItems = useMemo(() => getMenuItems(id), [id]);
@@ -55,9 +76,9 @@ export default function RestaurantDetail() {
 
   const handleSelectTab = (key: string) => {
     setSelectedTab(key);
-    const sectionIndex = sections.findIndex((section) => section.key === key);
-    if (sectionIndex >= 0) {
-      listRef.current?.scrollToLocation({ sectionIndex, itemIndex: 0, animated: true });
+    const y = sectionOffsets.current[key];
+    if (y !== undefined) {
+      scrollRef.current?.scrollTo({ y, animated: true });
     }
   };
 
@@ -79,32 +100,40 @@ export default function RestaurantDetail() {
   return (
     <Screen>
       <Stack.Screen options={{ headerShown: false }} />
-      <SectionList
-        ref={listRef}
-        sections={sections}
-        keyExtractor={(item) => item.id}
-        stickySectionHeadersEnabled={false}
-        ListHeaderComponent={
-          <>
-            <RestaurantHero restaurant={restaurant} topInset={insets.top} onBack={() => router.back()} />
-            <TabsWrapper>
-              <MenuTabs tabs={tabs} selectedKey={selectedTab} onSelect={handleSelectTab} />
-            </TabsWrapper>
-          </>
-        }
-        renderItem={({ item, section }) => (
-          <MenuItemRow
-            item={item}
-            onAdd={section.key === POPULAR_SECTION_KEY ? undefined : () => handleAdd(item.id)}
-          />
-        )}
-        renderSectionHeader={({ section }) => (
-          <SectionHeader>
-            <Text variant="title2">{section.icon ? `${section.icon} ${section.title}` : section.title}</Text>
-          </SectionHeader>
-        )}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 96 }}
-      />
+      <ScrollView ref={scrollRef} contentContainerStyle={{ paddingBottom: 96 }}>
+        <RestaurantHero restaurant={restaurant} topInset={insets.top} onBack={() => router.back()} />
+        <TabsWrapper>
+          <MenuTabs tabs={tabs} selectedKey={selectedTab} onSelect={handleSelectTab} />
+        </TabsWrapper>
+        {sections.map((section) => {
+          const allowAdd = section.key !== POPULAR_SECTION_KEY;
+          return (
+            <View
+              key={section.key}
+              onLayout={(event) => {
+                sectionOffsets.current[section.key] = event.nativeEvent.layout.y;
+              }}
+            >
+              <SectionHeader>
+                <Text variant="title2">{section.icon ? `${section.icon} ${section.title}` : section.title}</Text>
+              </SectionHeader>
+              <SectionBody>
+                {section.layout === 'grid' ? (
+                  <GridWrap>
+                    {section.data.map((item) => (
+                      <MenuGridCard key={item.id} item={item} onAdd={allowAdd ? () => handleAdd(item.id) : undefined} />
+                    ))}
+                  </GridWrap>
+                ) : (
+                  section.data.map((item) => (
+                    <MenuItemRow key={item.id} item={item} onAdd={allowAdd ? () => handleAdd(item.id) : undefined} />
+                  ))
+                )}
+              </SectionBody>
+            </View>
+          );
+        })}
+      </ScrollView>
       <CartBarWrapper bottomInset={insets.bottom}>
         <CartSummaryBar count={cartCount} total={cartTotal} />
       </CartBarWrapper>

@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { ScrollView } from 'react-native';
+import { Pressable, ScrollView } from 'react-native';
 import { useTheme } from 'styled-components/native';
-import { Chip } from '@/components/design-system/atoms';
+import { TabLabel, TabPill } from './MenuTabs.styles';
 
 export type MenuTab = {
   key: string;
@@ -24,14 +24,22 @@ export function MenuTabs({ tabs, selectedKey, onSelect }: MenuTabsProps) {
 
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={contentContainerStyle}>
-      {tabs.map((tab) => (
-        <Chip
-          key={tab.key}
-          label={tab.icon ? `${tab.icon} ${tab.title}` : tab.title}
-          selected={selectedKey === tab.key}
-          onPress={() => onSelect(tab.key)}
-        />
-      ))}
+      {tabs.map((tab) => {
+        const selected = selectedKey === tab.key;
+        return (
+          <Pressable
+            key={tab.key}
+            onPress={() => onSelect(tab.key)}
+            accessibilityRole="button"
+            accessibilityState={{ selected }}
+            hitSlop={6}
+          >
+            <TabPill selected={selected}>
+              <TabLabel selected={selected}>{tab.icon ? `${tab.icon} ${tab.title}` : tab.title}</TabLabel>
+            </TabPill>
+          </Pressable>
+        );
+      })}
     </ScrollView>
   );
 }

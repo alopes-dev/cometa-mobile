@@ -116,9 +116,23 @@ describe('buildMenuSections', () => {
     expect(sections.map((section) => section.key)).toEqual(['popular', 'Pizzas', 'Bebidas']);
     expect(sections[0].title).toBe('Populares agora');
     expect(sections[0].icon).toBe('🔥');
+    expect(sections[0].layout).toBe('list');
     expect(sections[0].data.map((item) => item.id)).toEqual(['1', '2']);
     expect(sections[1].data.map((item) => item.id)).toEqual(['1', '2']);
     expect(sections[2].data.map((item) => item.id)).toEqual(['3']);
+  });
+
+  it('renders the "Entradas" category as a grid section and every other section as a list', () => {
+    const items: MenuItem[] = [
+      makeMenuItem({ id: '1', category: 'Pizzas' }),
+      makeMenuItem({ id: '2', category: 'Entradas' }),
+      makeMenuItem({ id: '3', category: 'Bebidas' }),
+    ];
+
+    const sections = buildMenuSections(items);
+    const byKey = Object.fromEntries(sections.map((section) => [section.key, section.layout]));
+
+    expect(byKey).toEqual({ popular: 'list', Pizzas: 'list', Entradas: 'grid', Bebidas: 'list' });
   });
 
   it('caps the popular section at two items even with a larger menu', () => {

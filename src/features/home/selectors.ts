@@ -35,10 +35,17 @@ export function groupMenuItemsByCategory(items: MenuItem[]): MenuSection[] {
 export const POPULAR_SECTION_KEY = 'popular';
 const POPULAR_ITEM_COUNT = 2;
 
+// The one category rendered as a 2-column grid (the closest match in this data
+// model to a "Sides & Appetizers" grid); every other section renders as a list.
+const GRID_CATEGORY = 'Entradas';
+
+export type MenuSectionLayout = 'list' | 'grid';
+
 export type MenuDetailSection = {
   key: string;
   title: string;
   icon?: string;
+  layout: MenuSectionLayout;
   data: MenuItem[];
 };
 
@@ -48,11 +55,11 @@ export function buildMenuSections(items: MenuItem[]): MenuDetailSection[] {
   const popular = items.slice(0, POPULAR_ITEM_COUNT);
 
   if (popular.length > 0) {
-    sections.push({ key: POPULAR_SECTION_KEY, title: 'Populares agora', icon: '🔥', data: popular });
+    sections.push({ key: POPULAR_SECTION_KEY, title: 'Populares agora', icon: '🔥', layout: 'list', data: popular });
   }
 
   for (const { title, data } of groupMenuItemsByCategory(items)) {
-    sections.push({ key: title, title, data });
+    sections.push({ key: title, title, layout: title === GRID_CATEGORY ? 'grid' : 'list', data });
   }
 
   return sections;

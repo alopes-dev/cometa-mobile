@@ -2,14 +2,8 @@ import styled from 'styled-components/native';
 import { restaurantDetailPalette as palette } from '../../restaurantDetailPalette';
 
 export const Container = styled.View`
-  flex-direction: row;
-  gap: ${({ theme }) => theme.spacing.sm}px;
-  padding-vertical: ${({ theme }) => theme.spacing.sm}px;
-`;
-
-export const Info = styled.View`
-  flex: 1;
-  gap: 2px;
+  width: 48%;
+  gap: 4px;
 `;
 
 export const ImageWrapper = styled.View`
@@ -18,8 +12,8 @@ export const ImageWrapper = styled.View`
 
 export const AddButton = styled.View`
   position: absolute;
-  right: -6px;
-  bottom: -6px;
+  right: 6px;
+  bottom: 6px;
   width: 28px;
   height: 28px;
   border-radius: 14px;

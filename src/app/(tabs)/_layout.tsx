@@ -1,11 +1,13 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useTheme } from 'styled-components/native';
+import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 
 export default function TabsLayout() {
   const theme = useTheme();
+  const { isTabBarHidden } = useTabBarVisibility();
 
   return (
-    <NativeTabs tintColor={theme.colors.primary}>
+    <NativeTabs tintColor={theme.colors.primary} hidden={isTabBarHidden}>
       <NativeTabs.Trigger name="(home)">
         <NativeTabs.Trigger.Icon sf="house.fill" md="home" />
         <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
