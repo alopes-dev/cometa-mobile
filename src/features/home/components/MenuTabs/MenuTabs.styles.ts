@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-import { restaurantDetailPalette as palette } from '../../restaurantDetailPalette';
 
 export const TabPill = styled.View<{ selected: boolean }>`
   height: 40px;
@@ -7,11 +6,12 @@ export const TabPill = styled.View<{ selected: boolean }>`
   border-radius: ${({ theme }) => theme.radius.pill}px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ selected }) => (selected ? palette.accent : palette.chipBackground)};
+  background-color: ${({ theme, selected }) =>
+    selected ? theme.colors.brandAccent : theme.colors.brandChipBackground};
 `;
 
 export const TabLabel = styled.Text<{ selected: boolean }>`
   font-size: 13px;
   font-weight: 600;
-  color: ${({ selected }) => (selected ? palette.onAccent : palette.chipText)};
+  color: ${({ theme, selected }) => (selected ? theme.colors.brandOnAccent : theme.colors.brandChipText)};
 `;

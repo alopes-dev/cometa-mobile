@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-import { restaurantDetailPalette as palette } from '../../restaurantDetailPalette';
 
 export const Container = styled.View`
   flex-direction: row;
@@ -8,7 +7,7 @@ export const Container = styled.View`
   padding-vertical: ${({ theme }) => theme.spacing.md}px;
   padding-horizontal: ${({ theme }) => theme.spacing.lg}px;
   border-radius: ${({ theme }) => theme.radius.pill}px;
-  background-color: ${palette.accent};
+  background-color: ${({ theme }) => theme.colors.brandAccent};
   shadow-color: #000000;
   shadow-offset: 0px ${({ theme }) => theme.elevation.level2.ios.shadowOffset.height}px;
   shadow-opacity: ${({ theme }) => theme.elevation.level2.ios.shadowOpacity};
@@ -23,13 +22,13 @@ export const CountBadge = styled.View`
   padding-horizontal: 6px;
   align-items: center;
   justify-content: center;
-  background-color: ${palette.onAccent};
+  background-color: ${({ theme }) => theme.colors.brandOnAccent};
 `;
 
 export const CountText = styled.Text`
   font-size: 13px;
   font-weight: 700;
-  color: ${palette.accent};
+  color: ${({ theme }) => theme.colors.brandAccent};
 `;
 
 export const Label = styled.View`
@@ -39,11 +38,11 @@ export const Label = styled.View`
 export const LabelText = styled.Text`
   font-size: 15px;
   font-weight: 600;
-  color: ${palette.onAccent};
+  color: ${({ theme }) => theme.colors.brandOnAccent};
 `;
 
 export const TotalText = styled.Text`
   font-size: 15px;
   font-weight: 700;
-  color: ${palette.onAccent};
+  color: ${({ theme }) => theme.colors.brandOnAccent};
 `;

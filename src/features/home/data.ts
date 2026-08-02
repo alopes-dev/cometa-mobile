@@ -1,5 +1,5 @@
-import { mockMenuItems, mockRestaurants } from './mockData';
-import type { MenuItem, Restaurant } from './types';
+import { mockMenuItems, mockOffers, mockRestaurants } from './mockData';
+import type { MenuItem, Offer, Restaurant } from './types';
 
 export function getRestaurants(): Restaurant[] {
   return mockRestaurants;
@@ -15,4 +15,8 @@ export function getMenuItems(restaurantId: string): MenuItem[] {
 
 export function getCategories(): string[] {
   return Array.from(new Set(mockRestaurants.map((restaurant) => restaurant.cuisine)));
+}
+
+export function getOffers(): Offer[] {
+  return mockOffers;
 }

@@ -22,7 +22,7 @@ describe('RestaurantCard', () => {
   it('renders the restaurant name, cuisine, and rating', () => {
     const { getByText } = renderWithTheme(<RestaurantCard restaurant={restaurant} onPress={() => {}} />);
     expect(getByText('Sabores de Cabinda')).toBeTruthy();
-    expect(getByText('Angolana')).toBeTruthy();
+    expect(getByText(/Angolana/)).toBeTruthy();
     expect(getByText('4.7')).toBeTruthy();
   });
 
@@ -31,5 +31,19 @@ describe('RestaurantCard', () => {
     const { getByRole } = renderWithTheme(<RestaurantCard restaurant={restaurant} onPress={onPress} />);
     fireEvent.press(getByRole('button'));
     expect(onPress).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not render a favorite button when onToggleFavorite is not provided', () => {
+    const { queryByLabelText } = renderWithTheme(<RestaurantCard restaurant={restaurant} onPress={() => {}} />);
+    expect(queryByLabelText('Adicionar aos favoritos')).toBeNull();
+  });
+
+  it('fires onToggleFavorite when the favorite button is pressed', () => {
+    const onToggleFavorite = jest.fn();
+    const { getByLabelText } = renderWithTheme(
+      <RestaurantCard restaurant={restaurant} onPress={() => {}} isFavorite={false} onToggleFavorite={onToggleFavorite} />
+    );
+    fireEvent.press(getByLabelText('Adicionar aos favoritos'));
+    expect(onToggleFavorite).toHaveBeenCalledTimes(1);
   });
 });

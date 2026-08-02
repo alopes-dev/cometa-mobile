@@ -18,3 +18,11 @@ export type MenuItem = {
   imageUrl: string;
   category: string;
 };
+
+export type Offer = {
+  id: string;
+  imageUrl: string;
+  badgeLabel: string;
+  title: string;
+  subtitle: string;
+};

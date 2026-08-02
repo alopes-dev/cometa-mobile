@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-import { restaurantDetailPalette as palette } from '../../restaurantDetailPalette';
 
 export const Container = styled.View`
   width: 48%;
@@ -19,13 +18,13 @@ export const AddButton = styled.View`
   border-radius: 14px;
   align-items: center;
   justify-content: center;
-  background-color: ${palette.accent};
+  background-color: ${({ theme }) => theme.colors.brandAccent};
   border-width: 2px;
-  border-color: ${palette.background};
+  border-color: ${({ theme }) => theme.colors.brandBeige};
 `;
 
 export const PriceText = styled.Text`
   font-size: 13px;
   font-weight: 600;
-  color: ${palette.accent};
+  color: ${({ theme }) => theme.colors.brandAccent};
 `;

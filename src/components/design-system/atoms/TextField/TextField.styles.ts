@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import { TextInput } from 'react-native';
+import type { Theme } from '@/components/design-system/ThemeProvider';
 
 export const Container = styled.View`
   gap: 4px;
@@ -10,6 +11,7 @@ export const FieldRow = styled.View<{
   hasError: boolean;
   disabled: boolean;
   shape: 'default' | 'pill';
+  backgroundColor?: keyof Theme['colors'];
 }>`
   flex-direction: row;
   align-items: center;
@@ -17,7 +19,7 @@ export const FieldRow = styled.View<{
   height: 44px;
   border-radius: ${({ theme, shape }) => (shape === 'pill' ? theme.radius.pill : theme.radius.md)}px;
   padding-horizontal: ${({ theme }) => theme.spacing.md}px;
-  background-color: ${({ theme }) => theme.colors.surface};
+  background-color: ${({ theme, backgroundColor }) => theme.colors[backgroundColor ?? 'surface']};
   border-width: 1px;
   border-color: ${({ theme, focused, hasError }) =>
     hasError ? theme.colors.error : focused ? theme.colors.primary : theme.colors.border};

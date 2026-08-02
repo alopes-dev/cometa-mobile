@@ -1,4 +1,4 @@
-import type { MenuItem, Restaurant } from './types';
+import type { MenuItem, Offer, Restaurant } from './types';
 
 export const mockRestaurants: Restaurant[] = [
   {
@@ -307,5 +307,36 @@ export const mockMenuItems: MenuItem[] = [
     price: 4200,
     imageUrl: 'https://loremflickr.com/200/200/food,soup?lock=26',
     category: 'Pratos Principais',
+  },
+];
+
+export const mockOffers: Offer[] = [
+  {
+    id: 'o1',
+    imageUrl: 'https://loremflickr.com/400/300/food,pizza?lock=201',
+    badgeLabel: 'PROMOÇÃO',
+    title: '50% Off em Pizzas',
+    subtitle: 'Válido até hoje às 22h',
+  },
+  {
+    id: 'o2',
+    imageUrl: 'https://loremflickr.com/400/300/food,burger?lock=202',
+    badgeLabel: 'COMBO',
+    title: 'Burger + Batata + Bebida',
+    subtitle: 'Peça já em Ingombota',
+  },
+  {
+    id: 'o3',
+    imageUrl: 'https://loremflickr.com/400/300/food,bbq?lock=203',
+    badgeLabel: 'NOVO',
+    title: 'Grelhados Muxima',
+    subtitle: 'Experimente o novo menu de brasa',
+  },
+  {
+    id: 'o4',
+    imageUrl: 'https://loremflickr.com/400/300/food,seafood?lock=204',
+    badgeLabel: 'FRETE GRÁTIS',
+    title: 'Marisco sem taxa de entrega',
+    subtitle: 'Só esta semana no Kinaxixe',
   },
 ];

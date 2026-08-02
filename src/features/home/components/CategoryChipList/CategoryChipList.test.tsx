@@ -7,11 +7,11 @@ function renderWithTheme(ui: React.ReactElement) {
 }
 
 describe('CategoryChipList', () => {
-  it('renders a "Todos" chip plus one chip per category', () => {
+  it('renders a "Tudo" chip plus one chip per category', () => {
     const { getByText } = renderWithTheme(
       <CategoryChipList categories={['Angolana', 'Italiana']} selected={null} onSelect={() => {}} />
     );
-    expect(getByText('Todos')).toBeTruthy();
+    expect(getByText('Tudo')).toBeTruthy();
     expect(getByText('Angolana')).toBeTruthy();
     expect(getByText('Italiana')).toBeTruthy();
   });
@@ -25,12 +25,12 @@ describe('CategoryChipList', () => {
     expect(onSelect).toHaveBeenCalledWith('Italiana');
   });
 
-  it('calls onSelect with null when "Todos" is pressed', () => {
+  it('calls onSelect with null when "Tudo" is pressed', () => {
     const onSelect = jest.fn();
     const { getByText } = renderWithTheme(
       <CategoryChipList categories={['Angolana']} selected="Angolana" onSelect={onSelect} />
     );
-    fireEvent.press(getByText('Todos'));
+    fireEvent.press(getByText('Tudo'));
     expect(onSelect).toHaveBeenCalledWith(null);
   });
 });

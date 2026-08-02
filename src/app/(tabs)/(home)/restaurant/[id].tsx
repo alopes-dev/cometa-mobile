@@ -11,12 +11,11 @@ import { MenuItemRow } from '@/features/home/components/MenuItemRow';
 import { MenuTabs } from '@/features/home/components/MenuTabs';
 import { HEADER_COMPACT_HEIGHT, HERO_MAX_HEIGHT, RestaurantHero } from '@/features/home/components/RestaurantHero';
 import { getMenuItems, getRestaurantById } from '@/features/home/data';
-import { restaurantDetailPalette as palette } from '@/features/home/restaurantDetailPalette';
 import { buildMenuSections, POPULAR_SECTION_KEY } from '@/features/home/selectors';
 
 const Screen = styled.View`
   flex: 1;
-  background-color: ${palette.background};
+  background-color: ${({ theme }) => theme.colors.brandBeige};
 `;
 
 const TabsWrapper = styled.View`
@@ -55,7 +54,7 @@ const NotFoundScreen = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: ${palette.background};
+  background-color: ${({ theme }) => theme.colors.brandBeige};
 `;
 
 export default function RestaurantDetail() {

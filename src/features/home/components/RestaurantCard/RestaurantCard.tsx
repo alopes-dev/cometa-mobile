@@ -1,41 +1,50 @@
 import { Pressable } from 'react-native';
 import { Image } from 'expo-image';
-import { Text, Icon } from '@/components/design-system/atoms';
-import { Card } from '@/components/design-system/molecules';
-import { formatKwanza } from '../../format';
+import { Text, RatingBadge, FavoriteButton } from '@/components/design-system/atoms';
+import { formatDeliveryFee } from '../../format';
 import type { Restaurant } from '../../types';
-import { InfoRow, MetaRow } from './RestaurantCard.styles';
+import { Container, ImageWrapper, RatingBadgeWrapper, InfoRow, MetaRow } from './RestaurantCard.styles';
 
 export type RestaurantCardProps = {
   restaurant: Restaurant;
   onPress: () => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 };
 
-export function RestaurantCard({ restaurant, onPress }: RestaurantCardProps) {
+export function RestaurantCard({
+  restaurant,
+  onPress,
+  isFavorite = false,
+  onToggleFavorite,
+}: RestaurantCardProps) {
   return (
     <Pressable onPress={onPress} accessibilityRole="button">
-      <Card>
-        <Image
-          source={{ uri: restaurant.imageUrl }}
-          style={{ width: '100%', height: 140, borderRadius: 12 }}
-          contentFit="cover"
-        />
+      <Container>
+        <ImageWrapper>
+          <Image
+            source={{ uri: restaurant.imageUrl }}
+            style={{ width: '100%', height: 190, borderRadius: 16 }}
+            contentFit="cover"
+          />
+          <RatingBadgeWrapper>
+            <RatingBadge rating={restaurant.rating} />
+          </RatingBadgeWrapper>
+        </ImageWrapper>
         <InfoRow>
-          <Text variant="bodyEmphasized">{restaurant.name}</Text>
-          <MetaRow>
-            <Icon name="star" sf="star.fill" size={14} color="warning" />
-            <Text variant="footnote" color="textSecondary">
-              {restaurant.rating.toFixed(1)}
-            </Text>
-          </MetaRow>
+          <Text variant="bodyEmphasized" numberOfLines={1} style={{ flex: 1 }}>
+            {restaurant.name}
+          </Text>
+          {onToggleFavorite ? (
+            <FavoriteButton isFavorite={isFavorite} onToggle={onToggleFavorite} size={32} />
+          ) : null}
         </InfoRow>
-        <Text variant="footnote" color="textSecondary">
-          {restaurant.cuisine}
-        </Text>
-        <Text variant="footnote" color="textSecondary">
-          {restaurant.deliveryTimeMinutes} min · {formatKwanza(restaurant.deliveryFee)}
-        </Text>
-      </Card>
+        <MetaRow>
+          <Text variant="footnote" color="textSecondary">
+            {restaurant.cuisine} • {restaurant.deliveryTimeMinutes} min • {formatDeliveryFee(restaurant.deliveryFee)}
+          </Text>
+        </MetaRow>
+      </Container>
     </Pressable>
   );
 }

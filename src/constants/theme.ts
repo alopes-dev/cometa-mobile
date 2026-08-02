@@ -13,6 +13,12 @@ export const colors = {
   border: '#E5E5EA',
   divider: '#E5E5EA',
   overlay: 'rgba(0, 0, 0, 0.4)',
+  brandBeige: '#FBF3EA',
+  brandChipBackground: '#F3E3D0',
+  brandChipText: '#4A3524',
+  brandAccent: '#8B4A2B',
+  brandOnAccent: '#FFFFFF',
+  promoBadgeBackground: '#3A2A1E',
 } as const;
 
 export const colorsDark = {
@@ -31,6 +37,12 @@ export const colorsDark = {
   border: '#38383A',
   divider: '#38383A',
   overlay: 'rgba(0, 0, 0, 0.6)',
+  brandBeige: '#2A2018',
+  brandChipBackground: '#3A2E22',
+  brandChipText: '#F3E3D0',
+  brandAccent: '#D98F5F',
+  brandOnAccent: '#FFFFFF',
+  promoBadgeBackground: '#1E140D',
 } as const;
 
 export const font = {

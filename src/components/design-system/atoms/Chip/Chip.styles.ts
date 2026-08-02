@@ -6,11 +6,11 @@ export const Container = styled.View<{ selected: boolean }>`
   flex-direction: row;
   align-items: center;
   gap: 6px;
-  height: 32px;
-  padding-horizontal: 12px;
+  height: 40px;
+  padding-horizontal: 14px;
   border-radius: ${({ theme }) => theme.radius.pill}px;
   background-color: ${({ theme, selected }) =>
-    selected ? withAlpha(theme.colors.primary, '1A') : theme.colors.surface};
+    selected ? theme.colors.background : theme.colors.brandChipBackground};
   border-width: 1px;
-  border-color: ${({ theme, selected }) => (selected ? theme.colors.primary : theme.colors.border)};
+  border-color: ${({ theme, selected }) => (selected ? theme.colors.brandAccent : 'transparent')};
 `;

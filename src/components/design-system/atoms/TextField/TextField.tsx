@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { type TextInputProps } from 'react-native';
 import { Text } from '../Text';
 import { Icon, type IconProps } from '../Icon';
+import type { Theme } from '@/components/design-system/ThemeProvider';
 import { Container, FieldRow, Input } from './TextField.styles';
 
 export type TextFieldProps = TextInputProps & {
@@ -11,6 +12,7 @@ export type TextFieldProps = TextInputProps & {
   disabled?: boolean;
   shape?: 'default' | 'pill';
   leadingIcon?: { name: IconProps['name']; sf?: IconProps['sf'] };
+  backgroundColor?: keyof Theme['colors'];
 };
 
 export function TextField({
@@ -21,6 +23,7 @@ export function TextField({
   editable,
   shape = 'default',
   leadingIcon,
+  backgroundColor,
   ...rest
 }: TextFieldProps) {
   const [focused, setFocused] = useState(false);
@@ -32,7 +35,13 @@ export function TextField({
           {label}
         </Text>
       ) : null}
-      <FieldRow focused={focused} hasError={!!error} disabled={!!disabled} shape={shape}>
+      <FieldRow
+        focused={focused}
+        hasError={!!error}
+        disabled={!!disabled}
+        shape={shape}
+        backgroundColor={backgroundColor}
+      >
         {leadingIcon ? (
           <Icon name={leadingIcon.name} sf={leadingIcon.sf} size={18} color="textSecondary" />
         ) : null}

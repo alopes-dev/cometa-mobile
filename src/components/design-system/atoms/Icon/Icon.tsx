@@ -23,7 +23,14 @@ export function Icon({
   const tintColor = theme.colors[color];
 
   if (Platform.OS === "ios" && sf) {
-    return <SymbolView name={sf} size={size} tintColor={tintColor} />;
+    return (
+      <SymbolView
+        name={sf}
+        size={size}
+        tintColor={tintColor}
+        style={{ width: size, height: size }}
+      />
+    );
   }
 
   return <Ionicons name={name} size={size} color={tintColor} />;

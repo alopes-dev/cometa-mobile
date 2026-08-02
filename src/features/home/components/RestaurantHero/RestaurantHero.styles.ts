@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const TopBar = styled.View<{ topInset: number }>`
   position: absolute;
@@ -60,8 +60,3 @@ export const RatedBadge = styled.View`
   background-color: ${({ theme }) => theme.colors.overlay};
 `;
 
-export const RatingRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  gap: 4px;
-`;
