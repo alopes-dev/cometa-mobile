@@ -17,6 +17,7 @@ describe('useCheckoutFlow', () => {
     expect(result.current.couponCode).toBeNull();
     expect(result.current.discountPercent).toBe(0);
     expect(result.current.notes).toBe('');
+    expect(result.current.paymentMethod).toBeNull();
   });
 
   it('setDeliveryType stores the choice', () => {
@@ -76,17 +77,25 @@ describe('useCheckoutFlow', () => {
     expect(result.current.discountPercent).toBe(0);
   });
 
+  it('setPaymentMethod stores the selection', () => {
+    const { result } = renderHook(() => useCheckoutFlow(), { wrapper });
+    act(() => result.current.setPaymentMethod({ type: 'cash', detailsLabel: 'Dinheiro' }));
+    expect(result.current.paymentMethod).toEqual({ type: 'cash', detailsLabel: 'Dinheiro' });
+  });
+
   it('reset restores the initial state', () => {
     const { result } = renderHook(() => useCheckoutFlow(), { wrapper });
     act(() => {
       result.current.setDeliveryType('delivery');
       result.current.setTipPercent(20);
       result.current.applyCoupon('COMETA10');
+      result.current.setPaymentMethod({ type: 'cash', detailsLabel: 'Dinheiro' });
     });
     act(() => result.current.reset());
     expect(result.current.deliveryType).toBeNull();
     expect(result.current.tipPercent).toBe(0);
     expect(result.current.discountPercent).toBe(0);
+    expect(result.current.paymentMethod).toBeNull();
   });
 
   it('throws when used outside a CheckoutFlowProvider', () => {

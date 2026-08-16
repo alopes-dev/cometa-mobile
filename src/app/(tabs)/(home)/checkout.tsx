@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import styled from 'styled-components/native';
-import { Text, Icon } from '@/components/design-system/atoms';
+import styled, { useTheme } from 'styled-components/native';
+import { Icon, Text } from '@/components/design-system/atoms';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 import { useCart } from '@/hooks/useCart';
 import { useCheckoutFlow } from '@/hooks/useCheckoutFlow';
@@ -12,12 +12,14 @@ import { DetailsRow } from '@/features/checkout/components/DetailsRow';
 import { OrderSummaryCard } from '@/features/checkout/components/OrderSummaryCard';
 import { PlaceOrderBar } from '@/features/checkout/components/PlaceOrderBar';
 import { OrderConfirmation } from '@/features/checkout/components/OrderConfirmation';
-import { mockAddresses, mockPaymentMethod } from '@/features/checkout/mockData';
+import { mockAddresses } from '@/features/checkout/mockData';
 import { computeOrderSummary } from '@/features/checkout/pricing';
 
 const PLACING_DELAY = 1200;
+const PROCESSING_DELAY = 1400;
+const APPROVED_DELAY = 900;
 
-type CheckoutStatus = 'idle' | 'placing' | 'success';
+type CheckoutStatus = 'idle' | 'placing' | 'processingPayment' | 'paymentApproved' | 'success';
 
 const Screen = styled.View`
   flex: 1;
@@ -88,15 +90,42 @@ const EmptyState = styled.View`
   padding: ${({ theme }) => theme.spacing.xl}px;
 `;
 
+const TransientState = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.md}px;
+  padding: ${({ theme }) => theme.spacing.xl}px;
+`;
+
+const ApprovedCircle = styled.View`
+  width: 72px;
+  height: 72px;
+  border-radius: 36px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.primary};
+`;
+
 export default function Checkout() {
   const router = useRouter();
+  const theme = useTheme();
   const insets = useSafeAreaInsets();
   const { setIsTabBarHidden } = useTabBarVisibility();
   const { items, restaurantId, subtotal, clearCart } = useCart();
-  const { deliveryType, schedule, addressId, tipPercent, couponCode, discountPercent, reset: resetCheckoutFlow } =
-    useCheckoutFlow();
+  const {
+    deliveryType,
+    schedule,
+    addressId,
+    tipPercent,
+    couponCode,
+    discountPercent,
+    paymentMethod,
+    reset: resetCheckoutFlow,
+  } = useCheckoutFlow();
   const [status, setStatus] = useState<CheckoutStatus>('idle');
-  const placingTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const firstTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const secondTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useFocusEffect(
     useCallback(() => {
@@ -105,11 +134,31 @@ export default function Checkout() {
     }, [setIsTabBarHidden])
   );
 
-  useEffect(() => () => clearTimeout(placingTimeout.current), []);
+  useEffect(
+    () => () => {
+      clearTimeout(firstTimeout.current);
+      clearTimeout(secondTimeout.current);
+    },
+    []
+  );
 
   const handlePlaceOrder = () => {
-    setStatus('placing');
-    placingTimeout.current = setTimeout(() => setStatus('success'), PLACING_DELAY);
+    if (!paymentMethod) {
+      router.push('/payment-method');
+      return;
+    }
+
+    if (paymentMethod.type === 'cash') {
+      setStatus('placing');
+      firstTimeout.current = setTimeout(() => setStatus('success'), PLACING_DELAY);
+      return;
+    }
+
+    setStatus('processingPayment');
+    firstTimeout.current = setTimeout(() => {
+      setStatus('paymentApproved');
+      secondTimeout.current = setTimeout(() => setStatus('success'), APPROVED_DELAY);
+    }, PROCESSING_DELAY);
   };
 
   const restaurant = restaurantId ? getRestaurantById(restaurantId) : undefined;
@@ -133,6 +182,30 @@ export default function Checkout() {
       params: { restaurantId: trackedRestaurantId ?? '', itemCount: String(itemCount), total: String(total) },
     });
   };
+
+  if (status === 'processingPayment') {
+    return (
+      <Screen>
+        <TransientState>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text variant="title2">Processando pagamento...</Text>
+        </TransientState>
+      </Screen>
+    );
+  }
+
+  if (status === 'paymentApproved') {
+    return (
+      <Screen>
+        <TransientState>
+          <ApprovedCircle>
+            <Icon name="checkmark" sf="checkmark" size={32} color="onPrimary" />
+          </ApprovedCircle>
+          <Text variant="title2">Pagamento aprovado</Text>
+        </TransientState>
+      </Screen>
+    );
+  }
 
   if (status === 'success') {
     return (
@@ -215,10 +288,21 @@ export default function Checkout() {
             </SectionRow>
             <Card>
               <DetailsRow
-                icon={{ name: 'card-outline', sf: 'creditcard' }}
-                title={`${mockPaymentMethod.brand} ····${mockPaymentMethod.last4}`}
-                subtitle={`EXPIRES ${mockPaymentMethod.expiry}`}
-                trailing="Edit"
+                icon={
+                  paymentMethod
+                    ? paymentMethod.type === 'card'
+                      ? { name: 'card-outline', sf: 'creditcard' }
+                      : paymentMethod.type === 'cash'
+                        ? { name: 'cash-outline', sf: 'banknote' }
+                        : paymentMethod.type === 'multicaixa'
+                          ? { name: 'phone-portrait-outline', sf: 'iphone' }
+                          : { name: 'wallet-outline', sf: 'wallet.bifold' }
+                    : { name: 'card-outline', sf: 'creditcard' }
+                }
+                title={paymentMethod?.detailsLabel ?? 'Selecione um método de pagamento'}
+                subtitle={paymentMethod ? 'Método de pagamento' : 'Necessário para finalizar o pedido'}
+                trailing="chevron"
+                onPress={() => router.push('/payment-method')}
               />
             </Card>
           </View>

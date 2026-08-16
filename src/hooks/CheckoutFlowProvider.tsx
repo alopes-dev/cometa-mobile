@@ -1,5 +1,6 @@
 import { createContext, useCallback, useMemo, useState, type ReactNode } from 'react';
 import { VALID_COUPON } from '@/features/checkout/mockData';
+import type { PaymentMethodSelection } from '@/features/checkout/types';
 
 export type DeliveryType = 'delivery' | 'pickup';
 
@@ -13,6 +14,7 @@ export type CheckoutFlowState = {
   couponCode: string | null;
   discountPercent: number;
   notes: string;
+  paymentMethod: PaymentMethodSelection | null;
 };
 
 export type CheckoutFlowContextValue = CheckoutFlowState & {
@@ -23,6 +25,7 @@ export type CheckoutFlowContextValue = CheckoutFlowState & {
   setNotes: (notes: string) => void;
   applyCoupon: (code: string) => boolean;
   clearCoupon: () => void;
+  setPaymentMethod: (selection: PaymentMethodSelection) => void;
   reset: () => void;
 };
 
@@ -34,6 +37,7 @@ const INITIAL_STATE: CheckoutFlowState = {
   couponCode: null,
   discountPercent: 0,
   notes: '',
+  paymentMethod: null,
 };
 
 export const CheckoutFlowContext = createContext<CheckoutFlowContextValue | null>(null);
@@ -79,6 +83,10 @@ export function CheckoutFlowProvider({ children }: { children: ReactNode }) {
     setState((current) => ({ ...current, couponCode: null, discountPercent: 0 }));
   }, []);
 
+  const setPaymentMethod = useCallback((paymentMethod: PaymentMethodSelection) => {
+    setState((current) => ({ ...current, paymentMethod }));
+  }, []);
+
   const reset = useCallback(() => setState(INITIAL_STATE), []);
 
   const value = useMemo<CheckoutFlowContextValue>(
@@ -91,9 +99,21 @@ export function CheckoutFlowProvider({ children }: { children: ReactNode }) {
       setNotes,
       applyCoupon,
       clearCoupon,
+      setPaymentMethod,
       reset,
     }),
-    [state, setDeliveryType, setSchedule, setAddressId, setTipPercent, setNotes, applyCoupon, clearCoupon, reset]
+    [
+      state,
+      setDeliveryType,
+      setSchedule,
+      setAddressId,
+      setTipPercent,
+      setNotes,
+      applyCoupon,
+      clearCoupon,
+      setPaymentMethod,
+      reset,
+    ]
   );
 
   return <CheckoutFlowContext.Provider value={value}>{children}</CheckoutFlowContext.Provider>;

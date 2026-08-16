@@ -4,10 +4,11 @@ export type Address = {
   details: string;
 };
 
-export type PaymentMethod = {
-  brand: string;
-  last4: string;
-  expiry: string;
+export type PaymentMethodType = 'card' | 'multicaixa' | 'unitel' | 'afrimoney' | 'cash';
+
+export type PaymentMethodSelection = {
+  type: PaymentMethodType;
+  detailsLabel: string;
 };
 
 export type Coupon = {
