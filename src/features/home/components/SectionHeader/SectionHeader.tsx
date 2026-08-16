@@ -14,7 +14,7 @@ export function SectionHeader({ title, actionLabel, onPressAction }: SectionHead
       <Text variant="title2">{title}</Text>
       {actionLabel ? (
         <Pressable onPress={onPressAction} accessibilityRole="button">
-          <Text variant="footnote" color="brandAccent">
+          <Text variant="footnote" color="primary">
             {actionLabel}
           </Text>
         </Pressable>

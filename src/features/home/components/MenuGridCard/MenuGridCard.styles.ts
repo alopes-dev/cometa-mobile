@@ -18,13 +18,13 @@ export const AddButton = styled.View`
   border-radius: 14px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.brandAccent};
+  background-color: ${({ theme }) => theme.colors.primary};
   border-width: 2px;
-  border-color: ${({ theme }) => theme.colors.brandBeige};
+  border-color: ${({ theme }) => theme.colors.background};
 `;
 
 export const PriceText = styled.Text`
   font-size: 13px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.brandAccent};
+  color: ${({ theme }) => theme.colors.primary};
 `;

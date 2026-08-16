@@ -167,14 +167,14 @@ export function RestaurantHero({
     <Animated.View
       style={[
         heroPositionStyle,
-        { backgroundColor: theme.colors.brandBeige },
+        { backgroundColor: theme.colors.background },
         containerAnimatedStyle,
       ]}
     >
       <Animated.View
         style={[
           StyleSheet.absoluteFill,
-          { backgroundColor: theme.colors.brandBeige },
+          { backgroundColor: theme.colors.background },
           solidBackgroundStyle,
         ]}
       />

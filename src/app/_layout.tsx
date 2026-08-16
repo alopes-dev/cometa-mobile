@@ -16,6 +16,29 @@ import { useAuth } from "@/hooks/useAuth";
 import { OnboardingProvider } from "@/hooks/OnboardingProvider";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { TabBarVisibilityProvider } from "@/hooks/TabBarVisibilityProvider";
+import { CartProvider } from "@/hooks/CartProvider";
+
+const DEBUG_SERVER_URL = "http://192.168.1.146:7778/event";
+const DEBUG_SESSION_ID = "app-startup-crash";
+
+// #region debug-point A:module-load
+fetch(DEBUG_SERVER_URL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    sessionId: DEBUG_SESSION_ID,
+    runId: "pre",
+    hypothesisId: "A",
+    location: "src/app/_layout.tsx:module",
+    msg: "[DEBUG] Root layout module loaded",
+    data: {
+      hermes: Boolean((globalThis as any).HermesInternal),
+      remoteDebug: Boolean((globalThis as any).__REMOTEDEV__),
+    },
+    ts: Date.now(),
+  }),
+}).catch(() => {});
+// #endregion
 
 const Root = styled.View`
   flex: 1;
@@ -29,6 +52,22 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 function Navigation({ hasSeenOnboarding }: { hasSeenOnboarding: boolean }) {
   const theme = useTheme();
   const { isAuthenticated } = useAuth();
+
+  // #region debug-point B:navigation-render
+  fetch(DEBUG_SERVER_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      sessionId: DEBUG_SESSION_ID,
+      runId: "pre",
+      hypothesisId: "B",
+      location: "src/app/_layout.tsx:Navigation",
+      msg: "[DEBUG] Navigation render",
+      data: { hasSeenOnboarding, isAuthenticated },
+      ts: Date.now(),
+    }),
+  }).catch(() => {});
+  // #endregion
 
   return (
     <Root>
@@ -64,6 +103,21 @@ function Gate({ onReady }: { onReady: () => void }) {
   const ready = !onboardingLoading && !authLoading;
 
   useEffect(() => {
+    // #region debug-point B:gate-ready-effect
+    fetch(DEBUG_SERVER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: DEBUG_SESSION_ID,
+        runId: "pre",
+        hypothesisId: "B",
+        location: "src/app/_layout.tsx:Gate.useEffect",
+        msg: "[DEBUG] Gate readiness evaluated",
+        data: { ready, onboardingLoading, authLoading, hasSeenOnboarding },
+        ts: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     if (ready) onReady();
   }, [ready, onReady]);
 
@@ -73,7 +127,9 @@ function Gate({ onReady }: { onReady: () => void }) {
     <SafeAreaProvider>
       <StatusBar hidden />
       <TabBarVisibilityProvider>
-        <Navigation hasSeenOnboarding={hasSeenOnboarding} />
+        <CartProvider>
+          <Navigation hasSeenOnboarding={hasSeenOnboarding} />
+        </CartProvider>
       </TabBarVisibilityProvider>
     </SafeAreaProvider>
   );
@@ -87,10 +143,43 @@ export default function RootLayout() {
   });
   const fontsReady = fontsLoaded || fontError;
 
+  useEffect(() => {
+    // #region debug-point B:fonts-ready
+    fetch(DEBUG_SERVER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: DEBUG_SESSION_ID,
+        runId: "pre",
+        hypothesisId: "B",
+        location: "src/app/_layout.tsx:RootLayout.useEffect",
+        msg: "[DEBUG] Fonts state",
+        data: { fontsLoaded, fontError: Boolean(fontError), fontsReady },
+        ts: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
+  }, [fontsLoaded, fontError, fontsReady]);
+
   // Gate only mounts once fontsReady is true (see the early return below),
   // so by the time its onReady fires, fonts are already resolved — this
   // callback is the single point where "everything is ready" becomes true.
   const handleReady = () => {
+    // #region debug-point B:handle-ready
+    fetch(DEBUG_SERVER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId: DEBUG_SESSION_ID,
+        runId: "pre",
+        hypothesisId: "B",
+        location: "src/app/_layout.tsx:handleReady",
+        msg: "[DEBUG] handleReady called",
+        data: {},
+        ts: Date.now(),
+      }),
+    }).catch(() => {});
+    // #endregion
     SplashScreen.hideAsync().catch(() => {});
   };
 

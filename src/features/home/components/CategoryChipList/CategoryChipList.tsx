@@ -23,7 +23,7 @@ export function CategoryChipList({ categories, selected, onSelect }: CategoryChi
           <Icon
             {...getCategoryIcon(null)}
             size={16}
-            color={selected === null ? 'brandAccent' : 'brandChipText'}
+            color={selected === null ? 'primary' : 'textPrimary'}
           />
         }
       />
@@ -37,7 +37,7 @@ export function CategoryChipList({ categories, selected, onSelect }: CategoryChi
             <Icon
               {...getCategoryIcon(category)}
               size={16}
-              color={selected === category ? 'brandAccent' : 'brandChipText'}
+              color={selected === category ? 'primary' : 'textPrimary'}
             />
           }
         />

@@ -98,14 +98,14 @@ export default function Home() {
                 avatarUrl={MOCK_AVATAR_URL}
                 address={MOCK_ADDRESS}
               />
-              <Text variant="headline" color="brandAccent">
+              <Text variant="headline" color="primary">
                 Descobrir
               </Text>
               <SearchBar
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 placeholder="Restaurantes, pratos ou cozinhas"
-                backgroundColor="brandChipBackground"
+                backgroundColor="surface"
               />
             </PaddedSection>
             <CategoryChipList

@@ -18,13 +18,13 @@ export const AddButton = styled.View`
   border-radius: 16px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.brandAccent};
+  background-color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const PriceText = styled.Text`
   font-size: 13px;
   font-weight: 600;
-  color: ${({ theme }) => theme.colors.brandAccent};
+  color: ${({ theme }) => theme.colors.primary};
 `;
 
 // Split in two: shadows and overflow:hidden can't coexist on one RN view —

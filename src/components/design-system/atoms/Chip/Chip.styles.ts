@@ -10,7 +10,7 @@ export const Container = styled.View<{ selected: boolean }>`
   padding-horizontal: 14px;
   border-radius: ${({ theme }) => theme.radius.pill}px;
   background-color: ${({ theme, selected }) =>
-    selected ? theme.colors.background : theme.colors.brandChipBackground};
+    selected ? theme.colors.background : theme.colors.surface};
   border-width: 1px;
-  border-color: ${({ theme, selected }) => (selected ? theme.colors.brandAccent : 'transparent')};
+  border-color: ${({ theme, selected }) => (selected ? theme.colors.primary : 'transparent')};
 `;

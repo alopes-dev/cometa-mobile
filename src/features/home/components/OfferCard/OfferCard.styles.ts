@@ -8,7 +8,7 @@ export const Container = styled.View`
   height: ${CARD_HEIGHT}px;
   border-radius: ${({ theme }) => theme.radius.lg}px;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.colors.brandChipBackground};
+  background-color: ${({ theme }) => theme.colors.surface};
 `;
 
 export const Badge = styled.View`

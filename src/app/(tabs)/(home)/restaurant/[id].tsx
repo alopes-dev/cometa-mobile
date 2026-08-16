@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import { Text } from '@/components/design-system/atoms';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
+import { useCart } from '@/hooks/useCart';
 import { CartSummaryBar } from '@/features/home/components/CartSummaryBar';
 import { MenuGridCard } from '@/features/home/components/MenuGridCard';
 import { MenuItemRow } from '@/features/home/components/MenuItemRow';
@@ -15,7 +16,7 @@ import { buildMenuSections, POPULAR_SECTION_KEY } from '@/features/home/selector
 
 const Screen = styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.colors.brandBeige};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const TabsWrapper = styled.View`
@@ -54,7 +55,7 @@ const NotFoundScreen = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.brandBeige};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 export default function RestaurantDetail() {
@@ -66,7 +67,7 @@ export default function RestaurantDetail() {
   const scrollY = useSharedValue(0);
   const sectionOffsets = useRef<Record<string, number>>({});
   const [selectedTab, setSelectedTab] = useState<string>(POPULAR_SECTION_KEY);
-  const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const { count: cartCount, subtotal: cartSubtotal, addItem } = useCart();
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
@@ -92,13 +93,6 @@ export default function RestaurantDetail() {
       scrollTo(scrollRef, 0, target, true);
     }
   };
-
-  const handleAdd = (itemId: string) => {
-    setQuantities((current) => ({ ...current, [itemId]: (current[itemId] ?? 0) + 1 }));
-  };
-
-  const cartCount = Object.values(quantities).reduce((sum, quantity) => sum + quantity, 0);
-  const cartTotal = menuItems.reduce((sum, item) => sum + (quantities[item.id] ?? 0) * item.price, 0);
 
   if (!restaurant) {
     return (
@@ -137,12 +131,12 @@ export default function RestaurantDetail() {
                 {section.layout === 'grid' ? (
                   <GridWrap>
                     {section.data.map((item) => (
-                      <MenuGridCard key={item.id} item={item} onAdd={allowAdd ? () => handleAdd(item.id) : undefined} />
+                      <MenuGridCard key={item.id} item={item} onAdd={allowAdd ? () => addItem(item) : undefined} />
                     ))}
                   </GridWrap>
                 ) : (
                   section.data.map((item) => (
-                    <MenuItemRow key={item.id} item={item} onAdd={allowAdd ? () => handleAdd(item.id) : undefined} />
+                    <MenuItemRow key={item.id} item={item} onAdd={allowAdd ? () => addItem(item) : undefined} />
                   ))
                 )}
               </SectionBody>
@@ -152,7 +146,7 @@ export default function RestaurantDetail() {
       </Animated.ScrollView>
       <RestaurantHero restaurant={restaurant} topInset={insets.top} scrollY={scrollY} onBack={() => router.back()} />
       <CartBarWrapper bottomInset={insets.bottom}>
-        <CartSummaryBar count={cartCount} total={cartTotal} />
+        <CartSummaryBar count={cartCount} total={cartSubtotal} onPress={() => router.push('/checkout')} />
       </CartBarWrapper>
     </Screen>
   );

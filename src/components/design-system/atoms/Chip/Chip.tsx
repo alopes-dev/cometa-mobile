@@ -20,7 +20,7 @@ export function Chip({ label, selected = false, onPress, icon }: ChipProps) {
     >
       <Container selected={selected}>
         {icon}
-        <Text variant="footnote" color={selected ? 'brandAccent' : 'brandChipText'}>
+        <Text variant="footnote" color={selected ? 'primary' : 'textPrimary'}>
           {label}
         </Text>
       </Container>
