@@ -10,3 +10,4 @@ export { Checkbox, type CheckboxProps } from './Checkbox';
 export { Radio, type RadioProps } from './Radio';
 export { RatingBadge, type RatingBadgeProps } from './RatingBadge';
 export { FavoriteButton, type FavoriteButtonProps } from './FavoriteButton';
+export { QuantityStepper, type QuantityStepperProps } from './QuantityStepper';

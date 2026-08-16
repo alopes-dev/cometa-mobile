@@ -1,17 +1,15 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "expo-router";
-import { FlatList, ScrollView } from "react-native";
+import { FlatList, Pressable, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import styled from "styled-components/native";
-import { Text } from "@/components/design-system/atoms";
-import { SearchBar } from "@/components/design-system/molecules";
+import { Icon, Text } from "@/components/design-system/atoms";
 import { CategoryChipList } from "@/features/home/components/CategoryChipList";
 import { DiscoverHeader } from "@/features/home/components/DiscoverHeader";
 import { OfferCard } from "@/features/home/components/OfferCard";
 import { RestaurantCard } from "@/features/home/components/RestaurantCard";
 import { SectionHeader } from "@/features/home/components/SectionHeader";
 import { getCategories, getOffers, getRestaurants } from "@/features/home/data";
-import { filterRestaurants } from "@/features/home/selectors";
 import type { Restaurant } from "@/features/home/types";
 
 const MOCK_AVATAR_URL =
@@ -34,6 +32,16 @@ const PaddedSection = styled.View`
   padding-horizontal: ${({ theme }) => theme.spacing.md}px;
 `;
 
+const SearchTrigger = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm}px;
+  height: 44px;
+  padding-horizontal: ${({ theme }) => theme.spacing.md}px;
+  border-radius: ${({ theme }) => theme.radius.pill}px;
+  background-color: ${({ theme }) => theme.colors.surface};
+`;
+
 const OffersSection = styled.View`
   gap: ${({ theme }) => theme.spacing.sm}px;
 `;
@@ -52,22 +60,11 @@ const EmptyState = styled.View`
 export default function Home() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<Set<string>>(new Set());
 
   const restaurants = useMemo(() => getRestaurants(), []);
   const categories = useMemo(() => getCategories(), []);
   const offers = useMemo(() => getOffers(), []);
-
-  const filteredRestaurants = useMemo(
-    () =>
-      filterRestaurants(restaurants, {
-        query: searchQuery,
-        category: selectedCategory,
-      }),
-    [restaurants, searchQuery, selectedCategory],
-  );
 
   const toggleFavorite = (id: string) => {
     setFavoriteIds((current) => {
@@ -81,10 +78,16 @@ export default function Home() {
     });
   };
 
+  const handleSelectCategory = (category: string | null) => {
+    // "Tudo" (null) stays on Home; any real category opens the dedicated listing screen.
+    if (category === null) return;
+    router.push({ pathname: "/restaurants", params: { category } });
+  };
+
   return (
     <Screen>
       <FlatList
-        data={filteredRestaurants}
+        data={restaurants}
         keyExtractor={(item: Restaurant) => item.id}
         contentContainerStyle={{
           paddingHorizontal: 16,
@@ -101,17 +104,23 @@ export default function Home() {
               <Text variant="headline" color="primary">
                 Descobrir
               </Text>
-              <SearchBar
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                placeholder="Restaurantes, pratos ou cozinhas"
-                backgroundColor="surface"
-              />
+              <Pressable
+                onPress={() => router.push("/search")}
+                accessibilityRole="button"
+                accessibilityLabel="Pesquisar"
+              >
+                <SearchTrigger>
+                  <Icon name="search" sf="magnifyingglass" size={18} color="textSecondary" />
+                  <Text variant="body" color="textSecondary">
+                    Restaurantes, pratos ou cozinhas
+                  </Text>
+                </SearchTrigger>
+              </Pressable>
             </PaddedSection>
             <CategoryChipList
               categories={categories}
-              selected={selectedCategory}
-              onSelect={setSelectedCategory}
+              selected={null}
+              onSelect={handleSelectCategory}
             />
             <OffersSection>
               <SectionHeader

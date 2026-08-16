@@ -36,4 +36,11 @@ describe('MenuGridCard', () => {
     fireEvent.press(getByLabelText(`Adicionar ${item.name}`));
     expect(onAdd).toHaveBeenCalledTimes(1);
   });
+
+  it('fires onPress when the card is pressed', () => {
+    const onPress = jest.fn();
+    const { getByLabelText } = renderWithTheme(<MenuGridCard item={item} onPress={onPress} />);
+    fireEvent.press(getByLabelText(`Ver ${item.name}`));
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
 });

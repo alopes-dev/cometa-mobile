@@ -17,6 +17,32 @@ export function filterRestaurants(restaurants: Restaurant[], filter: RestaurantF
   });
 }
 
+export type RestaurantSort = 'fastest' | 'topRated' | 'nearest' | 'lowestFee' | 'promotions';
+
+export function applyRestaurantSort(restaurants: Restaurant[], sort: RestaurantSort | null): Restaurant[] {
+  if (!sort) return restaurants;
+  if (sort === 'promotions') {
+    return restaurants.filter((restaurant) => restaurant.hasPromotion);
+  }
+
+  const sorted = [...restaurants];
+  switch (sort) {
+    case 'fastest':
+      sorted.sort((a, b) => a.deliveryTimeMinutes - b.deliveryTimeMinutes);
+      break;
+    case 'topRated':
+      sorted.sort((a, b) => b.rating - a.rating);
+      break;
+    case 'nearest':
+      sorted.sort((a, b) => a.distanceKm - b.distanceKm);
+      break;
+    case 'lowestFee':
+      sorted.sort((a, b) => a.deliveryFee - b.deliveryFee);
+      break;
+  }
+  return sorted;
+}
+
 export type MenuSection = {
   title: string;
   data: MenuItem[];

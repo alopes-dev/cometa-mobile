@@ -1,5 +1,6 @@
 import { Pressable } from 'react-native';
-import { Text, Icon } from '@/components/design-system/atoms';
+import { Text } from '../Text';
+import { Icon } from '../Icon';
 import { Container, StepButton } from './QuantityStepper.styles';
 
 export type QuantityStepperProps = {

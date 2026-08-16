@@ -94,6 +94,10 @@ export default function RestaurantDetail() {
     }
   };
 
+  const openProduct = (itemId: string) => {
+    router.push({ pathname: '/product/[itemId]', params: { itemId } });
+  };
+
   if (!restaurant) {
     return (
       <NotFoundScreen>
@@ -130,14 +134,30 @@ export default function RestaurantDetail() {
               <SectionBody>
                 {section.layout === 'grid' ? (
                   <GridWrap>
-                    {section.data.map((item) => (
-                      <MenuGridCard key={item.id} item={item} onAdd={allowAdd ? () => addItem(item) : undefined} />
-                    ))}
+                    {section.data.map((item) => {
+                      const hasModifiers = Boolean(item.modifierGroups?.length);
+                      return (
+                        <MenuGridCard
+                          key={item.id}
+                          item={item}
+                          onAdd={allowAdd && !hasModifiers ? () => addItem(item) : undefined}
+                          onPress={allowAdd && hasModifiers ? () => openProduct(item.id) : undefined}
+                        />
+                      );
+                    })}
                   </GridWrap>
                 ) : (
-                  section.data.map((item) => (
-                    <MenuItemRow key={item.id} item={item} onAdd={allowAdd ? () => addItem(item) : undefined} />
-                  ))
+                  section.data.map((item) => {
+                    const hasModifiers = Boolean(item.modifierGroups?.length);
+                    return (
+                      <MenuItemRow
+                        key={item.id}
+                        item={item}
+                        onAdd={allowAdd && !hasModifiers ? () => addItem(item) : undefined}
+                        onPress={allowAdd && hasModifiers ? () => openProduct(item.id) : undefined}
+                      />
+                    );
+                  })
                 )}
               </SectionBody>
             </SectionWrapper>

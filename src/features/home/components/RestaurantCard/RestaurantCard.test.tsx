@@ -16,6 +16,7 @@ const restaurant: Restaurant = {
   deliveryTimeMinutes: 25,
   deliveryFee: 500,
   description: 'Sabores autênticos de Cabinda, direto para a sua mesa.',
+  distanceKm: 2.4,
 };
 
 describe('RestaurantCard', () => {

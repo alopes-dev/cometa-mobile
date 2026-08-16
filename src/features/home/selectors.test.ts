@@ -1,4 +1,4 @@
-import { buildMenuSections, filterRestaurants, groupMenuItemsByCategory } from './selectors';
+import { applyRestaurantSort, buildMenuSections, filterRestaurants, groupMenuItemsByCategory } from './selectors';
 import type { MenuItem, Restaurant } from './types';
 
 function makeRestaurant(overrides: Partial<Restaurant>): Restaurant {
@@ -11,6 +11,7 @@ function makeRestaurant(overrides: Partial<Restaurant>): Restaurant {
     deliveryTimeMinutes: 30,
     deliveryFee: 500,
     description: 'The best pizza in town.',
+    distanceKm: 2.5,
     ...overrides,
   };
 }
@@ -65,6 +66,49 @@ describe('filterRestaurants', () => {
   it('returns an empty array when nothing matches', () => {
     const result = filterRestaurants(restaurants, { query: 'burger', category: null });
     expect(result).toEqual([]);
+  });
+});
+
+describe('applyRestaurantSort', () => {
+  const restaurants: Restaurant[] = [
+    makeRestaurant({ id: 'fast', deliveryTimeMinutes: 20, rating: 4.2, distanceKm: 5.0, deliveryFee: 800 }),
+    makeRestaurant({ id: 'slow', deliveryTimeMinutes: 45, rating: 4.8, distanceKm: 1.0, deliveryFee: 200, hasPromotion: true }),
+    makeRestaurant({ id: 'mid', deliveryTimeMinutes: 30, rating: 4.5, distanceKm: 3.0, deliveryFee: 500 }),
+  ];
+
+  it('returns the list unchanged when sort is null', () => {
+    expect(applyRestaurantSort(restaurants, null)).toEqual(restaurants);
+  });
+
+  it('sorts by delivery time ascending for "fastest"', () => {
+    const result = applyRestaurantSort(restaurants, 'fastest');
+    expect(result.map((r) => r.id)).toEqual(['fast', 'mid', 'slow']);
+  });
+
+  it('sorts by rating descending for "topRated"', () => {
+    const result = applyRestaurantSort(restaurants, 'topRated');
+    expect(result.map((r) => r.id)).toEqual(['slow', 'mid', 'fast']);
+  });
+
+  it('sorts by distance ascending for "nearest"', () => {
+    const result = applyRestaurantSort(restaurants, 'nearest');
+    expect(result.map((r) => r.id)).toEqual(['slow', 'mid', 'fast']);
+  });
+
+  it('sorts by delivery fee ascending for "lowestFee"', () => {
+    const result = applyRestaurantSort(restaurants, 'lowestFee');
+    expect(result.map((r) => r.id)).toEqual(['slow', 'mid', 'fast']);
+  });
+
+  it('filters to only promoted restaurants for "promotions"', () => {
+    const result = applyRestaurantSort(restaurants, 'promotions');
+    expect(result.map((r) => r.id)).toEqual(['slow']);
+  });
+
+  it('does not mutate the input array', () => {
+    const original = [...restaurants];
+    applyRestaurantSort(restaurants, 'fastest');
+    expect(restaurants).toEqual(original);
   });
 });
 

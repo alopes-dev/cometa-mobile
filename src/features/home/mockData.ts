@@ -1,4 +1,37 @@
-import type { MenuItem, Offer, Restaurant } from './types';
+import type { MenuItem, ModifierGroup, Offer, Restaurant } from './types';
+
+const BURGER_MODIFIER_GROUPS: ModifierGroup[] = [
+  {
+    id: 'pao',
+    label: 'Escolha o pão',
+    type: 'single',
+    required: true,
+    options: [
+      { id: 'pao-tradicional', label: 'Tradicional', priceDelta: 0 },
+      { id: 'pao-brioche', label: 'Brioche', priceDelta: 300 },
+    ],
+  },
+  {
+    id: 'queijo',
+    label: 'Queijo',
+    type: 'single',
+    required: true,
+    options: [
+      { id: 'queijo-cheddar', label: 'Cheddar', priceDelta: 0 },
+      { id: 'queijo-gouda', label: 'Gouda', priceDelta: 500 },
+    ],
+  },
+  {
+    id: 'extras',
+    label: 'Extras',
+    type: 'multiple',
+    required: false,
+    options: [
+      { id: 'extra-bacon', label: 'Bacon', priceDelta: 700 },
+      { id: 'extra-ovo', label: 'Ovo', priceDelta: 500 },
+    ],
+  },
+];
 
 export const mockRestaurants: Restaurant[] = [
   {
@@ -10,6 +43,8 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTimeMinutes: 25,
     deliveryFee: 500,
     description: 'Sabores autênticos de Cabinda, direto para a sua mesa.',
+    distanceKm: 2.4,
+    hasPromotion: true,
   },
   {
     id: 'r2',
@@ -20,6 +55,7 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTimeMinutes: 35,
     deliveryFee: 700,
     description: 'Marisco fresco do dia, preparado à moda da casa.',
+    distanceKm: 4.8,
   },
   {
     id: 'r3',
@@ -30,6 +66,8 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTimeMinutes: 30,
     deliveryFee: 600,
     description: 'Pizzas artesanais assadas em forno a lenha em Talatona.',
+    distanceKm: 1.5,
+    hasPromotion: true,
   },
   {
     id: 'r4',
@@ -40,6 +78,7 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTimeMinutes: 20,
     deliveryFee: 400,
     description: 'Hambúrgueres suculentos e batatas crocantes em Ingombota.',
+    distanceKm: 3.1,
   },
   {
     id: 'r5',
@@ -50,6 +89,7 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTimeMinutes: 40,
     deliveryFee: 800,
     description: 'Grelhados na brasa com o sabor tradicional angolano.',
+    distanceKm: 5.6,
   },
   {
     id: 'r6',
@@ -60,6 +100,7 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTimeMinutes: 45,
     deliveryFee: 900,
     description: 'Sushi fresco e combinados japoneses no coração de Luanda.',
+    distanceKm: 6.2,
   },
   {
     id: 'r7',
@@ -70,6 +111,7 @@ export const mockRestaurants: Restaurant[] = [
     deliveryTimeMinutes: 35,
     deliveryFee: 650,
     description: 'Moamba de galinha tradicional, feita como em casa.',
+    distanceKm: 2.9,
   },
 ];
 
@@ -190,6 +232,7 @@ export const mockMenuItems: MenuItem[] = [
     price: 3000,
     imageUrl: 'https://loremflickr.com/200/200/food,burger?lock=13',
     category: 'Pratos Principais',
+    modifierGroups: BURGER_MODIFIER_GROUPS,
   },
   {
     id: 'r4-2',
@@ -199,6 +242,7 @@ export const mockMenuItems: MenuItem[] = [
     price: 3800,
     imageUrl: 'https://loremflickr.com/200/200/food,burger?lock=14',
     category: 'Pratos Principais',
+    modifierGroups: BURGER_MODIFIER_GROUPS,
   },
   {
     id: 'r4-3',

@@ -8,10 +8,11 @@ import { AddButton, Container, Info, PriceText, Thumbnail, ThumbnailClip } from 
 export type MenuItemRowProps = {
   item: MenuItem;
   onAdd?: () => void;
+  onPress?: () => void;
 };
 
-export function MenuItemRow({ item, onAdd }: MenuItemRowProps) {
-  return (
+export function MenuItemRow({ item, onAdd, onPress }: MenuItemRowProps) {
+  const content = (
     <Container>
       <Info>
         <Text variant="bodyEmphasized">{item.name}</Text>
@@ -33,5 +34,13 @@ export function MenuItemRow({ item, onAdd }: MenuItemRowProps) {
         </ThumbnailClip>
       </Thumbnail>
     </Container>
+  );
+
+  if (!onPress) return content;
+
+  return (
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`Ver ${item.name}`}>
+      {content}
+    </Pressable>
   );
 }

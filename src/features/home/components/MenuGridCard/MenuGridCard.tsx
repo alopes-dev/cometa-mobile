@@ -8,10 +8,11 @@ import { AddButton, Container, ImageWrapper, PriceText } from './MenuGridCard.st
 export type MenuGridCardProps = {
   item: MenuItem;
   onAdd?: () => void;
+  onPress?: () => void;
 };
 
-export function MenuGridCard({ item, onAdd }: MenuGridCardProps) {
-  return (
+export function MenuGridCard({ item, onAdd, onPress }: MenuGridCardProps) {
+  const content = (
     <Container>
       <ImageWrapper>
         <Image
@@ -40,5 +41,13 @@ export function MenuGridCard({ item, onAdd }: MenuGridCardProps) {
       </Text>
       <PriceText>{formatKwanza(item.price)}</PriceText>
     </Container>
+  );
+
+  if (!onPress) return content;
+
+  return (
+    <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`Ver ${item.name}`}>
+      {content}
+    </Pressable>
   );
 }

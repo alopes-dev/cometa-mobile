@@ -1,8 +1,8 @@
 import { Image } from 'expo-image';
-import { Text } from '@/components/design-system/atoms';
+import { QuantityStepper, Text } from '@/components/design-system/atoms';
 import { formatKwanza } from '@/features/home/format';
 import type { CartItem } from '@/hooks/CartProvider';
-import { QuantityStepper } from '../QuantityStepper';
+import { describeCartLine } from '../../cartDisplay';
 import { Container, Thumbnail, Info, PriceText } from './OrderItemRow.styles';
 
 export type OrderItemRowProps = {
@@ -12,7 +12,7 @@ export type OrderItemRowProps = {
 };
 
 export function OrderItemRow({ entry, onIncrement, onDecrement }: OrderItemRowProps) {
-  const { item, quantity } = entry;
+  const { item, quantity, selections, notes, unitPrice } = entry;
   return (
     <Container>
       <Thumbnail>
@@ -22,10 +22,10 @@ export function OrderItemRow({ entry, onIncrement, onDecrement }: OrderItemRowPr
         <Text variant="bodyEmphasized" numberOfLines={1}>
           {item.name}
         </Text>
-        <Text variant="footnote" color="textSecondary" numberOfLines={1}>
-          {item.description}
+        <Text variant="footnote" color="textSecondary" numberOfLines={2}>
+          {describeCartLine(item, selections, notes)}
         </Text>
-        <PriceText>{formatKwanza(item.price)}</PriceText>
+        <PriceText>{formatKwanza(unitPrice)}</PriceText>
       </Info>
       <QuantityStepper quantity={quantity} onIncrement={onIncrement} onDecrement={onDecrement} />
     </Container>

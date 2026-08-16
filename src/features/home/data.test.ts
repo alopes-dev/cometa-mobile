@@ -1,4 +1,4 @@
-import { getCategories, getMenuItems, getRestaurantById, getRestaurants } from './data';
+import { getCategories, getMenuItemById, getMenuItems, getRestaurantById, getRestaurants, searchMenuItems } from './data';
 
 describe('data', () => {
   it('getRestaurants returns a non-empty array of restaurants with the expected shape', () => {
@@ -31,6 +31,40 @@ describe('data', () => {
     for (const item of items) {
       expect(item.restaurantId).toBe(first.id);
     }
+  });
+
+  it('getMenuItemById returns the matching item', () => {
+    const [firstRestaurant] = getRestaurants();
+    const [firstItem] = getMenuItems(firstRestaurant.id);
+    expect(getMenuItemById(firstItem.id)).toEqual(firstItem);
+  });
+
+  it('getMenuItemById returns undefined for an unknown id', () => {
+    expect(getMenuItemById('does-not-exist')).toBeUndefined();
+  });
+
+  it('searchMenuItems matches by dish name across restaurants', () => {
+    const results = searchMenuItems('burger');
+    expect(results.length).toBeGreaterThan(0);
+    for (const item of results) {
+      expect(item.name.toLowerCase()).toContain('burger');
+    }
+  });
+
+  it('searchMenuItems matches by category', () => {
+    const results = searchMenuItems('sobremesas');
+    expect(results.length).toBeGreaterThan(0);
+    for (const item of results) {
+      expect(item.category.toLowerCase()).toBe('sobremesas');
+    }
+  });
+
+  it('searchMenuItems returns an empty array for a blank query', () => {
+    expect(searchMenuItems('   ')).toEqual([]);
+  });
+
+  it('searchMenuItems returns an empty array when nothing matches', () => {
+    expect(searchMenuItems('does-not-exist')).toEqual([]);
   });
 
   it('getCategories returns a deduped list of cuisines', () => {

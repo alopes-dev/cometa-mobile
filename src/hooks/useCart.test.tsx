@@ -16,6 +16,28 @@ const burger: MenuItem = {
   price: 3000,
   imageUrl: 'https://picsum.photos/seed/r1-1/200/200',
   category: 'Pratos Principais',
+  modifierGroups: [
+    {
+      id: 'pao',
+      label: 'Escolha o pão',
+      type: 'single',
+      required: true,
+      options: [
+        { id: 'pao-tradicional', label: 'Tradicional', priceDelta: 0 },
+        { id: 'pao-brioche', label: 'Brioche', priceDelta: 300 },
+      ],
+    },
+    {
+      id: 'extras',
+      label: 'Extras',
+      type: 'multiple',
+      required: false,
+      options: [
+        { id: 'extra-bacon', label: 'Bacon', priceDelta: 700 },
+        { id: 'extra-ovo', label: 'Ovo', priceDelta: 500 },
+      ],
+    },
+  ],
 };
 
 const fries: MenuItem = {
@@ -47,61 +69,116 @@ describe('useCart', () => {
     expect(result.current.restaurantId).toBeNull();
   });
 
-  it('addItem adds a new item with quantity 1', () => {
+  it('addItem adds a new item with quantity 1 and no selections', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
-    act(() => result.current.addItem(burger));
-    expect(result.current.items).toEqual([{ item: burger, quantity: 1 }]);
+    act(() => result.current.addItem(fries));
+    expect(result.current.items).toEqual([
+      { lineId: expect.any(String), item: fries, quantity: 1, selections: [], notes: undefined, unitPrice: 1200 },
+    ]);
     expect(result.current.count).toBe(1);
-    expect(result.current.subtotal).toBe(3000);
+    expect(result.current.subtotal).toBe(1200);
     expect(result.current.restaurantId).toBe('r1');
   });
 
-  it('addItem increments quantity when the item is already in the cart', () => {
+  it('addItem increments quantity when the same item with no selections is added again', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
-    act(() => result.current.addItem(burger));
-    act(() => result.current.addItem(burger));
-    expect(result.current.items).toEqual([{ item: burger, quantity: 2 }]);
+    act(() => result.current.addItem(fries));
+    act(() => result.current.addItem(fries));
+    expect(result.current.items).toHaveLength(1);
+    expect(result.current.items[0].quantity).toBe(2);
     expect(result.current.count).toBe(2);
-    expect(result.current.subtotal).toBe(6000);
+    expect(result.current.subtotal).toBe(2400);
   });
 
-  it('incrementItem and decrementItem adjust quantity', () => {
+  it('applies modifier price deltas to unitPrice and subtotal', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
-    act(() => result.current.addItem(burger));
-    act(() => result.current.incrementItem(burger.id));
+    act(() =>
+      result.current.addItem(burger, {
+        selections: [
+          { groupId: 'pao', optionIds: ['pao-brioche'] },
+          { groupId: 'extras', optionIds: ['extra-bacon', 'extra-ovo'] },
+        ],
+      })
+    );
+    // 3000 base + 300 (brioche) + 700 (bacon) + 500 (ovo) = 4500
+    expect(result.current.items[0].unitPrice).toBe(4500);
+    expect(result.current.subtotal).toBe(4500);
+  });
+
+  it('treats differently-customized lines of the same item as separate cart lines', () => {
+    const { result } = renderHook(() => useCart(), { wrapper });
+    act(() => result.current.addItem(burger, { selections: [{ groupId: 'pao', optionIds: ['pao-tradicional'] }] }));
+    act(() => result.current.addItem(burger, { selections: [{ groupId: 'pao', optionIds: ['pao-brioche'] }] }));
+    expect(result.current.items).toHaveLength(2);
+    expect(result.current.count).toBe(2);
+  });
+
+  it('merges identically-customized lines regardless of selection order', () => {
+    const { result } = renderHook(() => useCart(), { wrapper });
+    act(() =>
+      result.current.addItem(burger, {
+        selections: [{ groupId: 'extras', optionIds: ['extra-bacon', 'extra-ovo'] }],
+      })
+    );
+    act(() =>
+      result.current.addItem(burger, {
+        selections: [{ groupId: 'extras', optionIds: ['extra-ovo', 'extra-bacon'] }],
+      })
+    );
+    expect(result.current.items).toHaveLength(1);
     expect(result.current.items[0].quantity).toBe(2);
-    act(() => result.current.decrementItem(burger.id));
+  });
+
+  it('treats items with different notes as separate cart lines', () => {
+    const { result } = renderHook(() => useCart(), { wrapper });
+    act(() => result.current.addItem(fries, { notes: 'Sem sal' }));
+    act(() => result.current.addItem(fries));
+    expect(result.current.items).toHaveLength(2);
+  });
+
+  it('incrementItem and decrementItem adjust quantity by lineId', () => {
+    const { result } = renderHook(() => useCart(), { wrapper });
+    act(() => result.current.addItem(fries));
+    const { lineId } = result.current.items[0];
+    act(() => result.current.incrementItem(lineId));
+    expect(result.current.items[0].quantity).toBe(2);
+    act(() => result.current.decrementItem(lineId));
     expect(result.current.items[0].quantity).toBe(1);
   });
 
-  it('decrementItem removes the item once quantity reaches zero', () => {
+  it('decrementItem removes the line once quantity reaches zero', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
-    act(() => result.current.addItem(burger));
-    act(() => result.current.decrementItem(burger.id));
+    act(() => result.current.addItem(fries));
+    const { lineId } = result.current.items[0];
+    act(() => result.current.decrementItem(lineId));
     expect(result.current.items).toEqual([]);
     expect(result.current.restaurantId).toBeNull();
   });
 
-  it('keeps the restaurantId while other items remain after a removal', () => {
+  it('keeps the restaurantId while other lines remain after a removal', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
     act(() => result.current.addItem(burger));
     act(() => result.current.addItem(fries));
-    act(() => result.current.decrementItem(burger.id));
-    expect(result.current.items).toEqual([{ item: fries, quantity: 1 }]);
+    const burgerLineId = result.current.items.find((entry) => entry.item.id === burger.id)!.lineId;
+    act(() => result.current.decrementItem(burgerLineId));
+    expect(result.current.items).toEqual([
+      { lineId: expect.any(String), item: fries, quantity: 1, selections: [], notes: undefined, unitPrice: 1200 },
+    ]);
     expect(result.current.restaurantId).toBe('r1');
   });
 
   it('adding an item from a different restaurant replaces the cart', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
-    act(() => result.current.addItem(burger));
+    act(() => result.current.addItem(fries));
     act(() => result.current.addItem(sushi));
-    expect(result.current.items).toEqual([{ item: sushi, quantity: 1 }]);
+    expect(result.current.items).toHaveLength(1);
+    expect(result.current.items[0].item).toEqual(sushi);
     expect(result.current.restaurantId).toBe('r2');
   });
 
   it('clearCart empties the cart', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
-    act(() => result.current.addItem(burger));
+    act(() => result.current.addItem(fries));
     act(() => result.current.clearCart());
     expect(result.current.items).toEqual([]);
     expect(result.current.restaurantId).toBeNull();

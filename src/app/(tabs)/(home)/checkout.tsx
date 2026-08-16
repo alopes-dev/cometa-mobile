@@ -179,12 +179,12 @@ export default function Checkout() {
             </SectionRow>
             <Card>
               {items.map((entry, index) => (
-                <Fragment key={entry.item.id}>
+                <Fragment key={entry.lineId}>
                   {index > 0 ? <CardDivider /> : null}
                   <OrderItemRow
                     entry={entry}
-                    onIncrement={() => incrementItem(entry.item.id)}
-                    onDecrement={() => decrementItem(entry.item.id)}
+                    onIncrement={() => incrementItem(entry.lineId)}
+                    onDecrement={() => decrementItem(entry.lineId)}
                   />
                 </Fragment>
               ))}
