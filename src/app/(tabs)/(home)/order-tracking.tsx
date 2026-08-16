@@ -1,28 +1,15 @@
-import { Fragment, useCallback } from 'react';
-import { Pressable, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Pressable, ScrollView, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import { Text, Icon, type IconProps } from '@/components/design-system/atoms';
+import { Text, Icon } from '@/components/design-system/atoms';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 import { getRestaurantById } from '@/features/home/data';
 import { formatKwanza } from '@/features/home/format';
-
-type Stage = {
-  key: string;
-  label: string;
-  icon: { name: IconProps['name']; sf?: IconProps['sf'] };
-};
-
-const STAGES: Stage[] = [
-  { key: 'confirmed', label: 'Confirmado', icon: { name: 'checkmark-circle', sf: 'checkmark.circle.fill' } },
-  { key: 'preparing', label: 'Em preparação', icon: { name: 'restaurant-outline', sf: 'fork.knife' } },
-  { key: 'on-the-way', label: 'A caminho', icon: { name: 'bicycle-outline', sf: 'bicycle' } },
-  { key: 'delivered', label: 'Entregue', icon: { name: 'home-outline', sf: 'house' } },
-];
-
-const ACTIVE_STAGE_INDEX = 1;
+import { DriverCard } from '@/features/tracking/components/DriverCard';
+import { DRIVER_ASSIGNED_STAGE_INDEX, STAGE_INTERVAL_MS, TRACKING_STAGES, mockDriver } from '@/features/tracking/mockData';
 
 const Screen = styled.View`
   flex: 1;
@@ -48,6 +35,7 @@ const BackButton = styled.View`
 const Content = styled.View`
   padding-horizontal: ${({ theme }) => theme.spacing.md}px;
   gap: ${({ theme }) => theme.spacing.lg}px;
+  padding-bottom: ${({ theme }) => theme.spacing.xl}px;
 `;
 
 const RestaurantRow = styled.View`
@@ -120,6 +108,8 @@ export default function OrderTracking() {
     itemCount: string;
     total: string;
   }>();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
 
   useFocusEffect(
     useCallback(() => {
@@ -128,7 +118,22 @@ export default function OrderTracking() {
     }, [setIsTabBarHidden])
   );
 
+  useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      setActiveIndex((current) => {
+        const next = current + 1;
+        if (next >= TRACKING_STAGES.length - 1) {
+          clearInterval(intervalRef.current);
+          return TRACKING_STAGES.length - 1;
+        }
+        return next;
+      });
+    }, STAGE_INTERVAL_MS);
+    return () => clearInterval(intervalRef.current);
+  }, []);
+
   const restaurant = restaurantId ? getRestaurantById(restaurantId) : undefined;
+  const showDriver = activeIndex >= DRIVER_ASSIGNED_STAGE_INDEX;
 
   return (
     <Screen>
@@ -145,65 +150,69 @@ export default function OrderTracking() {
         </Pressable>
         <Text variant="headline">Acompanhar Pedido</Text>
       </Header>
-      <Content>
-        {restaurant ? (
-          <RestaurantRow>
-            <RestaurantImage source={{ uri: restaurant.imageUrl }} contentFit="cover" />
-            <View style={{ flex: 1, gap: 4 }}>
-              <Text variant="bodyEmphasized" numberOfLines={1}>
-                {restaurant.name}
-              </Text>
-              <EtaRow>
-                <Icon name="time-outline" sf="clock" size={14} color="textSecondary" />
-                <Text variant="footnote" color="textSecondary">
-                  Chegada estimada: {restaurant.deliveryTimeMinutes} min
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Content>
+          {restaurant ? (
+            <RestaurantRow>
+              <RestaurantImage source={{ uri: restaurant.imageUrl }} contentFit="cover" />
+              <View style={{ flex: 1, gap: 4 }}>
+                <Text variant="bodyEmphasized" numberOfLines={1}>
+                  {restaurant.name}
                 </Text>
-              </EtaRow>
-            </View>
-          </RestaurantRow>
-        ) : null}
-
-        <View>
-          {STAGES.map((stage, index) => {
-            const done = index <= ACTIVE_STAGE_INDEX;
-            const isLast = index === STAGES.length - 1;
-            return (
-              <StageRow key={stage.key}>
-                <StageIconColumn>
-                  <StageIconCircle done={done}>
-                    <Icon
-                      name={stage.icon.name}
-                      sf={stage.icon.sf}
-                      size={16}
-                      color={done ? 'onPrimary' : 'textSecondary'}
-                    />
-                  </StageIconCircle>
-                  {isLast ? null : <StageConnector done={index < ACTIVE_STAGE_INDEX} />}
-                </StageIconColumn>
-                <StageInfo>
-                  <Text
-                    variant="bodyEmphasized"
-                    color={index === ACTIVE_STAGE_INDEX ? 'primary' : done ? 'textPrimary' : 'textSecondary'}
-                  >
-                    {stage.label}
+                <EtaRow>
+                  <Icon name="time-outline" sf="clock" size={14} color="textSecondary" />
+                  <Text variant="footnote" color="textSecondary">
+                    Chegada estimada: {restaurant.deliveryTimeMinutes} min
                   </Text>
-                </StageInfo>
-              </StageRow>
-            );
-          })}
-        </View>
+                </EtaRow>
+              </View>
+            </RestaurantRow>
+          ) : null}
 
-        <Card>
-          <SummaryRow>
-            <Text variant="body" color="textSecondary">
-              {itemCount} {itemCount === '1' ? 'item' : 'itens'}
-            </Text>
-            <Text variant="bodyEmphasized" color="primary">
-              {formatKwanza(Number(total))}
-            </Text>
-          </SummaryRow>
-        </Card>
-      </Content>
+          <View>
+            {TRACKING_STAGES.map((stage, index) => {
+              const done = index <= activeIndex;
+              const isLast = index === TRACKING_STAGES.length - 1;
+              return (
+                <StageRow key={stage.key}>
+                  <StageIconColumn>
+                    <StageIconCircle done={done}>
+                      <Icon
+                        name={stage.icon.name}
+                        sf={stage.icon.sf}
+                        size={16}
+                        color={done ? 'onPrimary' : 'textSecondary'}
+                      />
+                    </StageIconCircle>
+                    {isLast ? null : <StageConnector done={index < activeIndex} />}
+                  </StageIconColumn>
+                  <StageInfo>
+                    <Text
+                      variant="bodyEmphasized"
+                      color={index === activeIndex ? 'primary' : done ? 'textPrimary' : 'textSecondary'}
+                    >
+                      {stage.label}
+                    </Text>
+                  </StageInfo>
+                </StageRow>
+              );
+            })}
+          </View>
+
+          {showDriver ? <DriverCard driver={mockDriver} /> : null}
+
+          <Card>
+            <SummaryRow>
+              <Text variant="body" color="textSecondary">
+                {itemCount} {itemCount === '1' ? 'item' : 'itens'}
+              </Text>
+              <Text variant="bodyEmphasized" color="primary">
+                {formatKwanza(Number(total))}
+              </Text>
+            </SummaryRow>
+          </Card>
+        </Content>
+      </ScrollView>
     </Screen>
   );
 }
