@@ -24,6 +24,24 @@ export function OrderSummaryCard({ summary }: OrderSummaryCardProps) {
           {formatDeliveryFee(summary.delivery)}
         </Text>
       </Row>
+      {summary.discount > 0 ? (
+        <Row>
+          <Text variant="body" color="textSecondary">
+            Desconto
+          </Text>
+          <Text variant="body" color="primary">
+            -{formatKwanza(summary.discount)}
+          </Text>
+        </Row>
+      ) : null}
+      {summary.tip > 0 ? (
+        <Row>
+          <Text variant="body" color="textSecondary">
+            Gorjeta
+          </Text>
+          <Text variant="body">{formatKwanza(summary.tip)}</Text>
+        </Row>
+      ) : null}
       <Row>
         <Text variant="body" color="textSecondary">
           VAT (14%)

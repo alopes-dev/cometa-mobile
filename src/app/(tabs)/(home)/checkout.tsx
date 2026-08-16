@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,13 +6,13 @@ import styled from 'styled-components/native';
 import { Text, Icon } from '@/components/design-system/atoms';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 import { useCart } from '@/hooks/useCart';
+import { useCheckoutFlow } from '@/hooks/useCheckoutFlow';
 import { getRestaurantById } from '@/features/home/data';
 import { DetailsRow } from '@/features/checkout/components/DetailsRow';
-import { OrderItemRow } from '@/features/checkout/components/OrderItemRow';
 import { OrderSummaryCard } from '@/features/checkout/components/OrderSummaryCard';
 import { PlaceOrderBar } from '@/features/checkout/components/PlaceOrderBar';
 import { OrderConfirmation } from '@/features/checkout/components/OrderConfirmation';
-import { mockAddress, mockPaymentMethod } from '@/features/checkout/mockData';
+import { mockAddresses, mockPaymentMethod } from '@/features/checkout/mockData';
 import { computeOrderSummary } from '@/features/checkout/pricing';
 
 const PLACING_DELAY = 1200;
@@ -92,7 +92,9 @@ export default function Checkout() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { setIsTabBarHidden } = useTabBarVisibility();
-  const { items, restaurantId, subtotal, incrementItem, decrementItem, clearCart } = useCart();
+  const { items, restaurantId, subtotal, clearCart } = useCart();
+  const { deliveryType, schedule, addressId, tipPercent, couponCode, discountPercent, reset: resetCheckoutFlow } =
+    useCheckoutFlow();
   const [status, setStatus] = useState<CheckoutStatus>('idle');
   const placingTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -111,10 +113,12 @@ export default function Checkout() {
   };
 
   const restaurant = restaurantId ? getRestaurantById(restaurantId) : undefined;
-  const summary = computeOrderSummary(subtotal, restaurant?.deliveryFee ?? 0);
+  const summary = computeOrderSummary(subtotal, restaurant?.deliveryFee ?? 0, discountPercent, tipPercent);
+  const selectedAddress = mockAddresses.find((address) => address.id === addressId);
 
   const handleDone = () => {
     clearCart();
+    resetCheckoutFlow();
     router.replace('/');
   };
 
@@ -123,6 +127,7 @@ export default function Checkout() {
     const itemCount = items.length;
     const { total } = summary;
     clearCart();
+    resetCheckoutFlow();
     router.push({
       pathname: '/order-tracking',
       params: { restaurantId: trackedRestaurantId ?? '', itemCount: String(itemCount), total: String(total) },
@@ -155,6 +160,14 @@ export default function Checkout() {
     );
   }
 
+  const deliveryTitle = deliveryType === 'pickup' ? 'Retirada no restaurante' : selectedAddress?.label ?? 'Entrega';
+  const deliverySubtitle =
+    deliveryType === 'pickup'
+      ? restaurant?.name ?? 'Selecione o restaurante'
+      : selectedAddress?.details ?? 'Escolha um endereço de entrega';
+
+  const scheduleTitle = !schedule ? 'Agora' : schedule.type === 'now' ? 'Agora' : schedule.label;
+
   return (
     <Screen>
       <ScrollView
@@ -172,37 +185,35 @@ export default function Checkout() {
         <Content>
           <View>
             <SectionRow>
-              <SectionLabel>Your Order</SectionLabel>
-              <Text variant="footnote" color="textSecondary">
-                {items.length} {items.length === 1 ? 'Item' : 'Items'}
-              </Text>
+              <SectionLabel>Entrega</SectionLabel>
             </SectionRow>
             <Card>
-              {items.map((entry, index) => (
-                <Fragment key={entry.lineId}>
-                  {index > 0 ? <CardDivider /> : null}
-                  <OrderItemRow
-                    entry={entry}
-                    onIncrement={() => incrementItem(entry.lineId)}
-                    onDecrement={() => decrementItem(entry.lineId)}
-                  />
-                </Fragment>
-              ))}
+              <DetailsRow
+                icon={{
+                  name: deliveryType === 'pickup' ? 'storefront-outline' : 'location-outline',
+                  sf: deliveryType === 'pickup' ? 'storefront' : 'location',
+                }}
+                title={deliveryTitle}
+                subtitle={deliverySubtitle}
+                trailing="chevron"
+                onPress={() => router.push(deliveryType === 'pickup' ? '/delivery-type' : '/address')}
+              />
+              <CardDivider />
+              <DetailsRow
+                icon={{ name: 'time-outline', sf: 'clock' }}
+                title={scheduleTitle}
+                subtitle="Quando"
+                trailing="chevron"
+                onPress={() => router.push('/schedule')}
+              />
             </Card>
           </View>
 
           <View>
             <SectionRow>
-              <SectionLabel>Details</SectionLabel>
+              <SectionLabel>Pagamento</SectionLabel>
             </SectionRow>
             <Card>
-              <DetailsRow
-                icon={{ name: 'location-outline', sf: 'location' }}
-                title={mockAddress.label}
-                subtitle={mockAddress.details}
-                trailing="chevron"
-              />
-              <CardDivider />
               <DetailsRow
                 icon={{ name: 'card-outline', sf: 'creditcard' }}
                 title={`${mockPaymentMethod.brand} ····${mockPaymentMethod.last4}`}
@@ -212,9 +223,38 @@ export default function Checkout() {
             </Card>
           </View>
 
+          {tipPercent > 0 || couponCode ? (
+            <View>
+              <SectionRow>
+                <SectionLabel>Gorjeta e Cupão</SectionLabel>
+              </SectionRow>
+              <Card>
+                {tipPercent > 0 ? (
+                  <DetailsRow
+                    icon={{ name: 'heart-outline', sf: 'heart' }}
+                    title={`Gorjeta ${tipPercent}%`}
+                    subtitle="Para o entregador"
+                    trailing="chevron"
+                    onPress={() => router.push('/cart')}
+                  />
+                ) : null}
+                {tipPercent > 0 && couponCode ? <CardDivider /> : null}
+                {couponCode ? (
+                  <DetailsRow
+                    icon={{ name: 'pricetag-outline', sf: 'tag' }}
+                    title={couponCode}
+                    subtitle={`${discountPercent}% de desconto`}
+                    trailing="chevron"
+                    onPress={() => router.push('/cart')}
+                  />
+                ) : null}
+              </Card>
+            </View>
+          ) : null}
+
           <View>
             <SectionRow>
-              <SectionLabel>Order Summary</SectionLabel>
+              <SectionLabel>Resumo</SectionLabel>
             </SectionRow>
             <OrderSummaryCard summary={summary} />
           </View>

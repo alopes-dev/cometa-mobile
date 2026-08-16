@@ -166,7 +166,7 @@ export default function RestaurantDetail() {
       </Animated.ScrollView>
       <RestaurantHero restaurant={restaurant} topInset={insets.top} scrollY={scrollY} onBack={() => router.back()} />
       <CartBarWrapper bottomInset={insets.bottom}>
-        <CartSummaryBar count={cartCount} total={cartSubtotal} onPress={() => router.push('/checkout')} />
+        <CartSummaryBar count={cartCount} total={cartSubtotal} onPress={() => router.push('/cart')} />
       </CartBarWrapper>
     </Screen>
   );

@@ -17,6 +17,7 @@ import { OnboardingProvider } from "@/hooks/OnboardingProvider";
 import { useOnboarding } from "@/hooks/useOnboarding";
 import { TabBarVisibilityProvider } from "@/hooks/TabBarVisibilityProvider";
 import { CartProvider } from "@/hooks/CartProvider";
+import { CheckoutFlowProvider } from "@/hooks/CheckoutFlowProvider";
 
 const DEBUG_SERVER_URL = "http://192.168.1.146:7778/event";
 const DEBUG_SESSION_ID = "app-startup-crash";
@@ -128,7 +129,9 @@ function Gate({ onReady }: { onReady: () => void }) {
       <StatusBar hidden />
       <TabBarVisibilityProvider>
         <CartProvider>
-          <Navigation hasSeenOnboarding={hasSeenOnboarding} />
+          <CheckoutFlowProvider>
+            <Navigation hasSeenOnboarding={hasSeenOnboarding} />
+          </CheckoutFlowProvider>
         </CartProvider>
       </TabBarVisibilityProvider>
     </SafeAreaProvider>

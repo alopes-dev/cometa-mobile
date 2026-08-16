@@ -1,0 +1,242 @@
+import { Fragment, useCallback, useState } from 'react';
+import { Pressable, ScrollView, View } from 'react-native';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import styled from 'styled-components/native';
+import { Button, Chip, Icon, Text, TextField } from '@/components/design-system/atoms';
+import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
+import { useCart } from '@/hooks/useCart';
+import { useCheckoutFlow } from '@/hooks/useCheckoutFlow';
+import { getRestaurantById } from '@/features/home/data';
+import { OrderItemRow } from '@/features/checkout/components/OrderItemRow';
+import { OrderSummaryCard } from '@/features/checkout/components/OrderSummaryCard';
+import { TIP_PRESETS } from '@/features/checkout/mockData';
+import { computeOrderSummary } from '@/features/checkout/pricing';
+
+const Screen = styled.View`
+  flex: 1;
+  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const Header = styled.View<{ topInset: number }>`
+  padding-top: ${({ theme, topInset }) => theme.spacing.md + topInset}px;
+  padding-horizontal: ${({ theme }) => theme.spacing.md}px;
+  padding-bottom: ${({ theme }) => theme.spacing.sm}px;
+  gap: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const BackButton = styled.View`
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.colors.surface};
+`;
+
+const Content = styled.View`
+  padding-horizontal: ${({ theme }) => theme.spacing.md}px;
+  gap: ${({ theme }) => theme.spacing.lg}px;
+  padding-bottom: ${({ theme }) => theme.spacing.xl}px;
+`;
+
+const SectionLabel = styled.Text`
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: ${({ theme }) => theme.colors.textSecondary};
+  text-transform: uppercase;
+  margin-bottom: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const Card = styled.View`
+  background-color: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.radius.lg}px;
+  padding: ${({ theme }) => theme.spacing.md}px;
+  gap: ${({ theme }) => theme.spacing.md}px;
+`;
+
+const CardDivider = styled.View`
+  height: 1px;
+  background-color: ${({ theme }) => theme.colors.divider};
+`;
+
+const AddMoreRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs}px;
+  padding-top: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const CouponRow = styled.View`
+  flex-direction: row;
+  gap: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const CouponField = styled.View`
+  flex: 1;
+`;
+
+const ChipRow = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const BottomBar = styled.View<{ bottomInset: number }>`
+  position: absolute;
+  left: ${({ theme }) => theme.spacing.md}px;
+  right: ${({ theme }) => theme.spacing.md}px;
+  bottom: ${({ theme, bottomInset }) => bottomInset + theme.spacing.sm}px;
+`;
+
+const EmptyState = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.md}px;
+  padding: ${({ theme }) => theme.spacing.xl}px;
+`;
+
+function tipLabel(percent: number): string {
+  return percent === 0 ? 'Sem gorjeta' : `${percent}%`;
+}
+
+export default function Cart() {
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const { setIsTabBarHidden } = useTabBarVisibility();
+  const { items, restaurantId, subtotal, incrementItem, decrementItem } = useCart();
+  const { tipPercent, setTipPercent, couponCode, discountPercent, applyCoupon, notes, setNotes } = useCheckoutFlow();
+  const [couponInput, setCouponInput] = useState('');
+  const [couponError, setCouponError] = useState<string | null>(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      setIsTabBarHidden(true);
+      return () => setIsTabBarHidden(false);
+    }, [setIsTabBarHidden])
+  );
+
+  const restaurant = restaurantId ? getRestaurantById(restaurantId) : undefined;
+  const summary = computeOrderSummary(subtotal, restaurant?.deliveryFee ?? 0, discountPercent, tipPercent);
+
+  const handleApplyCoupon = () => {
+    if (!couponInput.trim()) return;
+    const success = applyCoupon(couponInput);
+    setCouponError(success ? null : 'Cupão inválido');
+    if (success) setCouponInput('');
+  };
+
+  if (items.length === 0) {
+    return (
+      <Screen>
+        <EmptyState>
+          <Text variant="title2">O seu carrinho está vazio</Text>
+          <Pressable onPress={() => router.back()} accessibilityRole="button">
+            <Text color="primary">Voltar</Text>
+          </Pressable>
+        </EmptyState>
+      </Screen>
+    );
+  }
+
+  return (
+    <Screen>
+      <ScrollView contentContainerStyle={{ paddingBottom: 96 + insets.bottom }} showsVerticalScrollIndicator={false}>
+        <Header topInset={insets.top}>
+          <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Voltar" hitSlop={8}>
+            <BackButton>
+              <Icon name="chevron-back" sf="chevron.left" size={18} color="textPrimary" />
+            </BackButton>
+          </Pressable>
+          <Text variant="headline">Carrinho</Text>
+        </Header>
+        <Content>
+          <View>
+            <SectionLabel>Seu Pedido</SectionLabel>
+            <Card>
+              {items.map((entry, index) => (
+                <Fragment key={entry.lineId}>
+                  {index > 0 ? <CardDivider /> : null}
+                  <OrderItemRow
+                    entry={entry}
+                    onIncrement={() => incrementItem(entry.lineId)}
+                    onDecrement={() => decrementItem(entry.lineId)}
+                  />
+                </Fragment>
+              ))}
+            </Card>
+            {restaurantId ? (
+              <Pressable onPress={() => router.push(`/restaurant/${restaurantId}`)} accessibilityRole="button">
+                <AddMoreRow>
+                  <Icon name="add-circle-outline" sf="plus.circle" size={18} color="primary" />
+                  <Text variant="footnote" color="primary">
+                    Adicionar mais itens
+                  </Text>
+                </AddMoreRow>
+              </Pressable>
+            ) : null}
+          </View>
+
+          <View>
+            <SectionLabel>Cupão</SectionLabel>
+            {couponCode ? (
+              <Card>
+                <Text variant="bodyEmphasized" color="primary">
+                  {couponCode} aplicado — {discountPercent}% de desconto
+                </Text>
+              </Card>
+            ) : (
+              <View>
+                <CouponRow>
+                  <CouponField>
+                    <TextField
+                      value={couponInput}
+                      onChangeText={setCouponInput}
+                      placeholder="Ex: COMETA10"
+                      autoCapitalize="characters"
+                      error={couponError ?? undefined}
+                    />
+                  </CouponField>
+                  <Button variant="outline" onPress={handleApplyCoupon}>
+                    Aplicar
+                  </Button>
+                </CouponRow>
+              </View>
+            )}
+          </View>
+
+          <View>
+            <SectionLabel>Gorjeta</SectionLabel>
+            <ChipRow>
+              {TIP_PRESETS.map((preset) => (
+                <Chip
+                  key={preset}
+                  label={tipLabel(preset)}
+                  selected={tipPercent === preset}
+                  onPress={() => setTipPercent(preset)}
+                />
+              ))}
+            </ChipRow>
+          </View>
+
+          <View>
+            <SectionLabel>Observação</SectionLabel>
+            <TextField value={notes} onChangeText={setNotes} placeholder="Ex: Tocar a campainha" multiline />
+          </View>
+
+          <View>
+            <SectionLabel>Resumo</SectionLabel>
+            <OrderSummaryCard summary={summary} />
+          </View>
+        </Content>
+      </ScrollView>
+      <BottomBar bottomInset={insets.bottom}>
+        <Button variant="primary" size="lg" shape="pill" onPress={() => router.push('/delivery-type')}>
+          Continuar
+        </Button>
+      </BottomBar>
+    </Screen>
+  );
+}
