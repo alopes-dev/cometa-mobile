@@ -7,11 +7,12 @@ import { Container, Badge, Content, TopContent } from './OfferCard.styles';
 
 export type OfferCardProps = {
   offer: Offer;
+  fullWidth?: boolean;
 };
 
-export function OfferCard({ offer }: OfferCardProps) {
+export function OfferCard({ offer, fullWidth }: OfferCardProps) {
   return (
-    <Container>
+    <Container fullWidth={fullWidth}>
       <Image source={{ uri: offer.imageUrl }} style={StyleSheet.absoluteFill} contentFit="cover" />
       <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']} style={StyleSheet.absoluteFill} />
       <TopContent>

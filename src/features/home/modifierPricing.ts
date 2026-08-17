@@ -14,3 +14,13 @@ export function computeUnitPrice(item: MenuItem, selections: CartSelection[]): n
   }, 0);
   return item.price + delta;
 }
+
+export function hasRequiredSelections(item: MenuItem, selections: CartSelection[]): boolean {
+  const groups = item.modifierGroups ?? [];
+  return groups
+    .filter((group) => group.required)
+    .every((group) => {
+      const selection = selections.find((candidate) => candidate.groupId === group.id);
+      return Boolean(selection && selection.optionIds.length > 0);
+    });
+}

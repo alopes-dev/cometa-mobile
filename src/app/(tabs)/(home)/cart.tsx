@@ -122,7 +122,6 @@ export default function Cart() {
   const summary = computeOrderSummary(subtotal, restaurant?.deliveryFee ?? 0, discountPercent, tipPercent);
 
   const handleApplyCoupon = () => {
-    if (!couponInput.trim()) return;
     const success = applyCoupon(couponInput);
     setCouponError(success ? null : 'Cupão inválido');
     if (success) setCouponInput('');
@@ -199,7 +198,7 @@ export default function Cart() {
                       error={couponError ?? undefined}
                     />
                   </CouponField>
-                  <Button variant="outline" onPress={handleApplyCoupon}>
+                  <Button variant="outline" disabled={!couponInput.trim()} onPress={handleApplyCoupon}>
                     Aplicar
                   </Button>
                 </CouponRow>

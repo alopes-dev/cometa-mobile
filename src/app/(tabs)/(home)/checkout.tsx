@@ -143,10 +143,9 @@ export default function Checkout() {
   );
 
   const handlePlaceOrder = () => {
-    if (!paymentMethod) {
-      router.push('/payment-method');
-      return;
-    }
+    // The PlaceOrderBar is disabled whenever paymentMethod is unset, so this
+    // is unreachable in practice — kept only to narrow the type below.
+    if (!paymentMethod) return;
 
     if (paymentMethod.type === 'cash') {
       setStatus('placing');
@@ -355,7 +354,12 @@ export default function Checkout() {
         </Content>
       </ScrollView>
       <BottomBar bottomInset={insets.bottom}>
-        <PlaceOrderBar total={summary.total} isLoading={status === 'placing'} onPress={handlePlaceOrder} />
+        <PlaceOrderBar
+          total={summary.total}
+          isLoading={status === 'placing'}
+          disabled={!paymentMethod}
+          onPress={handlePlaceOrder}
+        />
       </BottomBar>
     </Screen>
   );

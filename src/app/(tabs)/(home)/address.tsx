@@ -74,7 +74,6 @@ export default function AddressScreen() {
   );
 
   const handleSaveNewAddress = () => {
-    if (!newLabel.trim() || !newDetails.trim()) return;
     const id = `custom-${addresses.length}`;
     setAddresses((current) => [...current, { id, label: newLabel.trim(), details: newDetails.trim() }]);
     setAddressId(id);
@@ -115,7 +114,11 @@ export default function AddressScreen() {
                 value={newDetails}
                 onChangeText={setNewDetails}
               />
-              <Button variant="primary" onPress={handleSaveNewAddress}>
+              <Button
+                variant="primary"
+                disabled={!newLabel.trim() || !newDetails.trim()}
+                onPress={handleSaveNewAddress}
+              >
                 Guardar endereço
               </Button>
             </NewAddressForm>

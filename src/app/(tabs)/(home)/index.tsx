@@ -27,9 +27,8 @@ const ListHeader = styled.View<{ topInset: number }>`
   padding-bottom: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-const PaddedSection = styled.View`
+const HeaderStack = styled.View`
   gap: ${({ theme }) => theme.spacing.md}px;
-  padding-horizontal: ${({ theme }) => theme.spacing.md}px;
 `;
 
 const SearchTrigger = styled.View`
@@ -96,10 +95,11 @@ export default function Home() {
         }}
         ListHeaderComponent={
           <ListHeader topInset={insets.top}>
-            <PaddedSection>
+            <HeaderStack>
               <DiscoverHeader
                 avatarUrl={MOCK_AVATAR_URL}
                 address={MOCK_ADDRESS}
+                onPressNotifications={() => router.push("/notifications")}
               />
               <Text variant="headline" color="primary">
                 Descobrir
@@ -116,7 +116,7 @@ export default function Home() {
                   </Text>
                 </SearchTrigger>
               </Pressable>
-            </PaddedSection>
+            </HeaderStack>
             <CategoryChipList
               categories={categories}
               selected={null}
@@ -126,11 +126,12 @@ export default function Home() {
               <SectionHeader
                 title="Ofertas Especiais"
                 actionLabel="Ver todas"
+                onPressAction={() => router.push("/offers")}
               />
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{ gap: 12, paddingHorizontal: 16 }}
+                contentContainerStyle={{ gap: 12 }}
               >
                 {offers.map((offer) => (
                   <OfferCard key={offer.id} offer={offer} />

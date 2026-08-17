@@ -7,21 +7,23 @@ import { Container, TotalLabel, TotalValue, ButtonContent, ButtonLabel } from '.
 export type PlaceOrderBarProps = {
   total: number;
   isLoading?: boolean;
+  disabled?: boolean;
   onPress: () => void;
 };
 
-export function PlaceOrderBar({ total, isLoading = false, onPress }: PlaceOrderBarProps) {
+export function PlaceOrderBar({ total, isLoading = false, disabled = false, onPress }: PlaceOrderBarProps) {
   const theme = useTheme();
+  const isDisabled = disabled || isLoading;
 
   return (
     <Pressable
-      onPress={isLoading ? undefined : onPress}
-      disabled={isLoading}
+      onPress={isDisabled ? undefined : onPress}
+      disabled={isDisabled}
       accessibilityRole="button"
       accessibilityLabel="Fazer pedido"
-      accessibilityState={{ busy: isLoading }}
+      accessibilityState={{ busy: isLoading, disabled }}
     >
-      <Container>
+      <Container disabled={disabled}>
         <View>
           <TotalLabel>TOTAL</TotalLabel>
           <TotalValue>{formatKwanza(total)}</TotalValue>

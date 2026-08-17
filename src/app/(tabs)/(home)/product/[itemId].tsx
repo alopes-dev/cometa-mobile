@@ -9,7 +9,7 @@ import { useCart } from '@/hooks/useCart';
 import type { CartSelection } from '@/hooks/CartProvider';
 import { getMenuItemById } from '@/features/home/data';
 import { formatKwanza } from '@/features/home/format';
-import { computeUnitPrice } from '@/features/home/modifierPricing';
+import { computeUnitPrice, hasRequiredSelections } from '@/features/home/modifierPricing';
 import { ModifierGroupSelector } from '@/features/home/components/ModifierGroupSelector';
 
 const Screen = styled.View`
@@ -123,6 +123,7 @@ export default function ProductDetail() {
 
   const unitPrice = computeUnitPrice(item, selections);
   const totalPrice = unitPrice * quantity;
+  const canAdd = hasRequiredSelections(item, selections);
 
   const handleAdd = () => {
     const trimmedNotes = notes.trim() || undefined;
@@ -190,7 +191,7 @@ export default function ProductDetail() {
         </Content>
       </ScrollView>
       <BottomBar bottomInset={insets.bottom}>
-        <Button variant="primary" size="lg" shape="pill" onPress={handleAdd}>
+        <Button variant="primary" size="lg" shape="pill" disabled={!canAdd} onPress={handleAdd}>
           Adicionar — {formatKwanza(totalPrice)}
         </Button>
       </BottomBar>

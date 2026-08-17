@@ -28,4 +28,16 @@ describe('PlaceOrderBar', () => {
     fireEvent.press(getByLabelText('Fazer pedido'));
     expect(onPress).not.toHaveBeenCalled();
   });
+
+  it('ignores presses when disabled', () => {
+    const onPress = jest.fn();
+    const { getByLabelText } = renderWithTheme(<PlaceOrderBar total={13224} disabled onPress={onPress} />);
+    fireEvent.press(getByLabelText('Fazer pedido'));
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
+  it('exposes the disabled state via accessibilityState', () => {
+    const { getByLabelText } = renderWithTheme(<PlaceOrderBar total={13224} disabled onPress={() => {}} />);
+    expect(getByLabelText('Fazer pedido').props.accessibilityState).toEqual({ busy: false, disabled: true });
+  });
 });

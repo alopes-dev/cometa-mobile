@@ -3,9 +3,9 @@ import styled from 'styled-components/native';
 export const CARD_WIDTH = 260;
 export const CARD_HEIGHT = 140;
 
-export const Container = styled.View`
-  width: ${CARD_WIDTH}px;
-  height: ${CARD_HEIGHT}px;
+export const Container = styled.View<{ fullWidth?: boolean }>`
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : `${CARD_WIDTH}px`)};
+  height: ${({ fullWidth }) => (fullWidth ? 160 : CARD_HEIGHT)}px;
   border-radius: ${({ theme }) => theme.radius.lg}px;
   overflow: hidden;
   background-color: ${({ theme }) => theme.colors.surface};

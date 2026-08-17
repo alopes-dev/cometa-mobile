@@ -13,7 +13,7 @@ export function CategoryChipList({ categories, selected, onSelect }: CategoryChi
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ gap: 8, paddingHorizontal: 16 }}
+      contentContainerStyle={{ gap: 8 }}
     >
       <Chip
         label="Tudo"
