@@ -4,7 +4,7 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled, { useTheme } from 'styled-components/native';
-import { Icon, Text } from '@/components/design-system/atoms';
+import { Button, Icon, Text } from '@/components/design-system/atoms';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 import { getRestaurantById } from '@/features/home/data';
 import { formatKwanza } from '@/features/home/format';
@@ -222,7 +222,23 @@ export default function LiveTracking() {
               ) : null}
             </StatusHeader>
 
-            <DriverCard driver={liveDriver} />
+            {delivered ? (
+              <Button
+                variant="primary"
+                size="lg"
+                shape="pill"
+                onPress={() =>
+                  router.push({
+                    pathname: '/delivered',
+                    params: { restaurantId: restaurantId ?? '', itemCount, total },
+                  })
+                }
+              >
+                Ver Resumo do Pedido
+              </Button>
+            ) : (
+              <DriverCard driver={liveDriver} />
+            )}
 
             <SectionDivider />
 

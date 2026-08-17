@@ -135,7 +135,8 @@ export default function OrderTracking() {
   }, []);
 
   const restaurant = restaurantId ? getRestaurantById(restaurantId) : undefined;
-  const showDriver = activeIndex >= DRIVER_ASSIGNED_STAGE_INDEX;
+  const delivered = activeIndex === TRACKING_STAGES.length - 1;
+  const showDriver = activeIndex >= DRIVER_ASSIGNED_STAGE_INDEX && !delivered;
 
   return (
     <Screen>
@@ -219,6 +220,22 @@ export default function OrderTracking() {
                 Ver no mapa
               </Button>
             </View>
+          ) : null}
+
+          {delivered ? (
+            <Button
+              variant="primary"
+              size="lg"
+              shape="pill"
+              onPress={() =>
+                router.push({
+                  pathname: '/delivered',
+                  params: { restaurantId: restaurantId ?? '', itemCount, total },
+                })
+              }
+            >
+              Ver Resumo do Pedido
+            </Button>
           ) : null}
 
           <Card>
