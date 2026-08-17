@@ -1,5 +1,10 @@
 import type { IconProps } from '@/components/design-system/atoms';
 
+export type Coordinate = {
+  latitude: number;
+  longitude: number;
+};
+
 export type Driver = {
   name: string;
   photoUrl: string;

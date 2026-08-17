@@ -3,6 +3,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import styled, { useTheme } from "styled-components/native";
 import {
   useFonts,
@@ -189,12 +190,14 @@ export default function RootLayout() {
   if (!fontsReady) return null;
 
   return (
-    <ThemeProvider>
-      <OnboardingProvider>
-        <AuthProvider>
-          <Gate onReady={handleReady} />
-        </AuthProvider>
-      </OnboardingProvider>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider>
+        <OnboardingProvider>
+          <AuthProvider>
+            <Gate onReady={handleReady} />
+          </AuthProvider>
+        </OnboardingProvider>
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 }

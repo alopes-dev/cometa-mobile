@@ -175,11 +175,21 @@ export default function Checkout() {
     const trackedRestaurantId = restaurantId;
     const itemCount = items.length;
     const { total } = summary;
+    // Captured before resetCheckoutFlow() clears deliveryType/addressId/paymentMethod,
+    // so the tracking screens still have something human-readable to display.
+    const deliverySummary = deliveryType === 'pickup' ? 'Retirada no restaurante' : selectedAddress?.details ?? 'Entrega';
+    const paymentSummary = paymentMethod?.detailsLabel ?? 'Não definido';
     clearCart();
     resetCheckoutFlow();
     router.push({
       pathname: '/order-tracking',
-      params: { restaurantId: trackedRestaurantId ?? '', itemCount: String(itemCount), total: String(total) },
+      params: {
+        restaurantId: trackedRestaurantId ?? '',
+        itemCount: String(itemCount),
+        total: String(total),
+        deliverySummary,
+        paymentSummary,
+      },
     });
   };
 

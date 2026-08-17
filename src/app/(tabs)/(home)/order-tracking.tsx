@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import { Text, Icon } from '@/components/design-system/atoms';
+import { Button, Text, Icon } from '@/components/design-system/atoms';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 import { getRestaurantById } from '@/features/home/data';
 import { formatKwanza } from '@/features/home/format';
@@ -103,10 +103,12 @@ export default function OrderTracking() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { setIsTabBarHidden } = useTabBarVisibility();
-  const { restaurantId, itemCount, total } = useLocalSearchParams<{
+  const { restaurantId, itemCount, total, deliverySummary, paymentSummary } = useLocalSearchParams<{
     restaurantId: string;
     itemCount: string;
     total: string;
+    deliverySummary: string;
+    paymentSummary: string;
   }>();
   const [activeIndex, setActiveIndex] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
@@ -199,7 +201,25 @@ export default function OrderTracking() {
             })}
           </View>
 
-          {showDriver ? <DriverCard driver={mockDriver} /> : null}
+          {showDriver ? (
+            <View style={{ gap: 12 }}>
+              <DriverCard driver={mockDriver} />
+              <Button
+                variant="outline"
+                size="lg"
+                shape="pill"
+                icon={<Icon name="map-outline" sf="map" size={18} color="primary" />}
+                onPress={() =>
+                  router.push({
+                    pathname: '/live-tracking',
+                    params: { restaurantId: restaurantId ?? '', itemCount, total, deliverySummary, paymentSummary },
+                  })
+                }
+              >
+                Ver no mapa
+              </Button>
+            </View>
+          ) : null}
 
           <Card>
             <SummaryRow>
