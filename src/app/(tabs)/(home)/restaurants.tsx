@@ -87,8 +87,13 @@ export default function RestaurantListing() {
             <RestaurantListFilterBar selected={sort} onSelect={setSort} />
           </ListHeader>
         }
-        renderItem={({ item }) => (
-          <RestaurantCard restaurant={item} onPress={() => router.push(`/restaurant/${item.id}`)} />
+        renderItem={({ item, index }) => (
+          <RestaurantCard
+            restaurant={item}
+            onPress={() => router.push(`/restaurant/${item.id}`)}
+            index={index}
+            entranceDelayMs={80}
+          />
         )}
         ListEmptyComponent={
           <EmptyState>

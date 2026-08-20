@@ -12,5 +12,5 @@ export const Container = styled.View<{ selected: boolean }>`
   background-color: ${({ theme, selected }) =>
     selected ? theme.colors.background : theme.colors.surface};
   border-width: 1px;
-  border-color: ${({ theme, selected }) => (selected ? theme.colors.primary : 'transparent')};
+  border-color: ${({ theme, selected }) => (selected ? theme.colors.categorySelected : 'transparent')};
 `;

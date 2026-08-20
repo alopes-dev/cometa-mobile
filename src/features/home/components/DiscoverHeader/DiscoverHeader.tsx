@@ -1,5 +1,7 @@
 import { Pressable } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { Text, Icon, Avatar } from '@/components/design-system/atoms';
+import { useBounceAnimation } from '@/hooks/useBounceAnimation';
 import { Container, AddressSection, AddressColumn, AddressRow, BellButton } from './DiscoverHeader.styles';
 
 export type DiscoverHeaderProps = {
@@ -15,11 +17,26 @@ export function DiscoverHeader({
   onPressAddress,
   onPressNotifications,
 }: DiscoverHeaderProps) {
+  const { style: avatarBounceStyle, bounce: bounceAvatar } = useBounceAnimation(0.96);
+  const { style: bellBounceStyle, bounce: bounceBell } = useBounceAnimation(0.9);
+
+  const handlePressAddress = () => {
+    bounceAvatar();
+    onPressAddress?.();
+  };
+
+  const handlePressNotifications = () => {
+    bounceBell();
+    onPressNotifications?.();
+  };
+
   return (
     <Container>
-      <Pressable onPress={onPressAddress} accessibilityRole="button" style={{ flex: 1 }}>
+      <Pressable onPress={handlePressAddress} accessibilityRole="button" style={{ flex: 1 }}>
         <AddressSection>
-          <Avatar source={{ uri: avatarUrl }} size={44} />
+          <Animated.View style={avatarBounceStyle}>
+            <Avatar source={{ uri: avatarUrl }} size={44} />
+          </Animated.View>
           <AddressColumn>
             <Text variant="footnote" color="textSecondary">
               Entrega para
@@ -34,14 +51,16 @@ export function DiscoverHeader({
         </AddressSection>
       </Pressable>
       <Pressable
-        onPress={onPressNotifications}
+        onPress={handlePressNotifications}
         accessibilityRole="button"
         accessibilityLabel="Notificações"
         hitSlop={8}
       >
-        <BellButton>
-          <Icon name="notifications-outline" sf="bell" size={20} color="textPrimary" />
-        </BellButton>
+        <Animated.View style={bellBounceStyle}>
+          <BellButton>
+            <Icon name="notifications-outline" sf="bell" size={20} color="textPrimary" />
+          </BellButton>
+        </Animated.View>
       </Pressable>
     </Container>
   );

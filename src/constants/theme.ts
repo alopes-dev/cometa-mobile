@@ -16,6 +16,8 @@ export const colors = {
   divider: '#E5E5EA',
   overlay: 'rgba(0, 0, 0, 0.4)',
   promoBadgeBackground: '#111827',
+  categorySelected: '#1A1A1A',
+  onCategorySelected: '#FFFFFF',
 } as const;
 
 export const colorsDark = {
@@ -37,6 +39,8 @@ export const colorsDark = {
   divider: '#38383A',
   overlay: 'rgba(0, 0, 0, 0.6)',
   promoBadgeBackground: '#1F2937',
+  categorySelected: '#FFFFFF',
+  onCategorySelected: '#1A1A1A',
 } as const;
 
 export const font = {

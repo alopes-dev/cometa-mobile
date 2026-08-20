@@ -1,8 +1,7 @@
-import { Pressable } from 'react-native';
-import { Text, Icon } from '@/components/design-system/atoms';
-import { formatKwanza } from '../../format';
+import { Text } from '@/components/design-system/atoms';
 import type { ModifierGroup } from '../../types';
-import { Container, Header, OptionRow, IndicatorCircle, IndicatorSquare } from './ModifierGroupSelector.styles';
+import { Container, Header } from './ModifierGroupSelector.styles';
+import { ModifierOptionRow } from './ModifierOptionRow';
 
 export type ModifierGroupSelectorProps = {
   group: ModifierGroup;
@@ -19,33 +18,15 @@ export function ModifierGroupSelector({ group, selectedOptionIds, onToggle }: Mo
           {group.required ? 'Obrigatório' : 'Opcional'}
         </Text>
       </Header>
-      {group.options.map((option) => {
-        const selected = selectedOptionIds.includes(option.id);
-        const Indicator = group.type === 'single' ? IndicatorCircle : IndicatorSquare;
-        return (
-          <Pressable
-            key={option.id}
-            onPress={() => onToggle(option.id)}
-            accessibilityRole={group.type === 'single' ? 'radio' : 'checkbox'}
-            accessibilityState={{ checked: selected }}
-            accessibilityLabel={option.label}
-          >
-            <OptionRow>
-              <Indicator selected={selected}>
-                {selected ? <Icon name="checkmark" sf="checkmark" size={12} color="onPrimary" /> : null}
-              </Indicator>
-              <Text variant="body" style={{ flex: 1 }}>
-                {option.label}
-              </Text>
-              {option.priceDelta > 0 ? (
-                <Text variant="footnote" color="textSecondary">
-                  +{formatKwanza(option.priceDelta)}
-                </Text>
-              ) : null}
-            </OptionRow>
-          </Pressable>
-        );
-      })}
+      {group.options.map((option) => (
+        <ModifierOptionRow
+          key={option.id}
+          option={option}
+          type={group.type}
+          selected={selectedOptionIds.includes(option.id)}
+          onToggle={() => onToggle(option.id)}
+        />
+      ))}
     </Container>
   );
 }

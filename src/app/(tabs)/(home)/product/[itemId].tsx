@@ -1,16 +1,21 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Image } from 'expo-image';
+import Animated from 'react-native-reanimated';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
+import * as Haptics from 'expo-haptics';
 import { Button, Icon, QuantityStepper, Text, TextField } from '@/components/design-system/atoms';
+import { useBounceAnimation } from '@/hooks/useBounceAnimation';
 import { useCart } from '@/hooks/useCart';
 import type { CartSelection } from '@/hooks/CartProvider';
 import { getMenuItemById } from '@/features/home/data';
 import { formatKwanza } from '@/features/home/format';
 import { computeUnitPrice, hasRequiredSelections } from '@/features/home/modifierPricing';
 import { ModifierGroupSelector } from '@/features/home/components/ModifierGroupSelector';
+
+const ADDED_CONFIRMATION_DELAY = 550;
 
 const Screen = styled.View`
   flex: 1;
@@ -82,6 +87,11 @@ export default function ProductDetail() {
   );
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState('');
+  const [justAdded, setJustAdded] = useState(false);
+  const addedTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const { style: bounceStyle, bounce } = useBounceAnimation();
+
+  useEffect(() => () => clearTimeout(addedTimeout.current), []);
 
   if (!item) {
     return (
@@ -126,11 +136,15 @@ export default function ProductDetail() {
   const canAdd = hasRequiredSelections(item, selections);
 
   const handleAdd = () => {
+    if (justAdded) return;
     const trimmedNotes = notes.trim() || undefined;
     for (let index = 0; index < quantity; index += 1) {
       addItem(item, { selections, notes: trimmedNotes });
     }
-    router.back();
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+    bounce();
+    setJustAdded(true);
+    addedTimeout.current = setTimeout(() => router.back(), ADDED_CONFIRMATION_DELAY);
   };
 
   return (
@@ -191,9 +205,18 @@ export default function ProductDetail() {
         </Content>
       </ScrollView>
       <BottomBar bottomInset={insets.bottom}>
-        <Button variant="primary" size="lg" shape="pill" disabled={!canAdd} onPress={handleAdd}>
-          Adicionar — {formatKwanza(totalPrice)}
-        </Button>
+        <Animated.View style={bounceStyle}>
+          <Button
+            variant="primary"
+            size="lg"
+            shape="pill"
+            disabled={!canAdd}
+            icon={justAdded ? <Icon name="checkmark" sf="checkmark" size={18} color="onPrimary" /> : undefined}
+            onPress={handleAdd}
+          >
+            {justAdded ? 'Adicionado ao carrinho' : `Adicionar — ${formatKwanza(totalPrice)}`}
+          </Button>
+        </Animated.View>
       </BottomBar>
     </Screen>
   );

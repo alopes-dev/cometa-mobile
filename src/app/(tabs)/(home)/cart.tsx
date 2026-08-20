@@ -3,11 +3,13 @@ import { Pressable, ScrollView, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import { Button, Chip, Icon, Text, TextField } from '@/components/design-system/atoms';
+import { Button, Icon, Text, TextField } from '@/components/design-system/atoms';
+import { withAlpha } from '@/components/design-system/atoms/Chip/Chip.styles';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 import { useCart } from '@/hooks/useCart';
 import { useCheckoutFlow } from '@/hooks/useCheckoutFlow';
 import { getRestaurantById } from '@/features/home/data';
+import { formatKwanza } from '@/features/home/format';
 import { OrderItemRow } from '@/features/checkout/components/OrderItemRow';
 import { OrderSummaryCard } from '@/features/checkout/components/OrderSummaryCard';
 import { TIP_PRESETS } from '@/features/checkout/mockData';
@@ -77,10 +79,34 @@ const CouponField = styled.View`
   flex: 1;
 `;
 
-const ChipRow = styled.View`
+const PillSection = styled.View`
+  gap: ${({ theme }) => theme.spacing.sm}px;
+  padding: ${({ theme }) => theme.spacing.md}px;
+  border-radius: ${({ theme }) => theme.radius.lg}px;
+  background-color: ${({ theme }) => withAlpha(theme.colors.primary, '12')};
+`;
+
+const PillRow = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const TipChipRow = styled.View`
   flex-direction: row;
   flex-wrap: wrap;
   gap: ${({ theme }) => theme.spacing.sm}px;
+`;
+
+const TipPill = styled.View<{ selected: boolean }>`
+  height: 36px;
+  padding-horizontal: ${({ theme }) => theme.spacing.md}px;
+  border-radius: ${({ theme }) => theme.radius.pill}px;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme, selected }) => (selected ? theme.colors.primary : theme.colors.background)};
+  border-width: ${({ selected }) => (selected ? 0 : 1)}px;
+  border-color: ${({ theme }) => theme.colors.border};
 `;
 
 const BottomBar = styled.View<{ bottomInset: number }>`
@@ -98,8 +124,8 @@ const EmptyState = styled.View`
   padding: ${({ theme }) => theme.spacing.xl}px;
 `;
 
-function tipLabel(percent: number): string {
-  return percent === 0 ? 'Sem gorjeta' : `${percent}%`;
+function tipAmountLabel(preset: number, subtotal: number): string {
+  return preset === 0 ? 'Sem gorjeta' : formatKwanza(Math.round((subtotal * preset) / 100));
 }
 
 export default function Cart() {
@@ -208,16 +234,23 @@ export default function Cart() {
 
           <View>
             <SectionLabel>Gorjeta</SectionLabel>
-            <ChipRow>
-              {TIP_PRESETS.map((preset) => (
-                <Chip
-                  key={preset}
-                  label={tipLabel(preset)}
-                  selected={tipPercent === preset}
-                  onPress={() => setTipPercent(preset)}
-                />
-              ))}
-            </ChipRow>
+            <PillSection>
+              <PillRow>
+                <Icon name="heart-outline" sf="heart" size={18} color="primary" />
+                <Text variant="bodyEmphasized">Para o entregador</Text>
+              </PillRow>
+              <TipChipRow>
+                {TIP_PRESETS.map((preset) => (
+                  <Pressable key={preset} onPress={() => setTipPercent(preset)} accessibilityRole="button">
+                    <TipPill selected={tipPercent === preset}>
+                      <Text variant="footnote" color={tipPercent === preset ? 'onPrimary' : 'textPrimary'}>
+                        {tipAmountLabel(preset, subtotal)}
+                      </Text>
+                    </TipPill>
+                  </Pressable>
+                ))}
+              </TipChipRow>
+            </PillSection>
           </View>
 
           <View>

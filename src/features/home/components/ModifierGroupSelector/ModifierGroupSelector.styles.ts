@@ -17,24 +17,20 @@ export const OptionRow = styled.View`
   padding-vertical: ${({ theme }) => theme.spacing.sm}px;
 `;
 
-export const IndicatorCircle = styled.View<{ selected: boolean }>`
-  width: 22px;
-  height: 22px;
-  border-radius: 11px;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme, selected }) => (selected ? theme.colors.primary : 'transparent')};
-  border-width: ${({ selected }) => (selected ? 0 : 1.5)}px;
-  border-color: ${({ theme }) => theme.colors.border};
-`;
+// Static shape only — background/border are animated per-option (see
+// ModifierOptionRow), so they aren't part of these style objects.
+export const circleShape = {
+  width: 22,
+  height: 22,
+  borderRadius: 11,
+  alignItems: 'center' as const,
+  justifyContent: 'center' as const,
+};
 
-export const IndicatorSquare = styled.View<{ selected: boolean }>`
-  width: 22px;
-  height: 22px;
-  border-radius: ${({ theme }) => theme.radius.sm}px;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme, selected }) => (selected ? theme.colors.primary : 'transparent')};
-  border-width: ${({ selected }) => (selected ? 0 : 1.5)}px;
-  border-color: ${({ theme }) => theme.colors.border};
-`;
+export const squareShape = {
+  width: 22,
+  height: 22,
+  borderRadius: 4,
+  alignItems: 'center' as const,
+  justifyContent: 'center' as const,
+};

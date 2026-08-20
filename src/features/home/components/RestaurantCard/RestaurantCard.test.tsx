@@ -1,10 +1,20 @@
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RestaurantCard } from './RestaurantCard';
 import { ThemeProvider } from '@/components/design-system/ThemeProvider';
 import type { Restaurant } from '../../types';
 
+const INITIAL_METRICS = {
+  frame: { x: 0, y: 0, width: 0, height: 0 },
+  insets: { top: 0, left: 0, right: 0, bottom: 0 },
+};
+
 function renderWithTheme(ui: React.ReactElement) {
-  return render(<ThemeProvider>{ui}</ThemeProvider>);
+  return render(
+    <SafeAreaProvider initialMetrics={INITIAL_METRICS}>
+      <ThemeProvider>{ui}</ThemeProvider>
+    </SafeAreaProvider>
+  );
 }
 
 const restaurant: Restaurant = {
@@ -27,11 +37,11 @@ describe('RestaurantCard', () => {
     expect(getByText('4.7')).toBeTruthy();
   });
 
-  it('fires onPress when pressed', () => {
+  it('fires onPress when pressed', async () => {
     const onPress = jest.fn();
     const { getByRole } = renderWithTheme(<RestaurantCard restaurant={restaurant} onPress={onPress} />);
     fireEvent.press(getByRole('button'));
-    expect(onPress).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(onPress).toHaveBeenCalledTimes(1));
   });
 
   it('does not render a favorite button when onToggleFavorite is not provided', () => {

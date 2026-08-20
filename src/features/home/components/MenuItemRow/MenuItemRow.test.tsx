@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { MenuItemRow } from './MenuItemRow';
 import { ThemeProvider } from '@/components/design-system/ThemeProvider';
 import type { MenuItem } from '../../types';
@@ -30,11 +30,11 @@ describe('MenuItemRow', () => {
     expect(queryByLabelText(`Adicionar ${item.name}`)).toBeNull();
   });
 
-  it('renders an add button and fires onAdd when pressed', () => {
+  it('renders an add button and fires onAdd when pressed', async () => {
     const onAdd = jest.fn();
     const { getByLabelText } = renderWithTheme(<MenuItemRow item={item} onAdd={onAdd} />);
     fireEvent.press(getByLabelText(`Adicionar ${item.name}`));
-    expect(onAdd).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(onAdd).toHaveBeenCalledTimes(1));
   });
 
   it('fires onPress when the row is pressed', () => {

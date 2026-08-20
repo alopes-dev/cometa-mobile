@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, View } from 'react-native';
-import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { Pressable, ScrollView, View } from 'react-native';
+import type BottomSheetType from '@gorhom/bottom-sheet';
 import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled, { useTheme } from 'styled-components/native';
@@ -12,6 +12,7 @@ import { DriverCard } from '@/features/tracking/components/DriverCard';
 import { CUSTOMER_COORDINATE, RESTAURANT_COORDINATE, ROUTE_COORDINATES, mockDriver } from '@/features/tracking/mockData';
 import { interpolateCoordinate, isArriving, isDelivered, remainingMinutes } from '@/features/tracking/geo';
 import { isMapboxAvailable, MapView, Camera, ShapeSource, LineLayer, PointAnnotation } from '@/features/tracking/mapbox';
+import { isBottomSheetAvailable, BottomSheet, BottomSheetScrollView } from '@/features/tracking/bottomSheet';
 
 const PROGRESS_TICK_MS = 400;
 const PROGRESS_STEP = 1 / 30;
@@ -105,6 +106,32 @@ const MapFallback = styled.View`
   background-color: ${({ theme }) => theme.colors.surface};
 `;
 
+const StaticSheet = styled.View`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 55%;
+  border-top-left-radius: ${({ theme }) => theme.radius.xl}px;
+  border-top-right-radius: ${({ theme }) => theme.radius.xl}px;
+  background-color: ${({ theme }) => theme.colors.background};
+  shadow-color: #000000;
+  shadow-offset: 0px -2px;
+  shadow-opacity: 0.1;
+  shadow-radius: 8px;
+  elevation: 8;
+`;
+
+const StaticSheetHandle = styled.View`
+  align-self: center;
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  margin-top: ${({ theme }) => theme.spacing.sm}px;
+  margin-bottom: 4px;
+  background-color: ${({ theme }) => theme.colors.divider};
+`;
+
 export default function LiveTracking() {
   const router = useRouter();
   const theme = useTheme();
@@ -120,7 +147,7 @@ export default function LiveTracking() {
 
   const [progress, setProgress] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
-  const sheetRef = useRef<BottomSheet>(null);
+  const sheetRef = useRef<BottomSheetType>(null);
   const snapPoints = useMemo(() => ['32%', '80%'], []);
 
   useFocusEffect(
@@ -161,6 +188,78 @@ export default function LiveTracking() {
       coordinates: ROUTE_COORDINATES.map((coordinate) => [coordinate.longitude, coordinate.latitude]),
     },
   };
+
+  const sheetBody = (
+    <SheetContent>
+      <StatusHeader>
+        <Text variant="title2">{statusText}</Text>
+        {!delivered ? (
+          <Text variant="footnote" color="textSecondary">
+            {remaining} min
+          </Text>
+        ) : null}
+      </StatusHeader>
+
+      {delivered ? (
+        <Button
+          variant="primary"
+          size="lg"
+          shape="pill"
+          onPress={() =>
+            router.push({
+              pathname: '/delivered',
+              params: { restaurantId: restaurantId ?? '', itemCount, total },
+            })
+          }
+        >
+          Ver Resumo do Pedido
+        </Button>
+      ) : (
+        <DriverCard driver={liveDriver} />
+      )}
+
+      <SectionDivider />
+
+      <Section>
+        <SectionLabel>Pedido</SectionLabel>
+        <SummaryRow>
+          <Text variant="body" color="textSecondary">
+            {itemCount} {itemCount === '1' ? 'item' : 'itens'}
+          </Text>
+          <Text variant="bodyEmphasized" color="primary">
+            {formatKwanza(Number(total))}
+          </Text>
+        </SummaryRow>
+      </Section>
+
+      {restaurant ? (
+        <Section>
+          <SectionLabel>Restaurante</SectionLabel>
+          <Text variant="body">{restaurant.name}</Text>
+        </Section>
+      ) : null}
+
+      <Section>
+        <SectionLabel>Endereço</SectionLabel>
+        <Text variant="body">{deliverySummary}</Text>
+      </Section>
+
+      <Section>
+        <SectionLabel>Pagamento</SectionLabel>
+        <Text variant="body">{paymentSummary}</Text>
+      </Section>
+
+      <Section>
+        <SectionLabel>Suporte</SectionLabel>
+        <SupportRow>
+          <Icon name="help-circle-outline" sf="questionmark.circle" size={18} color="primary" />
+          <Text variant="body" color="primary">
+            Precisa de ajuda? Contacte o suporte
+          </Text>
+        </SupportRow>
+      </Section>
+    </SheetContent>
+  );
 
   return (
     <Screen>
@@ -210,79 +309,16 @@ export default function LiveTracking() {
         </Pressable>
       </BackButtonWrapper>
 
-      <BottomSheet ref={sheetRef} index={0} snapPoints={snapPoints} enablePanDownToClose={false}>
-        <BottomSheetScrollView showsVerticalScrollIndicator={false}>
-          <SheetContent>
-            <StatusHeader>
-              <Text variant="title2">{statusText}</Text>
-              {!delivered ? (
-                <Text variant="footnote" color="textSecondary">
-                  {remaining} min
-                </Text>
-              ) : null}
-            </StatusHeader>
-
-            {delivered ? (
-              <Button
-                variant="primary"
-                size="lg"
-                shape="pill"
-                onPress={() =>
-                  router.push({
-                    pathname: '/delivered',
-                    params: { restaurantId: restaurantId ?? '', itemCount, total },
-                  })
-                }
-              >
-                Ver Resumo do Pedido
-              </Button>
-            ) : (
-              <DriverCard driver={liveDriver} />
-            )}
-
-            <SectionDivider />
-
-            <Section>
-              <SectionLabel>Pedido</SectionLabel>
-              <SummaryRow>
-                <Text variant="body" color="textSecondary">
-                  {itemCount} {itemCount === '1' ? 'item' : 'itens'}
-                </Text>
-                <Text variant="bodyEmphasized" color="primary">
-                  {formatKwanza(Number(total))}
-                </Text>
-              </SummaryRow>
-            </Section>
-
-            {restaurant ? (
-              <Section>
-                <SectionLabel>Restaurante</SectionLabel>
-                <Text variant="body">{restaurant.name}</Text>
-              </Section>
-            ) : null}
-
-            <Section>
-              <SectionLabel>Endereço</SectionLabel>
-              <Text variant="body">{deliverySummary}</Text>
-            </Section>
-
-            <Section>
-              <SectionLabel>Pagamento</SectionLabel>
-              <Text variant="body">{paymentSummary}</Text>
-            </Section>
-
-            <Section>
-              <SectionLabel>Suporte</SectionLabel>
-              <SupportRow>
-                <Icon name="help-circle-outline" sf="questionmark.circle" size={18} color="primary" />
-                <Text variant="body" color="primary">
-                  Precisa de ajuda? Contacte o suporte
-                </Text>
-              </SupportRow>
-            </Section>
-          </SheetContent>
-        </BottomSheetScrollView>
-      </BottomSheet>
+      {isBottomSheetAvailable ? (
+        <BottomSheet ref={sheetRef} index={0} snapPoints={snapPoints} enablePanDownToClose={false}>
+          <BottomSheetScrollView showsVerticalScrollIndicator={false}>{sheetBody}</BottomSheetScrollView>
+        </BottomSheet>
+      ) : (
+        <StaticSheet>
+          <StaticSheetHandle />
+          <ScrollView showsVerticalScrollIndicator={false}>{sheetBody}</ScrollView>
+        </StaticSheet>
+      )}
     </Screen>
   );
 }

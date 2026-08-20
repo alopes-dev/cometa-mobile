@@ -1,11 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, View } from 'react-native';
 import { Image } from 'expo-image';
+import Animated from 'react-native-reanimated';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import { Chip, Icon, Text, TextField } from '@/components/design-system/atoms';
 import { RestaurantCard } from '@/features/home/components/RestaurantCard';
+import { useEntranceAnimation } from '@/hooks/useEntranceAnimation';
 import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 import { getCategories, getRestaurantById, getRestaurants, searchMenuItems } from '@/features/home/data';
 import { filterRestaurants } from '@/features/home/selectors';
@@ -84,6 +86,7 @@ export default function Search() {
   const insets = useSafeAreaInsets();
   const { setIsTabBarHidden } = useTabBarVisibility();
   const [query, setQuery] = useState('');
+  const inputEntranceStyle = useEntranceAnimation(0);
 
   useFocusEffect(
     useCallback(() => {
@@ -109,17 +112,17 @@ export default function Search() {
             <Icon name="chevron-back" sf="chevron.left" size={18} color="textPrimary" />
           </BackButton>
         </Pressable>
-        <View style={{ flex: 1 }}>
+        <Animated.View style={[{ flex: 1 }, inputEntranceStyle]}>
           <TextField
             value={query}
             onChangeText={setQuery}
-            placeholder="O que você quer comer?"
+            placeholder="Buscar restaurantes ou pratos"
             accessibilityLabel="Pesquisar"
             shape="pill"
             autoFocus
             leadingIcon={{ name: 'search', sf: 'magnifyingglass' }}
           />
-        </View>
+        </Animated.View>
       </Header>
       <ScrollView contentContainerStyle={{ paddingBottom: 24 }} keyboardShouldPersistTaps="handled">
         <Content>
