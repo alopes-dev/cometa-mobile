@@ -70,6 +70,10 @@
     "styled-components": "^6.4.4"
   },
   "devDependencies": {
+    "@cometa/config": "workspace:*",
+    "@cometa/types": "workspace:*",
+    "@cometa/utils": "workspace:*",
+    "@cometa/validation": "workspace:*",
     "@react-native/jest-preset": "^0.86.0",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
