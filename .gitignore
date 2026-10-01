@@ -47,3 +47,6 @@ apps/mobile/android/
 # workspace / agent scaffolding (not part of the app)
 .superpowers/
 .claude/worktrees/
+
+# turborepo
+.turbo/
