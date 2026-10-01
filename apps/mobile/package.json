@@ -1,8 +1,11 @@
 {
-  "name": "cometa",
+  "name": "@cometa/mobile",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
+    "dev": "expo start",
+    "lint": "expo lint",
+    "typecheck": "tsc --noEmit",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
