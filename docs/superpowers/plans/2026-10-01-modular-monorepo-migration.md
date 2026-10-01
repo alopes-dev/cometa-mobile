@@ -45,7 +45,8 @@ Moves every app file, tracked and untracked, in one commit. The root is left wit
 - Move (untracked, gitignored): `ios/`, `expo-env.d.ts`
 - Delete (regenerable caches): `node_modules/`, `.expo/`
 - Modify: `apps/mobile/package.json` (rename + 3 new scripts)
-- Keep at root: `.git`, `.gitignore`, `.claude/`, `.superpowers/`, `docs/`, `README.md`, `LICENSE`, `AGENTS.md`, `CLAUDE.md`, `package-lock.json`, `yarn.lock`
+- Modify: `.gitignore` (re-anchor `/ios` and `/android` to `apps/mobile/` — **required before staging**)
+- Keep at root: `.git`, `.claude/`, `.superpowers/`, `docs/`, `README.md`, `LICENSE`, `AGENTS.md`, `CLAUDE.md`, `package-lock.json`, `yarn.lock`
 
 **Interfaces:**
 - Produces: workspace member `@cometa/mobile` at `apps/mobile`, with scripts `dev`, `start`, `android`, `ios`, `web`, `test`, `lint`, `typecheck`, and all 15 existing `eas:*` scripts.
@@ -99,7 +100,32 @@ Expected: `ios moved`, `expo-env.d.ts moved`, and a root listing containing only
 
 `apps/mobile/ios` is stale prebuild output — its CocoaPods references point at the old `node_modules` path. It is moved rather than deleted to keep the change reversible; Task 8 records regenerating it as a manual step.
 
-- [ ] **Step 5: Rename the mobile package and add the three missing scripts**
+- [ ] **Step 5: Re-anchor the gitignore patterns BEFORE staging anything**
+
+This step is load-bearing. The existing `/ios` and `/android` patterns are root-anchored, so they stopped matching the moment `ios/` moved. `git check-ignore apps/mobile/ios` confirms it is **not** ignored, and the `git add -A` two steps from now would stage **1.2 GB across 9,500 CocoaPods files**. Fix the patterns first.
+
+Apply exactly these changes to `.gitignore`:
+
+```diff
+-# generated native folders
+-/ios
+-/android
++# generated native folders
++apps/mobile/ios/
++apps/mobile/android/
+```
+
+Then prove the gap is closed before going near `git add`:
+
+```bash
+cd /Users/alopes.dev/Documents/brain/cometa
+git check-ignore -q apps/mobile/ios && echo "ios IGNORED - safe to stage" || echo "STOP: still not ignored"
+git status --porcelain | grep -c '^?? apps/mobile/ios' || echo "ios not listed as untracked - correct"
+```
+
+Expected: `ios IGNORED - safe to stage`, and `ios` absent from the untracked list. Do not continue to the commit until this prints correctly.
+
+- [ ] **Step 6: Rename the mobile package and add the three missing scripts**
 
 Edit `apps/mobile/package.json`. Change the `name` field and insert the new scripts at the top of the `scripts` object. Nothing else in the file changes — dependencies, the whole `jest` block, and all `eas:*` scripts stay byte-identical.
 
@@ -122,7 +148,7 @@ Edit `apps/mobile/package.json`. Change the `name` field and insert the new scri
 
 `typecheck` is `tsc --noEmit` rather than `expo lint --tsc` so Turborepo can cache it independently of lint.
 
-- [ ] **Step 6: Confirm no import statement changed**
+- [ ] **Step 7: Confirm no import statement changed**
 
 ```bash
 cd /Users/alopes.dev/Documents/brain/cometa
@@ -132,7 +158,7 @@ git diff --cached --stat -- 'apps/mobile/src' | tail -1
 
 Expected: `ZERO import changes - correct`. The stat line should report `0 insertions(+), 0 deletions(-)` across the renamed files.
 
-- [ ] **Step 7: Commit the move on its own**
+- [ ] **Step 8: Commit the move on its own**
 
 Keeping the move in a single commit with no content edits is what makes `git log --follow` work later.
 
@@ -154,7 +180,7 @@ MSG
 )"
 ```
 
-- [ ] **Step 8: Verify history survived the move**
+- [ ] **Step 9: Verify history survived the move**
 
 ```bash
 git log --follow --oneline -- apps/mobile/src/constants/theme.ts | wc -l
@@ -168,7 +194,7 @@ Expected: a number greater than `1` (the file predates this commit, so `--follow
 
 **Files:**
 - Create: `pnpm-workspace.yaml`, `package.json`, `turbo.json`, `tsconfig.json`
-- Modify: `.gitignore`
+- Modify: `.gitignore` (adds `.turbo/` only — Task 1 Step 5 already re-anchored the native paths)
 - Delete: `package-lock.json`, `yarn.lock`
 
 **Interfaces:**
@@ -269,21 +295,23 @@ Write `tsconfig.json`. This is a pure base with no `include`, so it never compil
 }
 ```
 
-- [ ] **Step 5: Re-anchor the gitignore paths and add Turborepo**
+- [ ] **Step 5: Add Turborepo to the gitignore**
 
-The existing `/ios` and `/android` patterns are root-anchored and stopped matching when the app moved. Apply exactly these changes to `.gitignore`:
+The `/ios` and `/android` re-anchoring already happened in Task 1 Step 5 — it had to, or the move's commit would have staged 1.2 GB of CocoaPods output. Only the Turborepo cache dir is left. Append to `.gitignore`:
 
 ```diff
--# generated native folders
--/ios
--/android
-+# generated native folders
-+apps/mobile/ios/
-+apps/mobile/android/
-+
 +# turborepo
 +.turbo/
 ```
+
+Then confirm both are in place:
+
+```bash
+cd /Users/alopes.dev/Documents/brain/cometa
+grep -nE 'apps/mobile/(ios|android)/|\.turbo/' .gitignore
+```
+
+Expected: three matching lines.
 
 - [ ] **Step 6: Drop the old lockfiles and install**
 
@@ -1233,10 +1261,11 @@ Expected: config values match Task 3 Step 1 exactly, and the bundle succeeds.
 
 ```bash
 cd /Users/alopes.dev/Documents/brain/cometa
-echo "--- no file lost (expect 260 + new files, 0 missing) ---"
-git log --oneline --diff-filter=D HEAD~7..HEAD -- 'apps/mobile/src' | wc -l
+MIGRATION_BASE=<the base commit recorded in the SDD ledger>
+echo "--- no file lost (expect 0 deletions from app source) ---"
+git log --oneline --diff-filter=D "$MIGRATION_BASE..HEAD" -- 'apps/mobile/src' | wc -l
 echo "--- no import changed ---"
-git diff HEAD~7..HEAD -- 'apps/mobile/src/app' 'apps/mobile/src/features' 'apps/mobile/src/components' 'apps/mobile/src/hooks' | grep -E '^[+-].*from ' || echo "ZERO import changes"
+git diff "$MIGRATION_BASE..HEAD" -- 'apps/mobile/src/app' 'apps/mobile/src/features' 'apps/mobile/src/components' 'apps/mobile/src/hooks' | grep -E '^[+-].*from ' || echo "ZERO import changes"
 echo "--- no secret committed ---"
 git ls-files | grep -E '(^|/)\.env$' || echo "no .env tracked"
 git grep -nE 'pk\.ey|sk\.ey|DATABASE_URL=.+|JWT_SECRET=.+' -- ':!*.example' ':!docs/*' || echo "no secrets found"
@@ -1247,7 +1276,7 @@ git log --follow --oneline -- apps/mobile/src/constants/theme.ts | wc -l
 
 Expected: `0` deletions from the app source, `ZERO import changes`, `no .env tracked`, `no secrets found`, a commit count greater than the 5 pre-migration commits, and `--follow` finding history older than the move.
 
-Adjust `HEAD~7` to the actual number of commits the migration produced.
+Set `MIGRATION_BASE` to the base commit recorded on the `Base commit:` line of the SDD ledger (`.superpowers/sdd/2026-10-01-modular-monorepo-migration/progress.md`). Use that, never a `HEAD~N` offset — an offset breaks silently if the task count changes, under-reporting exactly the deletions and import changes this step exists to catch.
 
 - [ ] **Step 5: Write the migration report**
 
