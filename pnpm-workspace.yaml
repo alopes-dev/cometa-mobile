@@ -2,6 +2,13 @@ packages:
   - 'apps/*'
   - 'packages/*'
 
+# pnpm's default isolated node_modules layout nests transitive packages
+# under node_modules/.pnpm/, which breaks the mobile app's Jest
+# transformIgnorePatterns (it only allow-lists flat node_modules/@react-native
+# paths). Expo's monorepo guide recommends hoisted in exactly this situation,
+# so use it here instead of editing the app's jest config.
+nodeLinker: hoisted
+
 # pnpm 12 enforces a default minimum-release-age supply-chain policy: it
 # refuses to install packages published too recently. The entries below
 # exempt turbo@2.11.6 and its per-platform binaries, which were published
