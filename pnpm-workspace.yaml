@@ -1,6 +1,16 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+
+# pnpm 12 enforces a default minimum-release-age supply-chain policy: it
+# refuses to install packages published too recently. The entries below
+# exempt turbo@2.11.6 and its per-platform binaries, which were published
+# inside that cutoff window when this lockfile was first resolved. pnpm
+# wrote this block automatically during `pnpm install` and validates the
+# committed lockfile against it on every subsequent install — removing
+# these entries makes `pnpm install` fail against pnpm-lock.yaml as it
+# stands today. Once turbo@2.11.6 has aged past the policy's cutoff, this
+# block becomes vestigial and can be deleted.
 minimumReleaseAgeExclude:
   - '@turbo/darwin-64@2.11.6'
   - '@turbo/darwin-arm64@2.11.6'
