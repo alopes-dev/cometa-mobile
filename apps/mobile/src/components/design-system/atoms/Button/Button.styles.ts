@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
 import type { Theme } from "@/components/design-system/ThemeProvider";
+import { spacing } from '@/theme';
 
 export type ButtonVariant =
   | "primary"
@@ -12,43 +13,82 @@ export type ButtonVariant =
 export type ButtonSize = "sm" | "md" | "lg";
 export type ButtonShape = "default" | "pill" | "circle";
 
-type ColorKey = keyof Theme["colors"];
+type Colors = Theme["colors"];
+/** A foreground role, so the label can be handed straight to `Text`/`Icon`. */
+type LabelRole = keyof Theme["fg"];
 
+/**
+ * Per-variant appearance, resolved from semantic tokens at render time.
+ *
+ * `label` is deliberately a role rather than a literal color: `onBrand`
+ * resolves to white on a light-mode brand fill and to near-black on the
+ * lighter dark-mode fill, so a filled button stays legible in both schemes
+ * without a second variant table.
+ *
+ * Only `primary`, `success` and `danger` are filled. §20: secondary is
+ * neutral and tertiary is text — the point is that not every button is green.
+ */
 export const VARIANT_STYLE: Record<
   ButtonVariant,
   {
-    background: ColorKey | "transparent";
-    label: ColorKey;
-    border: ColorKey | "transparent";
+    background: (c: Colors) => string;
+    border: (c: Colors) => string;
+    label: LabelRole;
   }
 > = {
-  primary: { background: "primary", label: "onPrimary", border: "transparent" },
-  secondary: {
-    background: "secondary",
-    label: "onSecondary",
-    border: "transparent",
+  primary: {
+    background: (c) => c.brand.base,
+    border: () => "transparent",
+    label: "onBrand",
   },
-  success: { background: "success", label: "onPrimary", border: "transparent" },
-  danger: { background: "error", label: "onPrimary", border: "transparent" },
-  outline: { background: "transparent", label: "primary", border: "primary" },
-  ghost: { background: "surface", label: "textPrimary", border: "transparent" },
-  text: { background: "transparent", label: "primary", border: "transparent" },
+  secondary: {
+    background: (c) => c.surface.secondary,
+    border: () => "transparent",
+    label: "primary",
+  },
+  success: {
+    background: (c) => c.status.success.fill,
+    border: () => "transparent",
+    label: "onBrand",
+  },
+  danger: {
+    background: (c) => c.status.error.fill,
+    border: () => "transparent",
+    label: "onBrand",
+  },
+  outline: {
+    background: () => "transparent",
+    border: (c) => c.border.selected,
+    label: "brand",
+  },
+  ghost: {
+    background: (c) => c.surface.secondary,
+    border: () => "transparent",
+    label: "primary",
+  },
+  text: {
+    background: () => "transparent",
+    border: () => "transparent",
+    label: "brand",
+  },
 };
 
 export const SIZE_STYLE: Record<
   ButtonSize,
   { height: number; paddingHorizontal: number }
 > = {
-  sm: { height: 36, paddingHorizontal: 12 },
-  md: { height: 44, paddingHorizontal: 16 },
-  lg: { height: 52, paddingHorizontal: 20 },
+  // Heights are control dimensions, not rhythm steps: 44 is the HIG minimum
+  // tappable edge, with one step either side of it.
+  sm: { height: 36, paddingHorizontal: spacing[12] },
+  md: { height: 44, paddingHorizontal: spacing[16] },
+  lg: { height: 52, paddingHorizontal: spacing[20] },
 };
 
 export const SIZE_TEXT_VARIANT: Record<ButtonSize, keyof Theme["typography"]> =
   {
-    sm: "footnote",
-    md: "bodyEmphasized",
-    lg: "bodyEmphasized",
+    sm: "label",
+    md: "title",
+    lg: "title",
   };
 
 const MIN_HIT_TARGET = 44;
@@ -68,24 +108,21 @@ export const Container = styled.View<{
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: ${({ theme }) => theme.spacing[8]}px;
   height: ${({ size }) => SIZE_STYLE[size].height}px;
   min-width: ${({ shape, size }) =>
     shape === "circle" ? Math.max(SIZE_STYLE[size].height, 44) : 44}px;
   padding-horizontal: ${({ shape, size }) =>
     shape === "circle" ? 0 : SIZE_STYLE[size].paddingHorizontal}px;
   border-radius: ${({ shape, theme }) =>
-    shape === "default" ? theme.radius.md : theme.radius.pill}px;
-  background-color: ${({ theme, variant }) => {
-    const bg = VARIANT_STYLE[variant].background;
-    return bg === "transparent" ? "transparent" : theme.colors[bg];
-  }};
-  border-width: ${({ variant }) =>
-    VARIANT_STYLE[variant].border === "transparent" ? 0 : 1}px;
-  border-color: ${({ theme, variant }) => {
-    const border = VARIANT_STYLE[variant].border;
-    return border === "transparent" ? "transparent" : theme.colors[border];
-  }};
+    shape === "default" ? theme.radius.md : theme.radius.full}px;
+  border-curve: continuous;
+  background-color: ${({ theme, variant }) =>
+    VARIANT_STYLE[variant].background(theme.colors)};
+  border-width: ${({ theme, variant }) =>
+    VARIANT_STYLE[variant].border(theme.colors) === "transparent" ? 0 : 1}px;
+  border-color: ${({ theme, variant }) =>
+    VARIANT_STYLE[variant].border(theme.colors)};
   opacity: ${({ theme, disabled }) =>
     disabled ? theme.opacity[40] : theme.opacity[100]};
 `;

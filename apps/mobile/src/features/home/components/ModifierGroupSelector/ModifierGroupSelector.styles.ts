@@ -1,7 +1,8 @@
 import styled from 'styled-components/native';
+import { radius } from '@/theme';
 
 export const Container = styled.View`
-  gap: ${({ theme }) => theme.spacing.xs}px;
+  gap: ${({ theme }) => theme.spacing[4]}px;
 `;
 
 export const Header = styled.View`
@@ -13,8 +14,8 @@ export const Header = styled.View`
 export const OptionRow = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.sm}px;
-  padding-vertical: ${({ theme }) => theme.spacing.sm}px;
+  gap: ${({ theme }) => theme.spacing[8]}px;
+  padding-vertical: ${({ theme }) => theme.spacing[8]}px;
 `;
 
 // Static shape only — background/border are animated per-option (see
@@ -22,7 +23,7 @@ export const OptionRow = styled.View`
 export const circleShape = {
   width: 22,
   height: 22,
-  borderRadius: 11,
+  borderRadius: radius.full,
   alignItems: 'center' as const,
   justifyContent: 'center' as const,
 };
@@ -30,7 +31,7 @@ export const circleShape = {
 export const squareShape = {
   width: 22,
   height: 22,
-  borderRadius: 4,
+  borderRadius: radius.xs,
   alignItems: 'center' as const,
   justifyContent: 'center' as const,
 };

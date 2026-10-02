@@ -11,10 +11,10 @@ export type SectionHeaderProps = {
 export function SectionHeader({ title, actionLabel, onPressAction }: SectionHeaderProps) {
   return (
     <Container>
-      <Text variant="title2">{title}</Text>
+      <Text variant="h4">{title}</Text>
       {actionLabel ? (
         <Pressable onPress={onPressAction} accessibilityRole="button">
-          <Text variant="footnote" color="primary">
+          <Text variant="caption" color="brand">
             {actionLabel}
           </Text>
         </Pressable>

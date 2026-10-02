@@ -1,6 +1,7 @@
 import { ScrollView } from 'react-native';
 import { Chip } from '@/components/design-system/atoms';
 import type { RestaurantSort } from '../../selectors';
+import { spacing } from '@/theme';
 
 export type RestaurantListFilterBarProps = {
   selected: RestaurantSort | null;
@@ -20,7 +21,7 @@ export function RestaurantListFilterBar({ selected, onSelect }: RestaurantListFi
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ gap: 8, paddingHorizontal: 16 }}
+      contentContainerStyle={{ gap: spacing[8], paddingHorizontal: spacing[16] }}
     >
       {FILTERS.map((filter) => (
         <Chip

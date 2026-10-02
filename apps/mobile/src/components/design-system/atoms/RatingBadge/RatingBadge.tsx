@@ -12,8 +12,8 @@ export type RatingBadgeProps = {
 export function RatingBadge({ rating, variant = 'floating', style }: RatingBadgeProps) {
   return (
     <Container variant={variant} style={style}>
-      <Icon name="star" sf="star.fill" size={14} color="warning" />
-      <Text variant="footnote" color={variant === 'floating' ? 'textPrimary' : 'onSecondary'}>
+      <Icon name="star" sf="star.fill" size={14} color="rating" />
+      <Text variant="caption" color={variant === 'floating' ? 'primary' : 'onMedia'}>
         {rating.toFixed(1)}
       </Text>
     </Container>

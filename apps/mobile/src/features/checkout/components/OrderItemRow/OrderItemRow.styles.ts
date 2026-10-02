@@ -1,9 +1,10 @@
 import styled from 'styled-components/native';
+import { textStyle } from '@/theme';
 
 export const Container = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.md}px;
+  gap: ${({ theme }) => theme.spacing[16]}px;
 `;
 
 export const Thumbnail = styled.View`
@@ -15,12 +16,11 @@ export const Thumbnail = styled.View`
 
 export const Info = styled.View`
   flex: 1;
-  gap: 2px;
+  gap: ${({ theme }) => theme.spacing[2]}px;
 `;
 
 export const PriceText = styled.Text`
-  font-size: 15px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.primary};
-  margin-top: 2px;
+  ${textStyle('labelLarge')}
+  color: ${({ theme }) => theme.colors.text.brand};
+  margin-top: ${({ theme }) => theme.spacing[2]}px;
 `;

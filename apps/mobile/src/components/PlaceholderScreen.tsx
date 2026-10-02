@@ -11,14 +11,14 @@ const Screen = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  background-color: ${({ theme }) => theme.colors.background};
+  gap: ${({ theme }) => theme.spacing[24]}px;
+  background-color: ${({ theme }) => theme.colors.background.primary};
 `;
 
 export function PlaceholderScreen({ label, children }: PlaceholderScreenProps) {
   return (
     <Screen>
-      <Text variant="headlineMobile">{label}</Text>
+      <Text variant="h2">{label}</Text>
       {children}
     </Screen>
   );

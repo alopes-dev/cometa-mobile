@@ -1,16 +1,14 @@
 import styled from 'styled-components/native';
 
-export const withAlpha = (hex: string, alphaHex: string) => `${hex}${alphaHex}`;
-
 export const Container = styled.View<{ selected: boolean }>`
   flex-direction: row;
   align-items: center;
-  gap: 6px;
+  gap: ${({ theme }) => theme.spacing[6]}px;
   height: 40px;
-  padding-horizontal: 14px;
-  border-radius: ${({ theme }) => theme.radius.pill}px;
+  padding-horizontal: ${({ theme }) => theme.spacing[12]}px;
+  border-radius: ${({ theme }) => theme.radius.full}px;
   background-color: ${({ theme, selected }) =>
-    selected ? theme.colors.background : theme.colors.surface};
+    selected ? theme.colors.surface.selected : theme.colors.surface.secondary};
   border-width: 1px;
-  border-color: ${({ theme, selected }) => (selected ? theme.colors.categorySelected : 'transparent')};
+  border-color: ${({ theme, selected }) => (selected ? theme.colors.border.selected : 'transparent')};
 `;

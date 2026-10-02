@@ -6,6 +6,6 @@ export type TextProps = RNTextProps & {
   color?: ColorKey;
 };
 
-export function Text({ variant = 'body', color = 'textPrimary', ...rest }: TextProps) {
+export function Text({ variant = 'bodyLarge', color = 'primary', ...rest }: TextProps) {
   return <StyledText variant={variant} color={color} {...rest} />;
 }

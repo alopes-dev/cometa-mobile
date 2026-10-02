@@ -15,18 +15,18 @@ export function OptionCard({ icon, title, subtitle, selected, onPress }: OptionC
     <Pressable onPress={onPress} accessibilityRole="radio" accessibilityState={{ checked: selected }}>
       <Container selected={selected}>
         <IconCircle>
-          <Icon name={icon.name} sf={icon.sf} size={18} color="primary" />
+          <Icon name={icon.name} sf={icon.sf} size={18} color="brand" />
         </IconCircle>
         <Info>
-          <Text variant="bodyEmphasized">{title}</Text>
+          <Text variant="title">{title}</Text>
           {subtitle ? (
-            <Text variant="footnote" color="textSecondary">
+            <Text variant="caption" color="secondary">
               {subtitle}
             </Text>
           ) : null}
         </Info>
         <RadioCircle selected={selected}>
-          {selected ? <Icon name="checkmark" sf="checkmark" size={12} color="onPrimary" /> : null}
+          {selected ? <Icon name="checkmark" sf="checkmark" size={12} color="onBrand" /> : null}
         </RadioCircle>
       </Container>
     </Pressable>

@@ -13,8 +13,8 @@ export function ModifierGroupSelector({ group, selectedOptionIds, onToggle }: Mo
   return (
     <Container>
       <Header>
-        <Text variant="bodyEmphasized">{group.label}</Text>
-        <Text variant="footnote" color="textSecondary">
+        <Text variant="title">{group.label}</Text>
+        <Text variant="caption" color="secondary">
           {group.required ? 'Obrigatório' : 'Opcional'}
         </Text>
       </Header>

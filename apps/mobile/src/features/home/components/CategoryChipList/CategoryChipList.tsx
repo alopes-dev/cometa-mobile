@@ -1,6 +1,7 @@
 import { ScrollView } from 'react-native';
 import { Chip, Icon } from '@/components/design-system/atoms';
 import { getCategoryIcon } from '../../categoryIcons';
+import { spacing } from '@/theme';
 
 export type CategoryChipListProps = {
   categories: string[];
@@ -13,7 +14,7 @@ export function CategoryChipList({ categories, selected, onSelect }: CategoryChi
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{ gap: 8 }}
+      contentContainerStyle={{ gap: spacing[8] }}
     >
       <Chip
         label="Tudo"
@@ -23,7 +24,7 @@ export function CategoryChipList({ categories, selected, onSelect }: CategoryChi
           <Icon
             {...getCategoryIcon(null)}
             size={16}
-            color={selected === null ? 'categorySelected' : 'textPrimary'}
+            color={selected === null ? 'brand' : 'primary'}
           />
         }
       />
@@ -37,7 +38,7 @@ export function CategoryChipList({ categories, selected, onSelect }: CategoryChi
             <Icon
               {...getCategoryIcon(category)}
               size={16}
-              color={selected === category ? 'categorySelected' : 'textPrimary'}
+              color={selected === category ? 'brand' : 'primary'}
             />
           }
         />

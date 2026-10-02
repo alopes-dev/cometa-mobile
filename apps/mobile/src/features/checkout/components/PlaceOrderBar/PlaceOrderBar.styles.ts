@@ -1,36 +1,34 @@
 import styled from 'styled-components/native';
+import { textStyle } from '@/theme';
 
 export const Container = styled.View<{ disabled?: boolean }>`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: ${({ theme }) => theme.spacing.md}px;
+  padding: ${({ theme }) => theme.spacing[16]}px;
   border-radius: ${({ theme }) => theme.radius.lg}px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.brand.base};
   opacity: ${({ theme, disabled }) => (disabled ? theme.opacity[40] : theme.opacity[100])};
 `;
 
 export const TotalLabel = styled.Text`
-  font-size: 12px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.onPrimary};
-  opacity: 0.8;
+  ${textStyle('labelSmall')}
+  color: ${({ theme }) => theme.colors.text.onBrand};
+  opacity: ${({ theme }) => theme.opacity[80]};
 `;
 
 export const TotalValue = styled.Text`
-  font-size: 18px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.onPrimary};
+  ${textStyle('title')}
+  color: ${({ theme }) => theme.colors.text.onBrand};
 `;
 
 export const ButtonContent = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.xs}px;
+  gap: ${({ theme }) => theme.spacing[4]}px;
 `;
 
 export const ButtonLabel = styled.Text`
-  font-size: 16px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.onPrimary};
+  ${textStyle('bodyStrong')}
+  color: ${({ theme }) => theme.colors.text.onBrand};
 `;

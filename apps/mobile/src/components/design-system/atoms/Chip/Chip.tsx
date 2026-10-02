@@ -27,7 +27,7 @@ export function Chip({ label, selected = false, onPress, icon }: ChipProps) {
       <Animated.View style={pressStyle}>
         <Container selected={selected}>
           {icon}
-          <Text variant="footnote" color={selected ? 'categorySelected' : 'textPrimary'}>
+          <Text variant="caption" color={selected ? 'brand' : 'primary'}>
             {label}
           </Text>
         </Container>

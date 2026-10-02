@@ -14,7 +14,7 @@ export function Avatar({ source, initials, size = 40 }: AvatarProps) {
       {source ? (
         <AvatarImage source={source} size={size} />
       ) : (
-        <Text variant="subheadline" color="textSecondary">
+        <Text variant="bodySmall" color="secondary">
           {initials}
         </Text>
       )}

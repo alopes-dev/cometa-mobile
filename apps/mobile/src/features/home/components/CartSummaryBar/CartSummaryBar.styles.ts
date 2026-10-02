@@ -1,34 +1,30 @@
 import styled from 'styled-components/native';
+import { elevate, textStyle } from '@/theme';
 
 export const Container = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.md}px;
-  padding-vertical: ${({ theme }) => theme.spacing.md}px;
-  padding-horizontal: ${({ theme }) => theme.spacing.lg}px;
-  border-radius: ${({ theme }) => theme.radius.pill}px;
-  background-color: ${({ theme }) => theme.colors.primary};
-  shadow-color: #000000;
-  shadow-offset: 0px ${({ theme }) => theme.elevation.level2.ios.shadowOffset.height}px;
-  shadow-opacity: ${({ theme }) => theme.elevation.level2.ios.shadowOpacity};
-  shadow-radius: ${({ theme }) => theme.elevation.level2.ios.shadowRadius}px;
-  elevation: ${({ theme }) => theme.elevation.level2.android.elevation};
+  gap: ${({ theme }) => theme.spacing[16]}px;
+  padding-vertical: ${({ theme }) => theme.spacing[16]}px;
+  padding-horizontal: ${({ theme }) => theme.spacing[24]}px;
+  border-radius: ${({ theme }) => theme.radius.full}px;
+  background-color: ${({ theme }) => theme.colors.brand.base};
+  ${elevate('md')}
 `;
 
 export const CountBadge = styled.View`
   min-width: 28px;
   height: 28px;
-  border-radius: 14px;
-  padding-horizontal: 6px;
+  border-radius: ${({ theme }) => theme.radius.full}px;
+  padding-horizontal: ${({ theme }) => theme.spacing[6]}px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.onPrimary};
+  background-color: ${({ theme }) => theme.colors.text.onBrand};
 `;
 
 export const CountText = styled.Text`
-  font-size: 13px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.primary};
+  ${textStyle('label')}
+  color: ${({ theme }) => theme.colors.text.brand};
 `;
 
 export const Label = styled.View`
@@ -36,13 +32,11 @@ export const Label = styled.View`
 `;
 
 export const LabelText = styled.Text`
-  font-size: 15px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.onPrimary};
+  ${textStyle('labelLarge')}
+  color: ${({ theme }) => theme.colors.text.onBrand};
 `;
 
 export const TotalText = styled.Text`
-  font-size: 15px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.onPrimary};
+  ${textStyle('labelLarge')}
+  color: ${({ theme }) => theme.colors.text.onBrand};
 `;

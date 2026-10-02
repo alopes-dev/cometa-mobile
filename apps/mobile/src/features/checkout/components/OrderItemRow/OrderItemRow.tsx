@@ -19,10 +19,10 @@ export function OrderItemRow({ entry, onIncrement, onDecrement }: OrderItemRowPr
         <Image source={{ uri: item.imageUrl }} style={{ width: '100%', height: '100%' }} contentFit="cover" />
       </Thumbnail>
       <Info>
-        <Text variant="bodyEmphasized" numberOfLines={1}>
+        <Text variant="title" numberOfLines={1}>
           {item.name}
         </Text>
-        <Text variant="footnote" color="textSecondary" numberOfLines={2}>
+        <Text variant="caption" color="secondary" numberOfLines={2}>
           {describeCartLine(item, selections, notes)}
         </Text>
         <PriceText>{formatKwanza(unitPrice)}</PriceText>

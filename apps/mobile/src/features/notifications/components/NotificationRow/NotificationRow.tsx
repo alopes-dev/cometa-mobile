@@ -13,19 +13,19 @@ export function NotificationRow({ notification }: NotificationRowProps) {
   return (
     <Container>
       <IconCircle read={notification.read}>
-        <Icon name={icon.name} sf={icon.sf} size={18} color={notification.read ? 'textSecondary' : 'primary'} />
+        <Icon name={icon.name} sf={icon.sf} size={18} color={notification.read ? 'secondary' : 'primary'} />
       </IconCircle>
       <Info>
         <TitleRow>
-          <Text variant="bodyEmphasized" numberOfLines={1} style={{ flex: 1 }}>
+          <Text variant="title" numberOfLines={1} style={{ flex: 1 }}>
             {notification.title}
           </Text>
           {!notification.read ? <UnreadDot testID="unread-dot" /> : null}
         </TitleRow>
-        <Text variant="footnote" color="textSecondary">
+        <Text variant="caption" color="secondary">
           {notification.message}
         </Text>
-        <Text variant="caption" color="textSecondary">
+        <Text variant="micro" color="secondary">
           {notification.timestamp}
         </Text>
       </Info>

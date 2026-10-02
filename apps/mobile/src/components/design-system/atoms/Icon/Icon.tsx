@@ -4,7 +4,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "styled-components/native";
 import type { Theme } from "@/components/design-system/ThemeProvider";
 
-type ColorKey = keyof Theme["colors"];
+/** A foreground role, not a token path — see `theme/roles.ts`. */
+type ColorKey = keyof Theme["fg"];
 
 export type IconProps = {
   name: keyof typeof Ionicons.glyphMap;
@@ -13,14 +14,9 @@ export type IconProps = {
   color?: ColorKey;
 };
 
-export function Icon({
-  name,
-  sf,
-  size = 24,
-  color = "textPrimary",
-}: IconProps) {
+export function Icon({ name, sf, size = 24, color = "primary" }: IconProps) {
   const theme = useTheme();
-  const tintColor = theme.colors[color];
+  const tintColor = theme.fg[color];
 
   if (Platform.OS === "ios" && sf) {
     return (

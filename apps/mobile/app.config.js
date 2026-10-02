@@ -27,6 +27,17 @@ module.exports = {
       "expo-image",
       "expo-dev-client",
       [
+        "expo-location",
+        {
+          // Shown in the iOS system dialog that the pre-permission screen
+          // (node 44:22414) leads into, so the sentence the user reads on that
+          // screen and the sentence iOS shows say the same thing.
+          locationWhenInUsePermission:
+            "A Cometa usa a tua localização para mostrar restaurantes e lojas que entregam perto de ti.",
+        },
+      ],
+      "expo-notifications",
+      [
         "@rnmapbox/maps",
         {
           // Build-time token used only to download the native Mapbox SDK from

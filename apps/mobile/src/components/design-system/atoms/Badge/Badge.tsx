@@ -17,7 +17,7 @@ export function Badge({ count, variant = 'error' }: BadgeProps) {
 
   return (
     <NumberBadge color={color}>
-      <Text variant="caption" color="onPrimary">
+      <Text variant="micro" color="onBrand">
         {count > 99 ? '99+' : String(count)}
       </Text>
     </NumberBadge>

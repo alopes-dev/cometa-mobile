@@ -8,15 +8,15 @@ export const Container = styled.View<{ fullWidth?: boolean }>`
   height: ${({ fullWidth }) => (fullWidth ? 160 : CARD_HEIGHT)}px;
   border-radius: ${({ theme }) => theme.radius.lg}px;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.colors.surface};
+  background-color: ${({ theme }) => theme.colors.surface.secondary};
 `;
 
 export const Badge = styled.View`
   align-self: flex-start;
-  padding-horizontal: ${({ theme }) => theme.spacing.sm}px;
-  padding-vertical: 4px;
-  border-radius: ${({ theme }) => theme.radius.pill}px;
-  background-color: ${({ theme }) => theme.colors.promoBadgeBackground};
+  padding-horizontal: ${({ theme }) => theme.spacing[8]}px;
+  padding-vertical: ${({ theme }) => theme.spacing[4]}px;
+  border-radius: ${({ theme }) => theme.radius.full}px;
+  background-color: ${({ theme }) => theme.colors.promo.offer.fill};
 `;
 
 export const Content = styled.View`
@@ -24,12 +24,12 @@ export const Content = styled.View`
   left: 0;
   right: 0;
   bottom: 0;
-  padding: ${({ theme }) => theme.spacing.md}px;
-  gap: 4px;
+  padding: ${({ theme }) => theme.spacing[16]}px;
+  gap: ${({ theme }) => theme.spacing[4]}px;
 `;
 
 export const TopContent = styled.View`
   position: absolute;
-  top: ${({ theme }) => theme.spacing.sm}px;
-  left: ${({ theme }) => theme.spacing.sm}px;
+  top: ${({ theme }) => theme.spacing[8]}px;
+  left: ${({ theme }) => theme.spacing[8]}px;
 `;

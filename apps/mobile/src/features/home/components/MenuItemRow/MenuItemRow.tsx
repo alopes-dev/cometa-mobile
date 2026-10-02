@@ -31,8 +31,8 @@ export function MenuItemRow({ item, onAdd, onPress }: MenuItemRowProps) {
   const content = (
     <Container>
       <Info>
-        <Text variant="bodyEmphasized">{item.name}</Text>
-        <Text variant="footnote" color="textSecondary" numberOfLines={2}>
+        <Text variant="title">{item.name}</Text>
+        <Text variant="caption" color="secondary" numberOfLines={2}>
           {item.description}
         </Text>
         <PriceText>{formatKwanza(item.price)}</PriceText>
@@ -41,7 +41,7 @@ export function MenuItemRow({ item, onAdd, onPress }: MenuItemRowProps) {
         <Pressable onPress={handleAdd} accessibilityRole="button" accessibilityLabel={`Adicionar ${item.name}`} hitSlop={8}>
           <Animated.View ref={addButtonRef} style={bounceStyle}>
             <AddButton>
-              <Icon name="add" sf="plus" size={16} color="onSecondary" />
+              <Icon name="add" sf="plus" size={16} color="onBrand" />
             </AddButton>
           </Animated.View>
         </Pressable>

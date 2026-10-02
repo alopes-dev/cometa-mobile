@@ -12,7 +12,7 @@ export type TextFieldProps = TextInputProps & {
   disabled?: boolean;
   shape?: 'default' | 'pill';
   leadingIcon?: { name: IconProps['name']; sf?: IconProps['sf'] };
-  backgroundColor?: keyof Theme['colors'];
+  backgroundColor?: keyof Theme['colors']['surface'];
 };
 
 export function TextField({
@@ -31,7 +31,7 @@ export function TextField({
   return (
     <Container>
       {label ? (
-        <Text variant="footnote" color="textSecondary">
+        <Text variant="caption" color="secondary">
           {label}
         </Text>
       ) : null}
@@ -43,7 +43,7 @@ export function TextField({
         backgroundColor={backgroundColor}
       >
         {leadingIcon ? (
-          <Icon name={leadingIcon.name} sf={leadingIcon.sf} size={18} color="textSecondary" />
+          <Icon name={leadingIcon.name} sf={leadingIcon.sf} size={18} color="secondary" />
         ) : null}
         <Input
           {...rest}
@@ -59,11 +59,11 @@ export function TextField({
         />
       </FieldRow>
       {error ? (
-        <Text variant="caption" color="error">
+        <Text variant="micro" color="error">
           {error}
         </Text>
       ) : helperText ? (
-        <Text variant="caption" color="textSecondary">
+        <Text variant="micro" color="secondary">
           {helperText}
         </Text>
       ) : null}

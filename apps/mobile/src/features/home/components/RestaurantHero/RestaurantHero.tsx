@@ -77,10 +77,10 @@ function HeaderIconButton({
           <IconButton />
         </Animated.View>
         <Animated.View style={[iconLayerStyle, lightIconStyle]}>
-          <Icon name={name} sf={sf} size={20} color="onSecondary" />
+          <Icon name={name} sf={sf} size={20} color="onMedia" />
         </Animated.View>
         <Animated.View style={[iconLayerStyle, darkIconStyle]}>
-          <Icon name={name} sf={sf} size={20} color="textPrimary" />
+          <Icon name={name} sf={sf} size={20} color="primary" />
         </Animated.View>
       </IconButtonStack>
     </Pressable>
@@ -167,14 +167,14 @@ export function RestaurantHero({
     <Animated.View
       style={[
         heroPositionStyle,
-        { backgroundColor: theme.colors.background },
+        { backgroundColor: theme.colors.background.primary },
         containerAnimatedStyle,
       ]}
     >
       <Animated.View
         style={[
           StyleSheet.absoluteFill,
-          { backgroundColor: theme.colors.background },
+          { backgroundColor: theme.colors.background.primary },
           solidBackgroundStyle,
         ]}
       />
@@ -185,7 +185,7 @@ export function RestaurantHero({
           contentFit="cover"
         />
         <LinearGradient
-          colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.75)"]}
+          colors={[theme.colors.overlay.scrimFrom, theme.colors.overlay.scrimTo]}
           style={StyleSheet.absoluteFill}
         />
       </Animated.View>
@@ -218,7 +218,7 @@ export function RestaurantHero({
 
       <Animated.View style={compactTitleStyle}>
         <CompactTitleWrapper topInset={topInset}>
-          <Text variant="bodyEmphasized" numberOfLines={1}>
+          <Text variant="title" numberOfLines={1}>
             {restaurant.name}
           </Text>
         </CompactTitleWrapper>
@@ -228,16 +228,16 @@ export function RestaurantHero({
         <BottomContent>
           {restaurant.rating >= TOP_RATED_THRESHOLD ? (
             <RatedBadge>
-              <Text variant="caption" color="onSecondary">
+              <Text variant="micro" color="onMedia">
                 MAIS BEM AVALIADO
               </Text>
             </RatedBadge>
           ) : null}
           <RatingBadge rating={restaurant.rating} variant="plain" />
-          <Text variant="title1" color="onSecondary">
+          <Text variant="h3" color="onMedia">
             {restaurant.name}
           </Text>
-          <Text variant="footnote" color="onSecondary">
+          <Text variant="caption" color="onMedia">
             {restaurant.description}
           </Text>
         </BottomContent>

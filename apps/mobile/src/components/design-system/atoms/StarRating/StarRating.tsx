@@ -28,7 +28,7 @@ export function StarRating({ value, onChange, count = 5, size = 28, label = 'Ava
               name={filled ? 'star' : 'star-outline'}
               sf={filled ? 'star.fill' : 'star'}
               size={size}
-              color={filled ? 'warning' : 'border'}
+              color={filled ? 'rating' : 'ratingEmpty'}
             />
           </Pressable>
         );

@@ -28,13 +28,13 @@ export function OrderConfirmation({ restaurantName, total, onDone, onTrack }: Or
         <Halo />
         <Animated.View style={circleStyle}>
           <IconCircle>
-            <Icon name="checkmark" sf="checkmark" size={40} color="onPrimary" />
+            <Icon name="checkmark" sf="checkmark" size={40} color="onBrand" />
           </IconCircle>
         </Animated.View>
       </IconStack>
       <TextGroup>
-        <Text variant="title1">Pedido confirmado!</Text>
-        <Text variant="body" color="textSecondary" style={{ textAlign: 'center' }}>
+        <Text variant="h3">Pedido confirmado!</Text>
+        <Text variant="bodyLarge" color="secondary" style={{ textAlign: 'center' }}>
           O seu pedido de {formatKwanza(total)} foi enviado para {restaurantName}.
         </Text>
       </TextGroup>
@@ -43,7 +43,7 @@ export function OrderConfirmation({ restaurantName, total, onDone, onTrack }: Or
           variant="primary"
           size="lg"
           shape="pill"
-          icon={<Icon name="location-outline" sf="location" size={18} color="onPrimary" />}
+          icon={<Icon name="location-outline" sf="location" size={18} color="onBrand" />}
           onPress={onTrack}
         >
           Acompanhar Pedido

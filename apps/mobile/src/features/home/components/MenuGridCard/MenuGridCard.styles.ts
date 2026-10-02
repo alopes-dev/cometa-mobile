@@ -1,8 +1,9 @@
 import styled from 'styled-components/native';
+import { textStyle } from '@/theme';
 
 export const Container = styled.View`
   width: 48%;
-  gap: 6px;
+  gap: ${({ theme }) => theme.spacing[6]}px;
 `;
 
 export const ImageWrapper = styled.View`
@@ -15,16 +16,15 @@ export const AddButton = styled.View`
   bottom: 6px;
   width: 28px;
   height: 28px;
-  border-radius: 14px;
+  border-radius: ${({ theme }) => theme.radius.full}px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.brand.base};
   border-width: 2px;
-  border-color: ${({ theme }) => theme.colors.background};
+  border-color: ${({ theme }) => theme.colors.background.primary};
 `;
 
 export const PriceText = styled.Text`
-  font-size: 13px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.primary};
+  ${textStyle('label')}
+  color: ${({ theme }) => theme.colors.text.brand};
 `;

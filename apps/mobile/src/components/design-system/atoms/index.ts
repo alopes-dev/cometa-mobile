@@ -12,3 +12,4 @@ export { RatingBadge, type RatingBadgeProps } from './RatingBadge';
 export { FavoriteButton, type FavoriteButtonProps } from './FavoriteButton';
 export { QuantityStepper, type QuantityStepperProps } from './QuantityStepper';
 export { StarRating, type StarRatingProps } from './StarRating';
+export { StatusChip, type StatusChipProps, type DeliveryStatus } from './StatusChip';

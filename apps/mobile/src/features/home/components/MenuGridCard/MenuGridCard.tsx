@@ -9,6 +9,7 @@ import { useMeasureOnTap, type ScreenOrigin } from '@/hooks/useMeasureOnTap';
 import { formatKwanza } from '../../format';
 import type { MenuItem } from '../../types';
 import { AddButton, Container, ImageWrapper, PriceText } from './MenuGridCard.styles';
+import { radius } from '@/theme';
 
 export type MenuGridCardProps = {
   item: MenuItem;
@@ -33,7 +34,7 @@ export function MenuGridCard({ item, onAdd, onPress }: MenuGridCardProps) {
       <ImageWrapper>
         <Image
           source={{ uri: item.imageUrl }}
-          style={{ width: '100%', height: 120, borderRadius: 12 }}
+          style={{ width: '100%', height: 120, borderRadius: radius.md }}
           contentFit="cover"
         />
         {onAdd ? (
@@ -45,16 +46,16 @@ export function MenuGridCard({ item, onAdd, onPress }: MenuGridCardProps) {
           >
             <Animated.View ref={addButtonRef} style={bounceStyle}>
               <AddButton>
-                <Icon name="add" sf="plus" size={14} color="onSecondary" />
+                <Icon name="add" sf="plus" size={14} color="onBrand" />
               </AddButton>
             </Animated.View>
           </Pressable>
         ) : null}
       </ImageWrapper>
-      <Text variant="footnote" numberOfLines={1}>
+      <Text variant="caption" numberOfLines={1}>
         {item.name}
       </Text>
-      <Text variant="caption" color="textSecondary" numberOfLines={1}>
+      <Text variant="micro" color="secondary" numberOfLines={1}>
         {item.description}
       </Text>
       <PriceText>{formatKwanza(item.price)}</PriceText>

@@ -6,7 +6,7 @@ export const Container = styled.View<{ size: number }>`
   border-radius: ${({ size }) => size / 2}px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: ${({ theme }) => theme.colors.background.primary};
   border-width: 1px;
-  border-color: ${({ theme }) => theme.colors.border};
+  border-color: ${({ theme }) => theme.colors.border.default};
 `;

@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTheme } from 'styled-components/native';
 import { Text } from '@/components/design-system/atoms';
 import type { Offer } from '../../types';
 import { Container, Badge, Content, TopContent } from './OfferCard.styles';
@@ -11,22 +12,27 @@ export type OfferCardProps = {
 };
 
 export function OfferCard({ offer, fullWidth }: OfferCardProps) {
+  const theme = useTheme();
+
   return (
     <Container fullWidth={fullWidth}>
       <Image source={{ uri: offer.imageUrl }} style={StyleSheet.absoluteFill} contentFit="cover" />
-      <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.75)']} style={StyleSheet.absoluteFill} />
+      <LinearGradient
+        colors={[theme.colors.overlay.scrimFrom, theme.colors.overlay.scrimTo]}
+        style={StyleSheet.absoluteFill}
+      />
       <TopContent>
         <Badge>
-          <Text variant="caption" color="onSecondary">
+          <Text variant="labelSmall" color="onBrand">
             {offer.badgeLabel}
           </Text>
         </Badge>
       </TopContent>
       <Content>
-        <Text variant="bodyEmphasized" color="onSecondary">
+        <Text variant="title" color="onMedia">
           {offer.title}
         </Text>
-        <Text variant="footnote" color="onSecondary">
+        <Text variant="caption" color="onMedia">
           {offer.subtitle}
         </Text>
       </Content>

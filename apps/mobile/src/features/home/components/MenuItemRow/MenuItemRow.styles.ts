@@ -1,30 +1,30 @@
 import styled from 'styled-components/native';
+import { textStyle, elevate } from '@/theme';
 
 export const Container = styled.View`
   flex-direction: row;
   align-items: flex-end;
-  gap: ${({ theme }) => theme.spacing.md}px;
-  padding-vertical: ${({ theme }) => theme.spacing.md}px;
+  gap: ${({ theme }) => theme.spacing[16]}px;
+  padding-vertical: ${({ theme }) => theme.spacing[16]}px;
 `;
 
 export const Info = styled.View`
   flex: 1;
-  gap: 4px;
+  gap: ${({ theme }) => theme.spacing[4]}px;
 `;
 
 export const AddButton = styled.View`
   width: 32px;
   height: 32px;
-  border-radius: 16px;
+  border-radius: ${({ theme }) => theme.radius.full}px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${({ theme }) => theme.colors.brand.base};
 `;
 
 export const PriceText = styled.Text`
-  font-size: 13px;
-  font-weight: 600;
-  color: ${({ theme }) => theme.colors.primary};
+  ${textStyle('label')}
+  color: ${({ theme }) => theme.colors.text.brand};
 `;
 
 // Split in two: shadows and overflow:hidden can't coexist on one RN view —
@@ -32,19 +32,15 @@ export const PriceText = styled.Text`
 export const Thumbnail = styled.View`
   width: 96px;
   height: 96px;
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.radius.md}px;
   border-width: 1px;
-  border-color: rgba(219, 194, 173, 0.1);
-  shadow-color: #000000;
-  shadow-offset: 0px 1px;
-  shadow-opacity: 0.05;
-  shadow-radius: 2px;
-  elevation: 1;
+  border-color: ${({ theme }) => theme.colors.border.subtle};
+  ${elevate('sm')}
 `;
 
 export const ThumbnailClip = styled.View`
   width: 100%;
   height: 100%;
-  border-radius: 12px;
+  border-radius: ${({ theme }) => theme.radius.md}px;
   overflow: hidden;
 `;

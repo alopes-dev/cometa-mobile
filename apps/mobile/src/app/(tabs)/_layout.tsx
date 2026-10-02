@@ -7,7 +7,7 @@ export default function TabsLayout() {
   const { isTabBarHidden } = useTabBarVisibility();
 
   return (
-    <NativeTabs tintColor={theme.colors.primary} hidden={isTabBarHidden}>
+    <NativeTabs tintColor={theme.colors.brand.base} hidden={isTabBarHidden}>
       <NativeTabs.Trigger name="(home)">
         <NativeTabs.Trigger.Icon sf="house.fill" md="home" />
         <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>

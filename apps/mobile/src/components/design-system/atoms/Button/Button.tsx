@@ -57,7 +57,7 @@ export function Button({
     >
       <Container variant={variant} size={size} shape={shape} disabled={isDisabled}>
         {loading ? (
-          <ActivityIndicator color={theme.colors[labelColor]} />
+          <ActivityIndicator color={theme.fg[labelColor]} />
         ) : (
           <>
             {icon}

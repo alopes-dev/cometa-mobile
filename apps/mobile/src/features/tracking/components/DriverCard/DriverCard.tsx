@@ -17,32 +17,32 @@ export function DriverCard({ driver }: DriverCardProps) {
       <HeaderRow>
         <Photo source={{ uri: driver.photoUrl }} contentFit="cover" />
         <Info>
-          <Text variant="bodyEmphasized">{driver.name}</Text>
+          <Text variant="title">{driver.name}</Text>
           <RatingRow>
             <Icon name="star" sf="star.fill" size={12} color="warning" />
-            <Text variant="footnote" color="textSecondary">
+            <Text variant="caption" color="secondary">
               {driver.rating.toFixed(1)}
             </Text>
           </RatingRow>
-          <Text variant="footnote" color="textSecondary">
+          <Text variant="caption" color="secondary">
             {driver.vehicle} · {driver.plate}
           </Text>
         </Info>
       </HeaderRow>
-      <Text variant="footnote" color="primary">
+      <Text variant="caption" color="brand">
         Chega em aproximadamente {driver.etaMinutes} min
       </Text>
       <ActionsRow>
         <Pressable onPress={() => {}} accessibilityRole="button" accessibilityLabel="Abrir chat com o entregador">
           <ActionButton>
-            <Icon name="chatbubble-outline" sf="bubble.left" size={16} color="textPrimary" />
-            <Text variant="footnote">Chat</Text>
+            <Icon name="chatbubble-outline" sf="bubble.left" size={16} color="primary" />
+            <Text variant="caption">Chat</Text>
           </ActionButton>
         </Pressable>
         <Pressable onPress={handleCall} accessibilityRole="button" accessibilityLabel="Ligar ao entregador">
           <ActionButton>
-            <Icon name="call-outline" sf="phone.fill" size={16} color="textPrimary" />
-            <Text variant="footnote">Ligar</Text>
+            <Icon name="call-outline" sf="phone.fill" size={16} color="primary" />
+            <Text variant="caption">Ligar</Text>
           </ActionButton>
         </Pressable>
       </ActionsRow>

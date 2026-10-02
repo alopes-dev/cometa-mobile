@@ -11,6 +11,7 @@ import { HERO_MAX_HEIGHT } from '../RestaurantHero';
 import { formatDeliveryFee } from '../../format';
 import type { Restaurant } from '../../types';
 import { Container, ImageWrapper, RatingBadgeWrapper, InfoRow, MetaRow } from './RestaurantCard.styles';
+import { radius } from '@/theme';
 
 const MAX_STAGGERED_INDEX = 6;
 const STAGGER_STEP_MS = 40;
@@ -62,7 +63,7 @@ export function RestaurantCard({
               <ImageWrapper>
                 <Image
                   source={{ uri: restaurant.imageUrl }}
-                  style={{ width: '100%', height: 190, borderRadius: 16 }}
+                  style={{ width: '100%', height: 190, borderRadius: radius.lg }}
                   contentFit="cover"
                 />
                 <RatingBadgeWrapper>
@@ -71,7 +72,7 @@ export function RestaurantCard({
               </ImageWrapper>
             </View>
             <InfoRow>
-              <Text variant="bodyEmphasized" numberOfLines={1} style={{ flex: 1 }}>
+              <Text variant="title" numberOfLines={1} style={{ flex: 1 }}>
                 {restaurant.name}
               </Text>
               {onToggleFavorite ? (
@@ -79,7 +80,7 @@ export function RestaurantCard({
               ) : null}
             </InfoRow>
             <MetaRow>
-              <Text variant="footnote" color="textSecondary">
+              <Text variant="caption" color="secondary">
                 {restaurant.cuisine} • {restaurant.deliveryTimeMinutes} min • {formatDeliveryFee(restaurant.deliveryFee)}
               </Text>
             </MetaRow>

@@ -10,7 +10,7 @@ As diretrizes completas de produto, negócio e design vivem em [`CLAUDE.md`](CLA
 
 Este repositório está na fase de **fundação do Design System**. Não é (ainda) o app completo descrito em `CLAUDE.md` — é a base técnica sobre a qual ele será construído:
 
-- ✅ **Fase 1 — Tokens**: paleta de cores, tipografia, espaçamento, raios, elevação e motion definidos em [`src/constants/theme.ts`](src/constants/theme.ts), seguindo a especificação em [`docs/superpowers/DESIGN-SYSTEM.md`](docs/superpowers/DESIGN-SYSTEM.md) (Apple HIG: Inter, laranja `#FF9500` como cor primária, neutros em escala de cinza, dark mode com preto verdadeiro).
+- ✅ **Fase 1 — Tokens**: paleta de cores, tipografia, espaçamento, raios, elevação e motion definidos em [`apps/mobile/src/theme/`](apps/mobile/src/theme/), documentados em [`docs/superpowers/DESIGN-SYSTEM.md`](docs/superpowers/DESIGN-SYSTEM.md). Sistema **neutral-first**: verde-jade da marca (`#0A7D53`) reservado para CTA, estado ativo, preço e progresso; neutros carregam 70–80% da interface. Poppins para display/headings, Inter para corpo, rótulos e numerais. Dark mode com base near-black (`#0E1013`), nunca preto absoluto.
 - 🚧 **Fase 2 — Atoms**: biblioteca de componentes base (Button, Text, TextField, Icon, Avatar, Badge, Chip, Switch, Checkbox, Radio) em desenho — ver `docs/superpowers/specs/`.
 - ⏳ **Próximas fases**: Molecules, Organisms, Templates e as telas de produto (onboarding, home, checkout, tracking).
 
@@ -39,17 +39,25 @@ cometa/
 │   ├── app/                # Rotas (Expo Router) — cada arquivo é uma tela
 │   │   ├── _layout.tsx     # Layout raiz: carregamento de fontes, Stack, splash screen
 │   │   └── index.tsx       # Tela inicial
-│   └── constants/
-│       └── theme.ts        # Design tokens: colors, typography, spacing, radius, elevation, motion
+│   └── theme/              # Design tokens — única fonte de verdade visual
+│       ├── palette.ts      # Escalas brutas (o único arquivo com hex literais)
+│       ├── semantic.ts     # Tokens semânticos light + dark
+│       ├── roles.ts        # Vocabulário de foreground/fill para Text, Icon, Badge
+│       ├── typography.ts   # Famílias + escala tipográfica
+│       ├── spacing.ts      # Grade de 4pt + constantes de layout
+│       ├── radius.ts
+│       ├── shadows.ts      # Quatro níveis de elevação, por esquema
+│       ├── motion.ts
+│       └── mixins.ts       # elevate() / textStyle() / continuousCorners
 ├── docs/superpowers/
-│   ├── DESIGN-SYSTEM.md    # Especificação de design que alimenta theme.ts
+│   ├── DESIGN-SYSTEM.md    # Documentação do Design System (espelha src/theme/)
 │   ├── specs/               # Specs de design (brainstorming) por feature
 │   └── plans/               # Planos de implementação por feature
 ├── CLAUDE.md / AGENTS.md   # Visão de produto, regras de negócio e diretrizes para agentes de IA
 └── assets/                  # Ícones e splash screen
 ```
 
-O alias de import `@/*` aponta para `src/*` (ver `tsconfig.json`) — ex.: `import { colors } from '@/constants/theme'`.
+O alias de import `@/*` aponta para `src/*` (ver `tsconfig.json`) — ex.: `import { spacing, radius } from '@/theme'`.
 
 À medida que novas features forem implementadas, esta árvore crescerá seguindo a arquitetura modular descrita em `CLAUDE.md` (`modules/`, `components/`, `hooks/`, `services/` por domínio: delivery, checkout, orders, tracking, wallet, etc.).
 
@@ -97,7 +105,9 @@ Testes ficam colocados ao lado do código que testam (`*.test.ts`), usando Jest 
 
 ## Design System
 
-Toda a identidade visual (cores, tipografia, espaçamento, raios, sombras, motion) é centralizada em [`src/constants/theme.ts`](src/constants/theme.ts) e documentada em [`docs/superpowers/DESIGN-SYSTEM.md`](docs/superpowers/DESIGN-SYSTEM.md). Nenhum componente deve usar valores de estilo "mágicos" (hex, px) diretamente — sempre importe os tokens do tema.
+Toda a identidade visual (cores, tipografia, espaçamento, raios, sombras, motion) é centralizada em [`apps/mobile/src/theme/`](apps/mobile/src/theme/) e documentada em [`docs/superpowers/DESIGN-SYSTEM.md`](docs/superpowers/DESIGN-SYSTEM.md). Nenhum componente deve usar valores de estilo "mágicos" (hex, px) diretamente — sempre importe os tokens do tema.
+
+Contraste WCAG é verificado em [`apps/mobile/src/theme/contrast.test.ts`](apps/mobile/src/theme/contrast.test.ts) contra os tokens reais, nos dois esquemas de cor: é portão de build, não recomendação.
 
 ## Licença
 

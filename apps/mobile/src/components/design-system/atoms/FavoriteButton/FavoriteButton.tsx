@@ -32,7 +32,7 @@ export function FavoriteButton({ isFavorite, onToggle, size = 36 }: FavoriteButt
             name={isFavorite ? 'heart' : 'heart-outline'}
             sf={isFavorite ? 'heart.fill' : 'heart'}
             size={18}
-            color={isFavorite ? 'error' : 'textSecondary'}
+            color={isFavorite ? 'error' : 'secondary'}
           />
         </Container>
       </Animated.View>

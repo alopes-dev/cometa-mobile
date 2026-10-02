@@ -11,47 +11,47 @@ export function OrderSummaryCard({ summary }: OrderSummaryCardProps) {
   return (
     <Container>
       <Row>
-        <Text variant="body" color="textSecondary">
+        <Text variant="bodyLarge" color="secondary">
           Subtotal
         </Text>
-        <Text variant="body">{formatKwanza(summary.subtotal)}</Text>
+        <Text variant="bodyLarge">{formatKwanza(summary.subtotal)}</Text>
       </Row>
       <Row>
-        <Text variant="body" color="textSecondary">
+        <Text variant="bodyLarge" color="secondary">
           Delivery
         </Text>
-        <Text variant="body" color={summary.delivery === 0 ? 'primary' : 'textPrimary'}>
+        <Text variant="bodyLarge" color={summary.delivery === 0 ? 'primary' : 'primary'}>
           {formatDeliveryFee(summary.delivery)}
         </Text>
       </Row>
       {summary.discount > 0 ? (
         <Row>
-          <Text variant="body" color="textSecondary">
+          <Text variant="bodyLarge" color="secondary">
             Desconto
           </Text>
-          <Text variant="body" color="primary">
+          <Text variant="bodyLarge" color="brand">
             -{formatKwanza(summary.discount)}
           </Text>
         </Row>
       ) : null}
       {summary.tip > 0 ? (
         <Row>
-          <Text variant="body" color="textSecondary">
+          <Text variant="bodyLarge" color="secondary">
             Gorjeta
           </Text>
-          <Text variant="body">{formatKwanza(summary.tip)}</Text>
+          <Text variant="bodyLarge">{formatKwanza(summary.tip)}</Text>
         </Row>
       ) : null}
       <Row>
-        <Text variant="body" color="textSecondary">
+        <Text variant="bodyLarge" color="secondary">
           VAT (14%)
         </Text>
-        <Text variant="body">{formatKwanza(summary.vat)}</Text>
+        <Text variant="bodyLarge">{formatKwanza(summary.vat)}</Text>
       </Row>
       <Divider />
       <Row>
-        <Text variant="bodyEmphasized">Total</Text>
-        <Text variant="bodyEmphasized" color="primary">
+        <Text variant="title">Total</Text>
+        <Text variant="title" color="brand">
           {formatKwanza(summary.total)}
         </Text>
       </Row>

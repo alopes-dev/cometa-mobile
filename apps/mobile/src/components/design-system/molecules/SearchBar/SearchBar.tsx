@@ -5,7 +5,7 @@ export type SearchBarProps = {
   value: string;
   onChangeText: (text: string) => void;
   placeholder?: string;
-  backgroundColor?: keyof Theme['colors'];
+  backgroundColor?: keyof Theme['colors']['surface'];
 };
 
 export function SearchBar({

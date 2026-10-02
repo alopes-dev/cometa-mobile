@@ -14,7 +14,7 @@ describe("Text", () => {
 
   it("applies the requested typography variant", () => {
     const { getByText } = renderWithTheme(
-      <Text variant="headline">Cometa</Text>,
+      <Text variant="h1">Cometa</Text>,
     );
     const style = getByText("Cometa").props.style;
     expect(JSON.stringify(style)).toContain("28");

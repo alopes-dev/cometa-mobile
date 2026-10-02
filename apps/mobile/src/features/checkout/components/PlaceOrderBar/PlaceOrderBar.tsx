@@ -29,11 +29,11 @@ export function PlaceOrderBar({ total, isLoading = false, disabled = false, onPr
           <TotalValue>{formatKwanza(total)}</TotalValue>
         </View>
         {isLoading ? (
-          <ActivityIndicator color={theme.colors.onPrimary} />
+          <ActivityIndicator color={theme.colors.text.onBrand} />
         ) : (
           <ButtonContent>
             <ButtonLabel>Place Order</ButtonLabel>
-            <Icon name="arrow-forward" sf="arrow.right" size={18} color="onPrimary" />
+            <Icon name="arrow-forward" sf="arrow.right" size={18} color="onBrand" />
           </ButtonContent>
         )}
       </Container>

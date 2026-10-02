@@ -38,14 +38,14 @@ export function DiscoverHeader({
             <Avatar source={{ uri: avatarUrl }} size={44} />
           </Animated.View>
           <AddressColumn>
-            <Text variant="footnote" color="textSecondary">
+            <Text variant="caption" color="secondary">
               Entrega para
             </Text>
             <AddressRow>
-              <Text variant="bodyEmphasized" numberOfLines={1}>
+              <Text variant="title" numberOfLines={1}>
                 {address}
               </Text>
-              <Icon name="chevron-down" sf="chevron.down" size={16} color="textPrimary" />
+              <Icon name="chevron-down" sf="chevron.down" size={16} color="primary" />
             </AddressRow>
           </AddressColumn>
         </AddressSection>
@@ -58,7 +58,7 @@ export function DiscoverHeader({
       >
         <Animated.View style={bellBounceStyle}>
           <BellButton>
-            <Icon name="notifications-outline" sf="bell" size={20} color="textPrimary" />
+            <Icon name="notifications-outline" sf="bell" size={20} color="primary" />
           </BellButton>
         </Animated.View>
       </Pressable>

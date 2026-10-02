@@ -47,9 +47,9 @@ export function ModifierOptionRow({ option, type, selected, onToggle }: Modifier
   }, [selected]);
 
   const colorStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(progress.value, [0, 1], ['transparent', theme.colors.primary]),
+    backgroundColor: interpolateColor(progress.value, [0, 1], ['transparent', theme.colors.brand.base]),
     borderWidth: interpolate(progress.value, [0, 1], [1.5, 0]),
-    borderColor: theme.colors.border,
+    borderColor: theme.colors.border.default,
   }));
 
   const shape = type === 'single' ? circleShape : squareShape;
@@ -67,14 +67,14 @@ export function ModifierOptionRow({ option, type, selected, onToggle }: Modifier
         <OptionRow>
           <Animated.View style={bounceStyle}>
             <Animated.View style={[shape, colorStyle]}>
-              {selected ? <Icon name="checkmark" sf="checkmark" size={12} color="onPrimary" /> : null}
+              {selected ? <Icon name="checkmark" sf="checkmark" size={12} color="onBrand" /> : null}
             </Animated.View>
           </Animated.View>
-          <Text variant="body" style={{ flex: 1 }}>
+          <Text variant="bodyLarge" style={{ flex: 1 }}>
             {option.label}
           </Text>
           {option.priceDelta > 0 ? (
-            <Text variant="footnote" color="textSecondary">
+            <Text variant="caption" color="secondary">
               +{formatKwanza(option.priceDelta)}
             </Text>
           ) : null}

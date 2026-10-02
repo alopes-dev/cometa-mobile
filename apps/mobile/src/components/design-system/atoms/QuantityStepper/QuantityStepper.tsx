@@ -13,13 +13,13 @@ export function QuantityStepper({ quantity, onIncrement, onDecrement }: Quantity
     <Container>
       <Pressable onPress={onDecrement} accessibilityRole="button" accessibilityLabel="Diminuir quantidade" hitSlop={8}>
         <StepButton variant="decrement">
-          <Icon name="remove" sf="minus" size={14} color="textPrimary" />
+          <Icon name="remove" sf="minus" size={14} color="primary" />
         </StepButton>
       </Pressable>
       <Value>{quantity}</Value>
       <Pressable onPress={onIncrement} accessibilityRole="button" accessibilityLabel="Aumentar quantidade" hitSlop={8}>
         <StepButton variant="increment">
-          <Icon name="add" sf="plus" size={14} color="onPrimary" />
+          <Icon name="add" sf="plus" size={14} color="onBrand" />
         </StepButton>
       </Pressable>
     </Container>

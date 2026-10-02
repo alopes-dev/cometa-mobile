@@ -25,7 +25,7 @@ export function MenuTabs({ tabs, selectedKey, onSelect }: MenuTabsProps) {
   const theme = useTheme();
   const reducedMotion = useReducedMotion();
   const contentContainerStyle = useMemo(
-    () => ({ gap: theme.spacing.sm, paddingHorizontal: theme.spacing.md }),
+    () => ({ gap: theme.spacing[8], paddingHorizontal: theme.spacing[16] }),
     [theme]
   );
 
@@ -77,8 +77,8 @@ export function MenuTabs({ tabs, selectedKey, onSelect }: MenuTabsProps) {
             position: 'absolute',
             top: 0,
             height: 40,
-            borderRadius: theme.radius.pill,
-            backgroundColor: theme.colors.categorySelected,
+            borderRadius: theme.radius.full,
+            backgroundColor: theme.colors.brand.base,
           },
           indicatorStyle,
         ]}

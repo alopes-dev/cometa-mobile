@@ -15,20 +15,20 @@ export function DetailsRow({ icon, title, subtitle, trailing, onPress }: Details
     <Pressable onPress={onPress} accessibilityRole={onPress ? 'button' : undefined}>
       <Container>
         <IconCircle>
-          <Icon name={icon.name} sf={icon.sf} size={18} color="primary" />
+          <Icon name={icon.name} sf={icon.sf} size={18} color="brand" />
         </IconCircle>
         <Info>
-          <Text variant="bodyEmphasized" numberOfLines={1}>
+          <Text variant="title" numberOfLines={1}>
             {title}
           </Text>
-          <Text variant="footnote" color="textSecondary" numberOfLines={1}>
+          <Text variant="caption" color="secondary" numberOfLines={1}>
             {subtitle}
           </Text>
         </Info>
         {trailing === 'chevron' ? (
-          <Icon name="chevron-forward" sf="chevron.right" size={16} color="textSecondary" />
+          <Icon name="chevron-forward" sf="chevron.right" size={16} color="secondary" />
         ) : trailing ? (
-          <Text variant="footnote" color="primary">
+          <Text variant="caption" color="brand">
             {trailing}
           </Text>
         ) : null}

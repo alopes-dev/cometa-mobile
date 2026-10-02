@@ -2,9 +2,9 @@ import styled from "styled-components/native";
 
 export const TopBar = styled.View<{ topInset: number }>`
   position: absolute;
-  top: ${({ theme, topInset }) => topInset + theme.spacing.sm}px;
-  left: ${({ theme }) => theme.spacing.md}px;
-  right: ${({ theme }) => theme.spacing.md}px;
+  top: ${({ theme, topInset }) => topInset + theme.spacing[8]}px;
+  left: ${({ theme }) => theme.spacing[16]}px;
+  right: ${({ theme }) => theme.spacing[16]}px;
   height: 36px;
   flex-direction: row;
   align-items: center;
@@ -13,7 +13,7 @@ export const TopBar = styled.View<{ topInset: number }>`
 
 export const TopBarActions = styled.View`
   flex-direction: row;
-  gap: ${({ theme }) => theme.spacing.sm}px;
+  gap: ${({ theme }) => theme.spacing[8]}px;
 `;
 
 export const IconButtonStack = styled.View`
@@ -27,15 +27,15 @@ export const IconButton = styled.View`
   left: 0;
   width: 36px;
   height: 36px;
-  border-radius: 18px;
+  border-radius: ${({ theme }) => theme.radius.full}px;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.overlay};
+  background-color: ${({ theme }) => theme.colors.overlay.backdrop};
 `;
 
 export const CompactTitleWrapper = styled.View<{ topInset: number }>`
   position: absolute;
-  top: ${({ theme, topInset }) => topInset + theme.spacing.sm}px;
+  top: ${({ theme, topInset }) => topInset + theme.spacing[8]}px;
   left: 56px;
   right: 96px;
   height: 36px;
@@ -48,15 +48,15 @@ export const BottomContent = styled.View`
   left: 0;
   right: 0;
   bottom: 0;
-  padding: ${({ theme }) => theme.spacing.md}px;
-  gap: ${({ theme }) => theme.spacing.xs}px;
+  padding: ${({ theme }) => theme.spacing[16]}px;
+  gap: ${({ theme }) => theme.spacing[4]}px;
 `;
 
 export const RatedBadge = styled.View`
   align-self: flex-start;
-  padding-horizontal: ${({ theme }) => theme.spacing.sm}px;
-  padding-vertical: 4px;
-  border-radius: ${({ theme }) => theme.radius.pill}px;
-  background-color: ${({ theme }) => theme.colors.overlay};
+  padding-horizontal: ${({ theme }) => theme.spacing[8]}px;
+  padding-vertical: ${({ theme }) => theme.spacing[4]}px;
+  border-radius: ${({ theme }) => theme.radius.full}px;
+  background-color: ${({ theme }) => theme.colors.overlay.backdrop};
 `;
 
