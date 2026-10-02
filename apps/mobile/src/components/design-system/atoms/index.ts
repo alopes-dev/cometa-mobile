@@ -4,7 +4,7 @@ export { TextField, type TextFieldProps } from './TextField';
 export { Icon, type IconProps } from './Icon';
 export { Avatar, type AvatarProps } from './Avatar';
 export { Badge, type BadgeProps } from './Badge';
-export { Chip, type ChipProps } from './Chip';
+export { Chip, type ChipProps, type ChipSize, type ChipVariant } from './Chip';
 export { Switch, type SwitchProps } from './Switch';
 export { Checkbox, type CheckboxProps } from './Checkbox';
 export { Radio, type RadioProps } from './Radio';

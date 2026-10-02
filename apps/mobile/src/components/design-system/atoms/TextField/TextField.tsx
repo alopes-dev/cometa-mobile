@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { type TextInputProps } from 'react-native';
 import { Text } from '../Text';
 import { Icon, type IconProps } from '../Icon';
@@ -15,6 +15,12 @@ export type TextFieldProps = TextInputProps & {
   height?: number;
   leadingIcon?: { name: IconProps['name']; sf?: IconProps['sf'] };
   backgroundColor?: keyof Theme['colors']['surface'];
+  /**
+   * Rendered at the row's trailing edge, inside the field — the clear button
+   * Search draws there (node 48:21786). Its own tap target, so it must not be
+   * wrapped in anything that swallows touches.
+   */
+  trailing?: ReactNode;
 };
 
 export function TextField({
@@ -27,6 +33,7 @@ export function TextField({
   height = 44,
   leadingIcon,
   backgroundColor,
+  trailing,
   ...rest
 }: TextFieldProps) {
   const [focused, setFocused] = useState(false);
@@ -61,6 +68,7 @@ export function TextField({
             rest.onBlur?.(e);
           }}
         />
+        {trailing}
       </FieldRow>
       {error ? (
         <Text variant="micro" color="error">

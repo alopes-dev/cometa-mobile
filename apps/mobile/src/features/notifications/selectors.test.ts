@@ -1,4 +1,4 @@
-import { groupNotificationsBySection } from './selectors';
+import { groupNotificationsBySection, hasUnreadNotifications } from './selectors';
 import type { AppNotification } from './types';
 
 function makeNotification(overrides: Partial<AppNotification>): AppNotification {
@@ -31,5 +31,29 @@ describe('groupNotificationsBySection', () => {
 
   it('returns an empty array for empty input', () => {
     expect(groupNotificationsBySection([])).toEqual([]);
+  });
+});
+
+describe('hasUnreadNotifications', () => {
+  it('is true while any notification is unread', () => {
+    expect(
+      hasUnreadNotifications([
+        makeNotification({ id: '1', read: true }),
+        makeNotification({ id: '2', read: false }),
+      ])
+    ).toBe(true);
+  });
+
+  it('is false once every notification has been read', () => {
+    expect(
+      hasUnreadNotifications([
+        makeNotification({ id: '1', read: true }),
+        makeNotification({ id: '2', read: true }),
+      ])
+    ).toBe(false);
+  });
+
+  it('is false when there are no notifications at all', () => {
+    expect(hasUnreadNotifications([])).toBe(false);
   });
 });
