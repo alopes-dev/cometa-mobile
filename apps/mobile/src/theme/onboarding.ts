@@ -189,7 +189,7 @@ const metrics = {
   splashDotGap: 6,
   /** Gap between the wordmark and the loader — node 45:23. */
   splashGap: 170,
-  /** `Cometa logo` — node 45:24. */
+  /** `Kometa logo` — node 45:24. */
   splashMarkSize: 48,
   splashMarkGap: 10,
 

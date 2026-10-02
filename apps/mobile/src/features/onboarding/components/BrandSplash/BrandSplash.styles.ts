@@ -11,7 +11,7 @@ export const Root = styled.View`
   background-color: ${({ theme }) => theme.onboarding.color.surfaceBackground};
 `;
 
-/** `Cometa logo` — node 45:24. */
+/** `Kometa logo` — node 45:24. */
 export const LogoRow = styled.View`
   flex-direction: row;
   align-items: center;

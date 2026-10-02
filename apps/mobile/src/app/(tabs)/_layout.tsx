@@ -34,7 +34,7 @@ export default function TabsLayout() {
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="(assistant)">
         <NativeTabs.Trigger.Icon sf="sparkles" md="auto_awesome" />
-        <NativeTabs.Trigger.Label>Hi Cometa</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Hi Kometa</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="(profile)">
         <NativeTabs.Trigger.Icon sf="person.fill" md="person" />

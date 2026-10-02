@@ -8,15 +8,15 @@ function renderWithTheme(ui: React.ReactElement) {
 
 describe("Text", () => {
   it("renders its children", () => {
-    const { getByText } = renderWithTheme(<Text>Cometa</Text>);
-    expect(getByText("Cometa")).toBeTruthy();
+    const { getByText } = renderWithTheme(<Text>Kometa</Text>);
+    expect(getByText("Kometa")).toBeTruthy();
   });
 
   it("applies the requested typography variant", () => {
     const { getByText } = renderWithTheme(
-      <Text variant="h1">Cometa</Text>,
+      <Text variant="h1">Kometa</Text>,
     );
-    const style = getByText("Cometa").props.style;
+    const style = getByText("Kometa").props.style;
     expect(JSON.stringify(style)).toContain("28");
   });
 });

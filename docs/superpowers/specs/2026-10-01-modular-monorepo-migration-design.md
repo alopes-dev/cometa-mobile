@@ -6,7 +6,7 @@
 
 ## Goal
 
-Reorganize the existing Cometa repository from a single-app Expo project into a
+Reorganize the existing Kometa repository from a single-app Expo project into a
 pnpm + Turborepo monorepo with `apps/*` and `packages/*` boundaries, while
 preserving 100% of current application behavior.
 
@@ -64,9 +64,9 @@ rather than trusting the numbers here, and must start from a clean working tree.
 The original brief describes a **different product**: it names `@nebulance/*`
 packages, "Nebulance Business", and backend domains `financial-accounts`,
 `transactions`, `budgets`, `goals`, `runway`, `insights`, `documents` — a
-personal-finance application. Cometa is a **food-delivery** app (restaurants,
+personal-finance application. Kometa is a **food-delivery** app (restaurants,
 cart, checkout, order tracking, ratings). Brief section 26 itself uses
-`@cometa/*`.
+`@kometa/*`.
 
 Consequently, brief sections 9, 10, 11, 12, 13, 14, 20, 30 and 31 have nothing
 to migrate. The database-safety requirements (11, 31) are satisfied trivially:
@@ -81,8 +81,8 @@ Confirmed with the project owner on 2026-10-01:
    member with a README documenting the intended Fastify/Prisma/Postgres stack
    and why it is empty. No server code is invented. The backend becomes its own
    future project with its own spec.
-2. **Namespace: `@cometa/*`** — matches the repo, product, app slug (`cometa`)
-   and bundle id (`so.sof.cometa`). Not `@nebulance/*`.
+2. **Namespace: `@kometa/*`** — matches the repo, product, app slug (`kometa`)
+   and bundle id (`so.sof.kometa`). Not `@nebulance/*`.
 3. **Shared packages: all four, as thin placeholders.** `packages/{types,
    validation,config,utils}` are scaffolded with real `package.json`,
    `tsconfig.json` and an `index.ts`, but **no code is moved out of mobile**.
@@ -93,7 +93,7 @@ Confirmed with the project owner on 2026-10-01:
 ## Target structure
 
 ```
-cometa/
+kometa/
 ├── apps/
 │   ├── mobile/          # the existing Expo app, moved wholesale
 │   ├── api/             # README only — reserved, no code

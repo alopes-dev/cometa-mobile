@@ -10,7 +10,7 @@ import { illustration, type CategoryIconName } from './assets';
 
 /** Node 45:49 — the title is drawn as two explicit lines. */
 export const welcome = {
-  titleLines: ['Welcome to', 'Cometa! 👋'],
+  titleLines: ['Welcome to', 'Kometa! 👋'],
   description:
     'Discover delicious food from the best restaurants near you, delivered at comet speed.',
 } as const;

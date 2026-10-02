@@ -7,4 +7,4 @@
  * both sides genuinely need the same shape. Never export Prisma types or
  * persistence details from this package.
  */
-export const PACKAGE_NAME = '@cometa/types';
+export const PACKAGE_NAME = '@kometa/types';

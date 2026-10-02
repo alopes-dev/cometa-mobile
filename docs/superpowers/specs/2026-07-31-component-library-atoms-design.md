@@ -2,7 +2,7 @@
 
 ## Context
 
-`docs/superpowers/DESIGN-SYSTEM.md` defines the Cometa visual language (Apple HIG, Inter, orange `#FF9500` primary, light/dark neutrals). Phase 1 implemented those values as tokens in `src/constants/theme.ts` (colors, colorsDark, typography, spacing, radius, elevation, opacity, motion), consumed statically (light-only) by the two files that currently exist under `src/app/`.
+`docs/superpowers/DESIGN-SYSTEM.md` defines the Kometa visual language (Apple HIG, Inter, orange `#FF9500` primary, light/dark neutrals). Phase 1 implemented those values as tokens in `src/constants/theme.ts` (colors, colorsDark, typography, spacing, radius, elevation, opacity, motion), consumed statically (light-only) by the two files that currently exist under `src/app/`.
 
 CLAUDE.md's Design System section lays out an Atomic Design progression: `Foundations → Tokens → Atoms → Molecules → Organisms → Templates → Pages`. This spec covers **Atoms** — the smallest, domain-agnostic UI primitives every later phase (Molecules, Organisms, product screens) will be built from.
 

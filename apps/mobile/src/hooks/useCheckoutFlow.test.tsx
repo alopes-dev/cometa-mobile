@@ -51,10 +51,10 @@ describe('useCheckoutFlow', () => {
     const { result } = renderHook(() => useCheckoutFlow(), { wrapper });
     let success = false;
     act(() => {
-      success = result.current.applyCoupon('cometa10');
+      success = result.current.applyCoupon('kometa10');
     });
     expect(success).toBe(true);
-    expect(result.current.couponCode).toBe('COMETA10');
+    expect(result.current.couponCode).toBe('KOMETA10');
     expect(result.current.discountPercent).toBe(10);
   });
 
@@ -71,7 +71,7 @@ describe('useCheckoutFlow', () => {
 
   it('clearCoupon resets the coupon fields', () => {
     const { result } = renderHook(() => useCheckoutFlow(), { wrapper });
-    act(() => result.current.applyCoupon('COMETA10'));
+    act(() => result.current.applyCoupon('KOMETA10'));
     act(() => result.current.clearCoupon());
     expect(result.current.couponCode).toBeNull();
     expect(result.current.discountPercent).toBe(0);
@@ -88,7 +88,7 @@ describe('useCheckoutFlow', () => {
     act(() => {
       result.current.setDeliveryType('delivery');
       result.current.setTipPercent(20);
-      result.current.applyCoupon('COMETA10');
+      result.current.applyCoupon('KOMETA10');
       result.current.setPaymentMethod({ type: 'cash', detailsLabel: 'Dinheiro' });
     });
     act(() => result.current.reset());

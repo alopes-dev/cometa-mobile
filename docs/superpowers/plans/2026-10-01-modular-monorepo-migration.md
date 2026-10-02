@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Reorganize the existing single-app Cometa repository into a pnpm + Turborepo monorepo (`apps/*`, `packages/*`) with zero change to application behavior.
+**Goal:** Reorganize the existing single-app Kometa repository into a pnpm + Turborepo monorepo (`apps/*`, `packages/*`) with zero change to application behavior.
 
 **Architecture:** The entire existing Expo app moves wholesale into `apps/mobile` via `git mv`, so its internal structure, its `@/*` alias and all 293 import statements stay valid without edits. A new workspace root owns only orchestration (pnpm workspace, Turborepo, shared TypeScript base, lint/format tooling). `apps/api`, `apps/web`, `infrastructure/` and the four `packages/*` are created as honest reserved slots — real workspace members with READMEs, no invented code.
 
@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Package namespace is `@cometa/*`. Never `@nebulance/*`.
+- Package namespace is `@kometa/*`. Never `@nebulance/*`.
 - Use `git mv` for every tracked file. Never `rm` + re-add. Never touch `.git`.
 - **Zero import edits.** No file under `apps/mobile/src/` may have a changed `import` line. If a task seems to require one, stop and report — it means the move was done wrong.
 - `apps/mobile/tsconfig.json` extends `expo/tsconfig.base`, not the root tsconfig.
@@ -28,7 +28,7 @@
 Failure modes the restructure can introduce that no existing test covers:
 
 1. **Metro cannot resolve the app inside the monorepo** — pnpm's symlinked `node_modules` is the single biggest risk. `pnpm test` passing is not sufficient proof; Task 3 bundles with `expo export --platform ios`, and Task 2 has an explicit `nodeLinker: hoisted` fallback.
-2. **Workspace packages are unresolvable from mobile** — a `@cometa/*` import may typecheck but fail at bundle time. Task 4 adds a committed test that imports all four packages, so this is caught by `pnpm test` forever.
+2. **Workspace packages are unresolvable from mobile** — a `@kometa/*` import may typecheck but fail at bundle time. Task 4 adds a committed test that imports all four packages, so this is caught by `pnpm test` forever.
 3. **Root-anchored `.gitignore` patterns silently stop working** — `/ios` and `/android` no longer match after the move, so prebuild output would get committed. Task 2 re-anchors them to `apps/mobile/`.
 4. **Jest resolves nothing after the move** — `setupFilesAfterEach` uses `<rootDir>/jest-setup.js` and the `react-native-worklets` resolver; both depend on `rootDir` becoming `apps/mobile`. Task 3 asserts all 48 test files still run, not just that the command exits 0.
 5. **`app.config.js` stops resolving `MAPBOX_DOWNLOADS_TOKEN` or the EAS projectId** — the config is read relative to the app directory, so EAS would build the wrong thing. Task 3 verifies with `expo config --type public`.
@@ -49,16 +49,16 @@ Moves every app file, tracked and untracked, in one commit. The root is left wit
 - Keep at root: `.git`, `.claude/`, `.superpowers/`, `docs/`, `README.md`, `LICENSE`, `AGENTS.md`, `CLAUDE.md`, `package-lock.json`, `yarn.lock`
 
 **Interfaces:**
-- Produces: workspace member `@cometa/mobile` at `apps/mobile`, with scripts `dev`, `start`, `android`, `ios`, `web`, `test`, `lint`, `typecheck`, and all 15 existing `eas:*` scripts.
+- Produces: workspace member `@kometa/mobile` at `apps/mobile`, with scripts `dev`, `start`, `android`, `ios`, `web`, `test`, `lint`, `typecheck`, and all 15 existing `eas:*` scripts.
 
 - [ ] **Step 1: Record the pre-move baseline so the move can be proven lossless**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git status --porcelain   # must be empty before starting
-git ls-files | wc -l > /tmp/cometa-baseline-filecount.txt
-git ls-files | grep -cE '\.test\.(ts|tsx)$' > /tmp/cometa-baseline-testcount.txt
-cat /tmp/cometa-baseline-filecount.txt /tmp/cometa-baseline-testcount.txt
+git ls-files | wc -l > /tmp/kometa-baseline-filecount.txt
+git ls-files | grep -cE '\.test\.(ts|tsx)$' > /tmp/kometa-baseline-testcount.txt
+cat /tmp/kometa-baseline-filecount.txt /tmp/kometa-baseline-testcount.txt
 ```
 
 Expected: working tree clean, `243`, then `48`. If the counts differ, the
@@ -68,7 +68,7 @@ recorded, not the ones in this plan, and note the difference in the final report
 - [ ] **Step 2: Create the destination and move the tracked app files**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 mkdir -p apps/mobile
 git mv app.config.js babel.config.js eas.json index.ts jest-setup.js package.json tsconfig.json .env.example apps/mobile/
 git mv src apps/mobile/src
@@ -89,7 +89,7 @@ files that stay at the root), and `no deletions - correct`. If any `D` lines app
 - [ ] **Step 4: Move the untracked native and generated files**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 [ -d ios ] && mv ios apps/mobile/ios && echo "ios moved"
 [ -f expo-env.d.ts ] && mv expo-env.d.ts apps/mobile/expo-env.d.ts && echo "expo-env.d.ts moved"
 rm -rf node_modules .expo
@@ -118,7 +118,7 @@ Apply exactly these changes to `.gitignore`:
 Then prove the gap is closed before going near `git add`:
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git check-ignore -q apps/mobile/ios && echo "ios IGNORED - safe to stage" || echo "STOP: still not ignored"
 git status --porcelain | grep -c '^?? apps/mobile/ios' || echo "ios not listed as untracked - correct"
 ```
@@ -131,7 +131,7 @@ Edit `apps/mobile/package.json`. Change the `name` field and insert the new scri
 
 ```json
 {
-  "name": "@cometa/mobile",
+  "name": "@kometa/mobile",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -151,7 +151,7 @@ Edit `apps/mobile/package.json`. Change the `name` field and insert the new scri
 - [ ] **Step 7: Confirm no import statement changed**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git diff --cached -- 'apps/mobile/src' | grep -E '^[+-].*from ' || echo "ZERO import changes - correct"
 git diff --cached --stat -- 'apps/mobile/src' | tail -1
 ```
@@ -163,7 +163,7 @@ Expected: `ZERO import changes - correct`. The stat line should report `0 insert
 Keeping the move in a single commit with no content edits is what makes `git log --follow` work later.
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git add -A
 git commit -m "$(cat <<'MSG'
 refactor: move Expo app into apps/mobile
@@ -172,7 +172,7 @@ Pure file move ahead of the pnpm workspace root. No source file
 content changed: the @/* alias stays relative to the app's own
 tsconfig, so all imports resolve unchanged.
 
-Renames package to @cometa/mobile and adds dev/lint/typecheck
+Renames package to @kometa/mobile and adds dev/lint/typecheck
 scripts for Turborepo to call.
 
 Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
@@ -198,7 +198,7 @@ Expected: a number greater than `1` (the file predates this commit, so `--follow
 - Delete: `package-lock.json`, `yarn.lock`
 
 **Interfaces:**
-- Consumes: `@cometa/mobile` at `apps/mobile` from Task 1.
+- Consumes: `@kometa/mobile` at `apps/mobile` from Task 1.
 - Produces: root scripts `dev`, `build`, `lint`, `typecheck`, `test`, `format`, `format:check`, each delegating to `turbo run <task>`; a root `tsconfig.json` that `packages/*` extend.
 
 - [ ] **Step 1: Create the pnpm workspace definition**
@@ -219,7 +219,7 @@ Write `package.json`. It carries orchestration and shared tooling only — no ap
 
 ```json
 {
-  "name": "cometa",
+  "name": "kometa",
   "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@12.6.0",
@@ -307,7 +307,7 @@ The `/ios` and `/android` re-anchoring already happened in Task 1 Step 5 — it 
 Then confirm both are in place:
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 grep -nE 'apps/mobile/(ios|android)/|\.turbo/' .gitignore
 ```
 
@@ -316,12 +316,12 @@ Expected: three matching lines.
 - [ ] **Step 6: Drop the old lockfiles and install**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git rm -q package-lock.json yarn.lock
 pnpm install 2>&1 | tail -30
 ```
 
-Expected: pnpm resolves two workspace projects (`cometa`, `@cometa/mobile`) and writes `pnpm-lock.yaml`. A Node engine warning about `>=22.13` is expected on Node v20.19.4 — record it, it is pre-existing.
+Expected: pnpm resolves two workspace projects (`kometa`, `@kometa/mobile`) and writes `pnpm-lock.yaml`. A Node engine warning about `>=22.13` is expected on Node v20.19.4 — record it, it is pre-existing.
 
 - [ ] **Step 7: If and only if install or a later Expo command fails on module resolution, switch to hoisted**
 
@@ -342,9 +342,9 @@ Expo's monorepo guide recommends exactly this fallback when isolated dependencie
 - [ ] **Step 8: Verify the workspace is wired up**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 pnpm ls --depth -1
-pnpm --filter @cometa/mobile exec node -e "console.log(require('expo/package.json').version)"
+pnpm --filter @kometa/mobile exec node -e "console.log(require('expo/package.json').version)"
 npx turbo --version
 ```
 
@@ -353,7 +353,7 @@ Expected: both projects listed, Expo version `57.x.x` printed from inside the mo
 - [ ] **Step 9: Commit**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git add -A
 git commit -m "$(cat <<'MSG'
 build: add pnpm workspace root with Turborepo
@@ -389,19 +389,19 @@ This is the task that decides whether the migration is viable. It adds no files 
 The cheapest check, and it fails fastest if `app.config.js` is in the wrong place.
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa/apps/mobile
+cd /Users/alopes.dev/Documents/brain/kometa/apps/mobile
 pnpm exec expo config --type public 2>&1 | grep -E 'name|slug|projectId|bundleIdentifier'
 ```
 
-Expected: `Cometa`, `cometa`, `638c24e1-00a3-4df2-8465-37d85d4ef4c5`, `so.sof.cometa`. Any of these missing or wrong means EAS would build the wrong app — stop and fix before continuing.
+Expected: `Kometa`, `kometa`, `638c24e1-00a3-4df2-8465-37d85d4ef4c5`, `so.sof.kometa`. Any of these missing or wrong means EAS would build the wrong app — stop and fix before continuing.
 
 - [ ] **Step 2: Prove Metro resolves the whole app inside the monorepo**
 
 This is the real substitute for "mobile starts": `expo start` is interactive, but a successful export runs the same resolver over every reachable module, and regenerates `.expo/types` as a side effect.
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa/apps/mobile
-pnpm exec expo export --platform ios --output-dir /tmp/cometa-export-check 2>&1 | tail -20
+cd /Users/alopes.dev/Documents/brain/kometa/apps/mobile
+pnpm exec expo export --platform ios --output-dir /tmp/kometa-export-check 2>&1 | tail -20
 ```
 
 Expected: a bundle is written and the command exits 0.
@@ -411,17 +411,17 @@ If it fails with an unresolved module from `node_modules`, this is Review Focus 
 - [ ] **Step 3: Confirm the typed-route types were regenerated**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 ls apps/mobile/.expo/types/
 ```
 
-Expected: `router.d.ts` present. If it is absent, run `pnpm --filter @cometa/mobile dev` and quit once the bundler reports ready — that also generates it.
+Expected: `router.d.ts` present. If it is absent, run `pnpm --filter @kometa/mobile dev` and quit once the bundler reports ready — that also generates it.
 
 - [ ] **Step 4: Typecheck the app in its new location**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
-pnpm --filter @cometa/mobile typecheck 2>&1 | tail -20
+cd /Users/alopes.dev/Documents/brain/kometa
+pnpm --filter @kometa/mobile typecheck 2>&1 | tail -20
 ```
 
 Expected: clean exit, no output. The app has never been typechecked by a script before (there was no `typecheck` script), so a pre-existing error is possible — distinguish it from a migration error by checking whether it mentions a path or module resolution. Report pre-existing type errors rather than silencing them with `any` or `@ts-expect-error`.
@@ -429,8 +429,8 @@ Expected: clean exit, no output. The app has never been typechecked by a script 
 - [ ] **Step 5: Run the full test suite and count the suites**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
-pnpm --filter @cometa/mobile test 2>&1 | tail -25
+cd /Users/alopes.dev/Documents/brain/kometa
+pnpm --filter @kometa/mobile test 2>&1 | tail -25
 ```
 
 Expected: `Test Suites: 48 passed, 48 total`. A count below 48 means Jest's `rootDir` or `testMatch` stopped matching after the move — that is a migration regression (Review Focus item 4) and must be fixed before continuing, not reported as flaky. Use the baseline test count recorded in Task 1 Step 1 rather than the literal 48 if the repository has moved on.
@@ -438,8 +438,8 @@ Expected: `Test Suites: 48 passed, 48 total`. A count below 48 means Jest's `roo
 - [ ] **Step 6: Clean up the throwaway export and confirm the repo is clean**
 
 ```bash
-rm -rf /tmp/cometa-export-check
-cd /Users/alopes.dev/Documents/brain/cometa && git status --porcelain
+rm -rf /tmp/kometa-export-check
+cd /Users/alopes.dev/Documents/brain/kometa && git status --porcelain
 ```
 
 Expected: empty output. The export must not have left artifacts inside the repo; if `apps/mobile/dist/` appears, confirm `.gitignore` covers `dist/`.
@@ -461,26 +461,26 @@ Per the spec's decision 3 these are thin placeholders — no code moves out of m
 
 **Interfaces:**
 - Consumes: root `tsconfig.json` from Task 2 Step 4.
-- Produces: `@cometa/types`, `@cometa/validation`, `@cometa/config`, `@cometa/utils`, each exporting `PACKAGE_NAME: string` from its package root, each with a `typecheck` script.
+- Produces: `@kometa/types`, `@kometa/validation`, `@kometa/config`, `@kometa/utils`, each exporting `PACKAGE_NAME: string` from its package root, each with a `typecheck` script.
 
 - [ ] **Step 1: Write the failing test first**
 
 Create `apps/mobile/src/workspace-resolution.test.ts`. This test is the permanent guard for Review Focus item 2 — it fails loudly the day pnpm, Metro or Jest stops resolving a workspace package.
 
 ```ts
-import { PACKAGE_NAME as CONFIG } from '@cometa/config';
-import { PACKAGE_NAME as TYPES } from '@cometa/types';
-import { PACKAGE_NAME as UTILS } from '@cometa/utils';
-import { PACKAGE_NAME as VALIDATION } from '@cometa/validation';
+import { PACKAGE_NAME as CONFIG } from '@kometa/config';
+import { PACKAGE_NAME as TYPES } from '@kometa/types';
+import { PACKAGE_NAME as UTILS } from '@kometa/utils';
+import { PACKAGE_NAME as VALIDATION } from '@kometa/validation';
 
 // Guards the monorepo wiring itself: pnpm must link these workspace packages,
 // and the Metro/Jest resolver must load their TypeScript source directly.
 describe('workspace package resolution', () => {
   it('resolves every shared package from the mobile app', () => {
-    expect(TYPES).toBe('@cometa/types');
-    expect(VALIDATION).toBe('@cometa/validation');
-    expect(CONFIG).toBe('@cometa/config');
-    expect(UTILS).toBe('@cometa/utils');
+    expect(TYPES).toBe('@kometa/types');
+    expect(VALIDATION).toBe('@kometa/validation');
+    expect(CONFIG).toBe('@kometa/config');
+    expect(UTILS).toBe('@kometa/utils');
   });
 });
 ```
@@ -488,23 +488,23 @@ describe('workspace package resolution', () => {
 - [ ] **Step 2: Run it and watch it fail for the right reason**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
-pnpm --filter @cometa/mobile test workspace-resolution 2>&1 | tail -15
+cd /Users/alopes.dev/Documents/brain/kometa
+pnpm --filter @kometa/mobile test workspace-resolution 2>&1 | tail -15
 ```
 
-Expected: FAIL with `Cannot find module '@cometa/config' from 'src/workspace-resolution.test.ts'`. A different error means something else is wrong — diagnose before continuing.
+Expected: FAIL with `Cannot find module '@kometa/config' from 'src/workspace-resolution.test.ts'`. A different error means something else is wrong — diagnose before continuing.
 
 - [ ] **Step 3: Create all four packages**
 
 The four are identical apart from the name. Run this once; it writes twelve files.
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 for pkg in types validation config utils; do
   mkdir -p "packages/$pkg/src"
   cat > "packages/$pkg/package.json" <<JSON
 {
-  "name": "@cometa/$pkg",
+  "name": "@kometa/$pkg",
   "version": "0.0.0",
   "private": true,
   "main": "./src/index.ts",
@@ -543,7 +543,7 @@ Each file states what the package is reserved for, so the next person does not h
  * sides genuinely need the same shape. Never export Prisma types or
  * persistence details from this package.
  */
-export const PACKAGE_NAME = '@cometa/types';
+export const PACKAGE_NAME = '@kometa/types';
 ```
 
 `packages/validation/src/index.ts`
@@ -555,7 +555,7 @@ export const PACKAGE_NAME = '@cometa/types';
  * server need the identical input contract; backend authorization and
  * business-rule validation stay in the API.
  */
-export const PACKAGE_NAME = '@cometa/validation';
+export const PACKAGE_NAME = '@kometa/validation';
 ```
 
 `packages/config/src/index.ts`
@@ -568,7 +568,7 @@ export const PACKAGE_NAME = '@cometa/validation';
  * export DATABASE_URL, JWT secrets, or any API secret from this package — it
  * is reachable from the mobile bundle.
  */
-export const PACKAGE_NAME = '@cometa/config';
+export const PACKAGE_NAME = '@kometa/config';
 ```
 
 `packages/utils/src/index.ts`
@@ -580,7 +580,7 @@ export const PACKAGE_NAME = '@cometa/config';
  * when a second workspace needs them; feature logic such as cart pricing or
  * modifier selection stays in apps/mobile/src/features.
  */
-export const PACKAGE_NAME = '@cometa/utils';
+export const PACKAGE_NAME = '@kometa/utils';
 ```
 
 - [ ] **Step 5: Declare the packages as mobile devDependencies**
@@ -589,38 +589,38 @@ They are devDependencies, not dependencies, because only the test imports them t
 
 ```json
   "devDependencies": {
-    "@cometa/config": "workspace:*",
-    "@cometa/types": "workspace:*",
-    "@cometa/utils": "workspace:*",
-    "@cometa/validation": "workspace:*",
+    "@kometa/config": "workspace:*",
+    "@kometa/types": "workspace:*",
+    "@kometa/utils": "workspace:*",
+    "@kometa/validation": "workspace:*",
     "@react-native/jest-preset": "^0.86.0",
 ```
 
 - [ ] **Step 6: Link the new packages**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 pnpm install 2>&1 | tail -15
-ls -la apps/mobile/node_modules/@cometa/
+ls -la apps/mobile/node_modules/@kometa/
 ```
 
-Expected: six workspace projects resolved, and four symlinks in `apps/mobile/node_modules/@cometa/` pointing at `../../../../packages/*`.
+Expected: six workspace projects resolved, and four symlinks in `apps/mobile/node_modules/@kometa/` pointing at `../../../../packages/*`.
 
 - [ ] **Step 7: Run the test and watch it pass**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
-pnpm --filter @cometa/mobile test workspace-resolution 2>&1 | tail -15
+cd /Users/alopes.dev/Documents/brain/kometa
+pnpm --filter @kometa/mobile test workspace-resolution 2>&1 | tail -15
 ```
 
 Expected: `Tests: 1 passed`.
 
-If it instead fails with a syntax error on the `export const` line, Jest is treating the symlinked package as untransformed `node_modules`. The fix is one addition to the existing `transformIgnorePatterns` in `apps/mobile/package.json` — insert `@cometa/.*|` after the opening `(?!` group — and nothing else.
+If it instead fails with a syntax error on the `export const` line, Jest is treating the symlinked package as untransformed `node_modules`. The fix is one addition to the existing `transformIgnorePatterns` in `apps/mobile/package.json` — insert `@kometa/.*|` after the opening `(?!` group — and nothing else.
 
 - [ ] **Step 8: Typecheck the packages and the app together**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 pnpm typecheck 2>&1 | tail -20
 ```
 
@@ -629,10 +629,10 @@ Expected: five `typecheck` tasks run (four packages + mobile), all succeeding. T
 - [ ] **Step 9: Commit**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git add -A
 git commit -m "$(cat <<'MSG'
-feat: add @cometa/{types,validation,config,utils} packages
+feat: add @kometa/{types,validation,config,utils} packages
 
 Thin placeholders establishing the shared-contract boundary. No code
 moves out of mobile — each package documents what it is reserved for
@@ -660,27 +660,27 @@ Each is a real workspace member with a README that says what it is for and why i
 - Create: `infrastructure/README.md`
 
 **Interfaces:**
-- Produces: workspace members `@cometa/api` and `@cometa/web` with no dependencies and no scripts, so `turbo run` skips them cleanly.
+- Produces: workspace members `@kometa/api` and `@kometa/web` with no dependencies and no scripts, so `turbo run` skips them cleanly.
 
 - [ ] **Step 1: Create the API reservation**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 mkdir -p apps/api
 cat > apps/api/package.json <<'JSON'
 {
-  "name": "@cometa/api",
+  "name": "@kometa/api",
   "version": "0.0.0",
   "private": true
 }
 JSON
 cat > apps/api/README.md <<'MD'
-# @cometa/api
+# @kometa/api
 
 **Status: reserved. There is no backend code here yet.**
 
 This directory is a workspace slot, not an application. As of the monorepo
-migration (2026-10-01) Cometa had no backend of any kind: no Fastify server, no
+migration (2026-10-01) Kometa had no backend of any kind: no Fastify server, no
 Prisma schema, no migrations, no database, and no real authentication. The
 mobile app runs entirely on mock data in `apps/mobile/src/features/*/mockData.ts`,
 and `apps/mobile/src/hooks/AuthProvider.tsx` is a local boolean.
@@ -729,21 +729,21 @@ MD
 - [ ] **Step 2: Create the web reservation**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 mkdir -p apps/web
 cat > apps/web/package.json <<'JSON'
 {
-  "name": "@cometa/web",
+  "name": "@kometa/web",
   "version": "0.0.0",
   "private": true
 }
 JSON
 cat > apps/web/README.md <<'MD'
-# @cometa/web
+# @kometa/web
 
 **Status: reserved. There is no web application here yet.**
 
-This slot exists for the future **Cometa Business** B2B portal (restaurant,
+This slot exists for the future **Kometa Business** B2B portal (restaurant,
 market, pharmacy and store partners managing their catalogue, orders and
 payouts). It is intentionally a workspace member with no dependencies: adding
 Next.js now would mean installing, upgrading and auditing a framework nobody is
@@ -751,13 +751,13 @@ using.
 
 ## Intended stack
 
-Next.js, TypeScript, consuming `@cometa/api` over HTTP and sharing contracts via
-`@cometa/types` and `@cometa/validation`.
+Next.js, TypeScript, consuming `@kometa/api` over HTTP and sharing contracts via
+`@kometa/types` and `@kometa/validation`.
 
 ## When this gets built
 
 Scaffold in place with `pnpm create next-app@latest .`, then set `"name":
-"@cometa/web"` in the generated `package.json` and add `dev`, `build`, `lint`
+"@kometa/web"` in the generated `package.json` and add `dev`, `build`, `lint`
 and `typecheck` scripts so Turborepo picks it up. Note that Expo and Next.js
 must not end up with duplicate React Native versions in one monorepo.
 MD
@@ -766,7 +766,7 @@ MD
 - [ ] **Step 3: Create the infrastructure reservation**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 mkdir -p infrastructure
 cat > infrastructure/README.md <<'MD'
 # Infrastructure
@@ -799,24 +799,24 @@ MD
 - [ ] **Step 4: Verify the workspace sees eight projects and turbo skips the empty ones**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 pnpm install 2>&1 | tail -5
 pnpm ls --depth -1
 pnpm build 2>&1 | tail -10
 ```
 
-Expected: eight projects listed (`cometa`, `@cometa/mobile`, `@cometa/api`, `@cometa/web`, and the four packages). `pnpm build` must exit 0 reporting no tasks to run — `apps/api` and `apps/web` have no scripts, so Turborepo skips them without error.
+Expected: eight projects listed (`kometa`, `@kometa/mobile`, `@kometa/api`, `@kometa/web`, and the four packages). `pnpm build` must exit 0 reporting no tasks to run — `apps/api` and `apps/web` have no scripts, so Turborepo skips them without error.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git add -A
 git commit -m "$(cat <<'MSG'
 chore: reserve apps/api, apps/web and infrastructure slots
 
 Workspace members with a README each, no code. Documents the intended
-stack and, more usefully, why the slot is empty: Cometa has no backend
+stack and, more usefully, why the slot is empty: Kometa has no backend
 and no B2B portal yet, and scaffolding either one undesigned would be
 worse than an honest reservation.
 
@@ -842,7 +842,7 @@ The repo has no ESLint, Prettier or Biome configuration today, yet the brief req
 - [ ] **Step 1: Let Expo generate the ESLint setup**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa/apps/mobile
+cd /Users/alopes.dev/Documents/brain/kometa/apps/mobile
 pnpm exec expo lint 2>&1 | tail -30
 ```
 
@@ -851,7 +851,7 @@ This installs `eslint` and `eslint-config-expo` into `apps/mobile` and writes `e
 - [ ] **Step 2: Confirm the generated config, and only fix it if the generator was skipped**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 cat apps/mobile/eslint.config.js
 ```
 
@@ -872,7 +872,7 @@ module.exports = defineConfig([
 - [ ] **Step 3: Record the lint baseline honestly**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 pnpm lint 2>&1 | tail -40
 ```
 
@@ -881,7 +881,7 @@ ESLint has never run on this codebase, so pre-existing warnings or errors are li
 - [ ] **Step 4: Add the Prettier configuration**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 cat > .prettierrc <<'JSON'
 {
   "semi": true,
@@ -905,7 +905,7 @@ IGNORE
 - [ ] **Step 5: Check formatting without changing anything**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 pnpm format:check 2>&1 | tail -10
 ```
 
@@ -914,7 +914,7 @@ This will report many files as unformatted — the existing code mixes single an
 - [ ] **Step 6: Commit**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git add -A
 git commit -m "$(cat <<'MSG'
 build: add ESLint and Prettier tooling
@@ -949,7 +949,7 @@ The project's documentation voice is Portuguese (pt-AO), so both READMEs stay in
 - [ ] **Step 1: Move the existing README to the app it describes**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git mv README.md apps/mobile/README.md
 git status --porcelain
 ```
@@ -959,15 +959,15 @@ Expected: a single `R` line. Its stale "Estado atual" and project-structure sect
 - [ ] **Step 2: Write the new root README**
 
 ````bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 cat > README.md <<'MD'
-# 🪐 Cometa
+# 🪐 Kometa
 
 > O Super App Inteligente de Delivery de Angola.
 
-Monorepo do **Cometa Delivery**. O produto conecta clientes, restaurantes,
+Monorepo do **Kometa Delivery**. O produto conecta clientes, restaurantes,
 mercados, farmácias, lojas e entregadores em Angola, e serve de base para o
-futuro Cometa Super App (Ride, Pay, Express, Market, Pharma, Business).
+futuro Kometa Super App (Ride, Pay, Express, Market, Pharma, Business).
 
 As diretrizes de produto, negócio e design vivem em [`CLAUDE.md`](CLAUDE.md) e
 em [`docs/`](docs/). Este README cobre a engenharia: como o repositório está
@@ -987,7 +987,7 @@ O mobile comunica com a API exclusivamente por HTTP. Ele nunca importa Prisma,
 código de base de dados, repositórios ou serviços do backend.
 
 ```
-                    COMETA
+                    KOMETA
                        │
              ┌─────────┴─────────┐
            MOBILE               API
@@ -1004,7 +1004,7 @@ código de base de dados, repositórios ou serviços do backend.
 ## Estrutura do repositório
 
 ```
-cometa/
+kometa/
 ├── apps/
 │   ├── mobile/        # App Expo + React Native (a aplicação real hoje)
 │   ├── api/           # RESERVADO — ainda sem código. Ver apps/api/README.md
@@ -1029,30 +1029,30 @@ app mobile funciona sobre dados mock.
 
 ## Aplicações
 
-### Mobile — `@cometa/mobile`
+### Mobile — `@kometa/mobile`
 
 A aplicação real. Expo SDK 57, React Native 0.86, React 19, Expo Router
 (file-based, 14 rotas), styled-components, design system próprio e 48 ficheiros
 de teste. Detalhes em [`apps/mobile/README.md`](apps/mobile/README.md).
 
-### API — `@cometa/api`
+### API — `@kometa/api`
 
 Reservado. Stack prevista: Fastify, Prisma, PostgreSQL (Neon), Zod, JWT com
 refresh tokens, Argon2. Ver [`apps/api/README.md`](apps/api/README.md).
 
-### Web — `@cometa/web`
+### Web — `@kometa/web`
 
-Reservado para o Cometa Business (portal B2B em Next.js). Ver
+Reservado para o Kometa Business (portal B2B em Next.js). Ver
 [`apps/web/README.md`](apps/web/README.md).
 
 ## Packages partilhados
 
 | Package | Para que serve | Estado |
 |---|---|---|
-| `@cometa/types` | Contratos entre mobile e API | Reservado |
-| `@cometa/validation` | Schemas Zod que ambos os lados validam | Reservado |
-| `@cometa/config` | Configuração partilhada (cliente e servidor separados) | Reservado |
-| `@cometa/utils` | Funções puras genéricas | Reservado |
+| `@kometa/types` | Contratos entre mobile e API | Reservado |
+| `@kometa/validation` | Schemas Zod que ambos os lados validam | Reservado |
+| `@kometa/config` | Configuração partilhada (cliente e servidor separados) | Reservado |
+| `@kometa/utils` | Funções puras genéricas | Reservado |
 
 Regras: `types` expõe contratos, nunca tipos do Prisma nem detalhes de
 persistência. `config` nunca expõe segredos do servidor — é alcançável pelo
@@ -1102,10 +1102,10 @@ pnpm format:check # Prettier em modo verificação
 ### Comandos por aplicação
 
 ```bash
-pnpm --filter @cometa/mobile dev        # expo start
-pnpm --filter @cometa/mobile test
-pnpm --filter @cometa/mobile typecheck
-pnpm --filter @cometa/mobile lint
+pnpm --filter @kometa/mobile dev        # expo start
+pnpm --filter @kometa/mobile test
+pnpm --filter @kometa/mobile typecheck
+pnpm --filter @kometa/mobile lint
 ```
 
 ## Testes
@@ -1124,10 +1124,10 @@ falha primeiro.
 O mobile não tem passo de build local: aplicações Expo são compiladas pelo EAS.
 
 ```bash
-pnpm --filter @cometa/mobile eas:build:dev
-pnpm --filter @cometa/mobile eas:build:preview
-pnpm --filter @cometa/mobile eas:build:prod
-pnpm --filter @cometa/mobile eas:update        # OTA
+pnpm --filter @kometa/mobile eas:build:dev
+pnpm --filter @kometa/mobile eas:build:preview
+pnpm --filter @kometa/mobile eas:build:prod
+pnpm --filter @kometa/mobile eas:update        # OTA
 ```
 
 Perfis em [`apps/mobile/eas.json`](apps/mobile/eas.json).
@@ -1139,8 +1139,8 @@ Quando a API for construída, o Prisma vive em `apps/api/prisma/` e em nenhum
 outro lugar:
 
 ```bash
-pnpm --filter @cometa/api prisma generate
-pnpm --filter @cometa/api prisma migrate dev
+pnpm --filter @kometa/api prisma generate
+pnpm --filter @kometa/api prisma migrate dev
 ```
 
 ## Deployment
@@ -1178,11 +1178,11 @@ Also fix the reference to `app.json` (the project uses `app.config.js`) and note
 - [ ] **Step 4: Verify every documented command and path is real**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 for p in apps/mobile/README.md apps/api/README.md apps/web/README.md apps/mobile/eas.json CLAUDE.md docs; do
   [ -e "$p" ] && echo "OK   $p" || echo "DEAD $p"
 done
-grep -o 'pnpm --filter @cometa/[a-z]* [a-z:]*' README.md | sort -u
+grep -o 'pnpm --filter @kometa/[a-z]* [a-z:]*' README.md | sort -u
 ```
 
 Expected: every path `OK`, and every documented `--filter` command naming a script that exists in that workspace's `package.json`. Fix any `DEAD` link rather than leaving it.
@@ -1190,7 +1190,7 @@ Expected: every path `OK`, and every documented `--filter` command naming a scri
 - [ ] **Step 5: Commit**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git add -A
 git commit -m "$(cat <<'MSG'
 docs: document the monorepo architecture
@@ -1224,7 +1224,7 @@ Nothing here is optional and nothing here may be summarized from memory. Every c
 Proves a fresh clone works, not just this machine's incremental state.
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 rm -rf node_modules apps/*/node_modules packages/*/node_modules .turbo
 pnpm install 2>&1 | tail -20
 ```
@@ -1236,7 +1236,7 @@ Expected: eight projects resolved, `pnpm-lock.yaml` unchanged (`git status` must
 Run each one separately and keep the real output. Do not chain them with `&&` — a failure must not hide the commands after it.
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 pnpm typecheck 2>&1 | tail -25
 pnpm lint 2>&1 | tail -25
 pnpm test 2>&1 | tail -25
@@ -1249,10 +1249,10 @@ Expected: `typecheck` passes for all five workspaces; `test` reports `Test Suite
 - [ ] **Step 3: Re-verify the Expo app end to end**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa/apps/mobile
+cd /Users/alopes.dev/Documents/brain/kometa/apps/mobile
 pnpm exec expo config --type public 2>&1 | grep -E 'name|slug|projectId|bundleIdentifier'
-pnpm exec expo export --platform ios --output-dir /tmp/cometa-final-check 2>&1 | tail -10
-rm -rf /tmp/cometa-final-check
+pnpm exec expo export --platform ios --output-dir /tmp/kometa-final-check 2>&1 | tail -10
+rm -rf /tmp/kometa-final-check
 ```
 
 Expected: config values match Task 3 Step 1 exactly, and the bundle succeeds.
@@ -1260,7 +1260,7 @@ Expected: config values match Task 3 Step 1 exactly, and the bundle succeeds.
 - [ ] **Step 4: Verify the three safety invariants**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 MIGRATION_BASE=<the base commit recorded in the SDD ledger>
 echo "--- no file lost (expect 0 deletions from app source) ---"
 git log --oneline --diff-filter=D "$MIGRATION_BASE..HEAD" -- 'apps/mobile/src' | wc -l
@@ -1324,7 +1324,7 @@ These are known and deliberately not done:
 - [ ] **Step 8: Commit the report**
 
 ```bash
-cd /Users/alopes.dev/Documents/brain/cometa
+cd /Users/alopes.dev/Documents/brain/kometa
 git add -A
 git commit -m "$(cat <<'MSG'
 docs: add monorepo migration report

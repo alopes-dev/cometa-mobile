@@ -1,5 +1,5 @@
 {
-  "name": "@cometa/mobile",
+  "name": "@kometa/mobile",
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
@@ -74,10 +74,10 @@
     "styled-components": "^6.4.4"
   },
   "devDependencies": {
-    "@cometa/config": "workspace:*",
-    "@cometa/types": "workspace:*",
-    "@cometa/utils": "workspace:*",
-    "@cometa/validation": "workspace:*",
+    "@kometa/config": "workspace:*",
+    "@kometa/types": "workspace:*",
+    "@kometa/utils": "workspace:*",
+    "@kometa/validation": "workspace:*",
     "@react-native/jest-preset": "^0.86.0",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",

@@ -18,7 +18,7 @@ export type WelcomeHeroProps = {
  * the swipe.
  *
  * The title is drawn as two explicit lines; they are rendered as written
- * rather than left to wrap, so "Cometa! 👋" always breaks where the design
+ * rather than left to wrap, so "Kometa! 👋" always breaks where the design
  * breaks it.
  */
 export function WelcomeHero({ onAdvance }: WelcomeHeroProps) {

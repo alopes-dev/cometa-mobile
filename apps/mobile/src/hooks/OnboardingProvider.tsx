@@ -8,7 +8,7 @@ import {
 } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const STORAGE_KEY = 'cometa:hasSeenOnboarding';
+const STORAGE_KEY = 'kometa:hasSeenOnboarding';
 
 export type OnboardingContextValue = {
   hasSeenOnboarding: boolean;

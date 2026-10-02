@@ -16,8 +16,8 @@ describe("TextField", () => {
         accessibilityLabel="Email"
       />,
     );
-    fireEvent.changeText(getByLabelText("Email"), "hi@cometa.co");
-    expect(onChangeText).toHaveBeenCalledWith("hi@cometa.co");
+    fireEvent.changeText(getByLabelText("Email"), "hi@kometa.co");
+    expect(onChangeText).toHaveBeenCalledWith("hi@kometa.co");
   });
 
   it("renders the error message when error is set", () => {

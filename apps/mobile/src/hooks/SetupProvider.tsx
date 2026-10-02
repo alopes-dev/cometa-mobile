@@ -14,8 +14,8 @@ import {
   type SetupState,
 } from '@/features/onboarding/types';
 
-const COMPLETED_KEY = 'cometa:hasCompletedSetup';
-const STATE_KEY = 'cometa:setupState';
+const COMPLETED_KEY = 'kometa:hasCompletedSetup';
+const STATE_KEY = 'kometa:setupState';
 
 export type SetupContextValue = SetupState & {
   hasCompletedSetup: boolean;

@@ -46,7 +46,7 @@ export const mockNotifications: AppNotification[] = [
   {
     id: 'n5',
     category: 'system',
-    title: 'Bem-vindo ao Cometa',
+    title: 'Bem-vindo ao Kometa',
     message: 'Explore restaurantes perto de si e peça já.',
     timestamp: 'Há 4 dias',
     group: 'Esta semana',

@@ -6,4 +6,4 @@
  * export DATABASE_URL, JWT secrets, or any API secret from this package — it
  * is reachable from the mobile bundle.
  */
-export const PACKAGE_NAME = '@cometa/config';
+export const PACKAGE_NAME = '@kometa/config';

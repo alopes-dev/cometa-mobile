@@ -1,5 +1,5 @@
 ---
-name: Cometa Delivery
+name: Kometa Delivery
 # These values mirror apps/mobile/src/theme/ exactly. The theme files are the
 # source of truth; this block is a readable index of them, not a second system.
 brand:
@@ -40,14 +40,14 @@ radius:
   full: 9999
 ---
 
-# Cometa Design System
+# Kometa Design System
 
-Cometa is a delivery marketplace. The interface has one job: make food, shops and
+Kometa is a delivery marketplace. The interface has one job: make food, shops and
 prices easy to read and act on. The system is **neutral-first** — roughly 70–80%
 of any screen is white, off-white and grey; the brand green appears where it
 means something, and semantic colors appear only when they carry state.
 
-> The test for any screen: does it look *green*, or does it look *Cometa*?
+> The test for any screen: does it look *green*, or does it look *Kometa*?
 > If the answer is green, the brand color is doing work that typography,
 > spacing and hierarchy should be doing instead.
 
@@ -272,7 +272,7 @@ regardless of color scheme, so this token must *not* flip the way `inverse` does
 
 ## Typography
 
-**Poppins** carries display and headings — it gives Cometa a voice at the top of
+**Poppins** carries display and headings — it gives Kometa a voice at the top of
 a screen. **Inter** carries everything functional: body, labels, buttons, inputs,
 metadata and all numerals.
 

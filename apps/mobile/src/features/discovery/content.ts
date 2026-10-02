@@ -29,7 +29,7 @@ export const discovery = {
   broadCategories: 'Comida e compras',
   trending: 'Trending',
   popular: 'Popular',
-  newOnCometa: 'New on Cometa',
+  newOnKometa: 'New on Kometa',
   offers: 'Offers',
   nearby: 'Nearby',
 

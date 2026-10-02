@@ -6,7 +6,7 @@ export const mockAddresses: Address[] = [
   { id: 'work', label: 'Trabalho', details: 'Talatona Business Center, Luanda' },
 ];
 
-export const VALID_COUPON: Coupon = { code: 'COMETA10', discountPercent: 10 };
+export const VALID_COUPON: Coupon = { code: 'KOMETA10', discountPercent: 10 };
 
 export const TIP_PRESETS = [0, 10, 15, 20];
 

@@ -1,5 +1,5 @@
 {
-  "name": "@cometa/validation",
+  "name": "@kometa/validation",
   "version": "0.0.0",
   "private": true,
   "main": "./src/index.ts",

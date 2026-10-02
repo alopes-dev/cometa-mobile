@@ -14,7 +14,7 @@ function renderWithTheme(ui: React.ReactElement) {
 describe('AssistantCard', () => {
   it('renders the assistant invitation', () => {
     const { getByText } = renderWithTheme(<AssistantCard />);
-    expect(getByText('Hi Cometa')).toBeTruthy();
+    expect(getByText('Hi Kometa')).toBeTruthy();
     expect(getByText('Ainda com fome? Tenho ideias rápidas para ti.')).toBeTruthy();
   });
 

@@ -5,4 +5,4 @@
  * server need the identical input contract; backend authorization and
  * business-rule validation stay in the API.
  */
-export const PACKAGE_NAME = '@cometa/validation';
+export const PACKAGE_NAME = '@kometa/validation';

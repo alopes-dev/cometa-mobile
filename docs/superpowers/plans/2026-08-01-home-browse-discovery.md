@@ -1192,7 +1192,7 @@ export default function Home() {
 
 - [ ] **Step 2: Regenerate typed routes and verify the bundle**
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully.
 
 - [ ] **Step 3: Verify types**
@@ -1372,7 +1372,7 @@ export default function HomeLayout() {
 
 - [ ] **Step 3: Regenerate typed routes and verify the bundle**
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully.
 
 - [ ] **Step 4: Verify types**

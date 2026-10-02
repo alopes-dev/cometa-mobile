@@ -152,7 +152,7 @@ export function DiscoveryScreen({ onPressSearch = () => {} }: DiscoveryScreenPro
         {newcomer ? (
           <Section>
             <Gutter>
-              <SectionHeader title={discovery.newOnCometa} actionLabel={discovery.seeAll} />
+              <SectionHeader title={discovery.newOnKometa} actionLabel={discovery.seeAll} />
             </Gutter>
             <Gutter>{renderCard(newcomer, 0)}</Gutter>
           </Section>

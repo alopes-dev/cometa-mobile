@@ -50,7 +50,7 @@ export function BrandSplash() {
   const lit = reducedMotion ? RESTING_DOT : active;
 
   return (
-    <Root accessibilityRole="progressbar" accessibilityLabel="A carregar a Cometa">
+    <Root accessibilityRole="progressbar" accessibilityLabel="A carregar a Kometa">
       <LogoRow>
         <Mark>
           <SpeedLines>
@@ -61,7 +61,7 @@ export function BrandSplash() {
           <Plate source={brandMark.plate} contentFit="contain" />
           <Food source={brandMark.food} contentFit="contain" />
         </Mark>
-        <Wordmark>Cometa</Wordmark>
+        <Wordmark>Kometa</Wordmark>
       </LogoRow>
       <Loader accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
         {Array.from({ length: DOT_COUNT }, (_, index) => (

@@ -34,7 +34,7 @@ describe('HomeScreen', () => {
       'Ofertas para ti',
       'Perto de ti',
       'Pedir novamente',
-      'Hi Cometa',
+      'Hi Kometa',
     ]) {
       expect(getByText(title)).toBeTruthy();
     }

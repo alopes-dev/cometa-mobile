@@ -1,8 +1,8 @@
-# 🪐 Cometa Delivery
+# 🪐 Kometa Delivery
 
 > O Super App Inteligente de Delivery de Angola.
 
-Aplicativo mobile do **Cometa Delivery**, construído em **React Native + Expo Router**, com um Design System próprio inspirado nas Apple Human Interface Guidelines. O objetivo é conectar clientes, restaurantes, mercados, farmácias, lojas e entregadores em Angola através de uma experiência premium, rápida e confiável — e servir de base para o futuro **Cometa Super App** (Ride, Pay, Express, Market, Pharma, Business).
+Aplicativo mobile do **Kometa Delivery**, construído em **React Native + Expo Router**, com um Design System próprio inspirado nas Apple Human Interface Guidelines. O objetivo é conectar clientes, restaurantes, mercados, farmácias, lojas e entregadores em Angola através de uma experiência premium, rápida e confiável — e servir de base para o futuro **Kometa Super App** (Ride, Pay, Express, Market, Pharma, Business).
 
 As diretrizes completas de produto, negócio e design vivem em [`CLAUDE.md`](CLAUDE.md) — este README cobre a parte de engenharia: como o projeto está organizado, como rodá-lo e em que estado se encontra.
 
@@ -32,7 +32,7 @@ O app hoje renderiza apenas uma tela mínima (`src/app/index.tsx`) — suficient
 ## Estrutura do projeto
 
 ```
-cometa/
+kometa/
 ├── app.json               # Configuração do Expo (nome, bundle id, plugins, EAS)
 ├── eas.json                # Perfis de build/submit do EAS (development, preview, production)
 ├── src/

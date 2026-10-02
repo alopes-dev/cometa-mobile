@@ -22,7 +22,7 @@ export const restaurantPhoto = {
   nori244: require('../../../assets/discovery/nori-244.jpg'),
   /** Node 48:20319 — "Popular", full width. */
   forno27: require('../../../assets/discovery/forno-27.jpg'),
-  /** Node 48:20333 — "New on Cometa", full width. */
+  /** Node 48:20333 — "New on Kometa", full width. */
   kwanzaBowl: require('../../../assets/discovery/kwanza-bowl.jpg'),
   /** Node 48:20347 — "Offers", full width. */
   doceKilamba: require('../../../assets/discovery/doce-kilamba.jpg'),

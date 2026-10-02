@@ -25,7 +25,7 @@ describe('useOnboarding', () => {
   });
 
   it('resolves hasSeenOnboarding to true when already stored', async () => {
-    await AsyncStorage.setItem('cometa:hasSeenOnboarding', 'true');
+    await AsyncStorage.setItem('kometa:hasSeenOnboarding', 'true');
     const { result } = renderHook(() => useOnboarding(), { wrapper });
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.hasSeenOnboarding).toBe(true);
@@ -40,7 +40,7 @@ describe('useOnboarding', () => {
     });
 
     expect(result.current.hasSeenOnboarding).toBe(true);
-    expect(await AsyncStorage.getItem('cometa:hasSeenOnboarding')).toBe('true');
+    expect(await AsyncStorage.getItem('kometa:hasSeenOnboarding')).toBe('true');
   });
 
   it('handles AsyncStorage.getItem failure gracefully', async () => {

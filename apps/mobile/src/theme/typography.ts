@@ -1,7 +1,7 @@
 /**
  * Type system.
  *
- * Poppins carries display and heading levels — it gives Cometa a voice at the
+ * Poppins carries display and heading levels — it gives Kometa a voice at the
  * top of a screen. Inter carries everything functional: body, labels,
  * buttons, inputs, metadata and all numerals, where its narrower forms and
  * tabular figures read better at small sizes.

@@ -11,7 +11,7 @@ export type AssistantCardProps = {
 };
 
 /**
- * The "Hi Cometa" entry point — node 48:19921.
+ * The "Hi Kometa" entry point — node 48:19921.
  *
  * Deliberately the last thing on Home: it is the fallback for a customer the
  * feed above did not manage to convince, not a competitor to it.

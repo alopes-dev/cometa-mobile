@@ -4,7 +4,7 @@ import type { IconProps } from '@/components/design-system/atoms';
  * One tile in "Comida e compras" (node 48:20268).
  *
  * Broader than Home's `HomeCategory`, which is a craving inside the food
- * catalogue: these are the verticals Cometa delivers at all — food, groceries,
+ * catalogue: these are the verticals Kometa delivers at all — food, groceries,
  * pharmacy — so a tile names a destination rather than a filter over the feed.
  *
  * The icon travels with the category rather than being guessed from the label,

@@ -1,5 +1,5 @@
 {
-  "name": "@cometa/utils",
+  "name": "@kometa/utils",
   "version": "0.0.0",
   "private": true,
   "main": "./src/index.ts",

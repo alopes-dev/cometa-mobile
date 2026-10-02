@@ -83,7 +83,7 @@ rm src/design-system/__smoke__.test.tsx
 Run: `npx tsc --noEmit`
 Expected: no output (clean).
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully.
 
 - [ ] **Step 7: Commit**
@@ -340,7 +340,7 @@ const Title = styled.Text`
 export default function Index() {
   return (
     <Screen>
-      <Title>Cometa</Title>
+      <Title>Kometa</Title>
     </Screen>
   );
 }
@@ -353,7 +353,7 @@ Expected: no output (clean).
 
 - [ ] **Step 4: Verify the bundle still exports**
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully.
 
 - [ ] **Step 5: Manually verify dark mode**
@@ -394,13 +394,13 @@ function renderWithTheme(ui: React.ReactElement) {
 
 describe('Text', () => {
   it('renders its children', () => {
-    const { getByText } = renderWithTheme(<Text>Cometa</Text>);
-    expect(getByText('Cometa')).toBeTruthy();
+    const { getByText } = renderWithTheme(<Text>Kometa</Text>);
+    expect(getByText('Kometa')).toBeTruthy();
   });
 
   it('applies the requested typography variant', () => {
-    const { getByText } = renderWithTheme(<Text variant="headline">Cometa</Text>);
-    const style = getByText('Cometa').props.style;
+    const { getByText } = renderWithTheme(<Text variant="headline">Kometa</Text>);
+    const style = getByText('Kometa').props.style;
     expect(JSON.stringify(style)).toContain('28');
   });
 });
@@ -1010,8 +1010,8 @@ describe('TextField', () => {
     const { getByLabelText } = renderWithTheme(
       <TextField label="Email" onChangeText={onChangeText} accessibilityLabel="Email" />
     );
-    fireEvent.changeText(getByLabelText('Email'), 'hi@cometa.co');
-    expect(onChangeText).toHaveBeenCalledWith('hi@cometa.co');
+    fireEvent.changeText(getByLabelText('Email'), 'hi@kometa.co');
+    expect(onChangeText).toHaveBeenCalledWith('hi@kometa.co');
   });
 
   it('renders the error message when error is set', () => {
@@ -1577,7 +1577,7 @@ Expected: all suites pass (ThemeProvider + 10 atoms — 6 with dedicated interac
 
 - [ ] **Step 4: Verify the app still bundles**
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully.
 
 - [ ] **Step 5: Commit**

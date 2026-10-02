@@ -1,18 +1,18 @@
 module.exports = {
   expo: {
-    name: "Cometa",
-    slug: "cometa",
+    name: "Kometa",
+    slug: "kometa",
     owner: "anthony.lopez",
     version: "1.0.0",
     orientation: "portrait",
     userInterfaceStyle: "light",
-    scheme: "cometa",
+    scheme: "kometa",
     ios: {
       supportsTablet: false,
-      bundleIdentifier: "so.sof.cometa",
+      bundleIdentifier: "so.sof.kometa",
     },
     android: {
-      package: "so.sof.cometa",
+      package: "so.sof.kometa",
       adaptiveIcon: {
         backgroundColor: "#FFFFFF",
       },
@@ -33,7 +33,7 @@ module.exports = {
           // (node 44:22414) leads into, so the sentence the user reads on that
           // screen and the sentence iOS shows say the same thing.
           locationWhenInUsePermission:
-            "A Cometa usa a tua localização para mostrar restaurantes e lojas que entregam perto de ti.",
+            "A Kometa usa a tua localização para mostrar restaurantes e lojas que entregam perto de ti.",
         },
       ],
       "expo-notifications",

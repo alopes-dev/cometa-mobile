@@ -18,7 +18,7 @@
 - Hooks live in `src/hooks/`. Shared placeholder UI lives in `src/components/`. Never co-locate components/hooks/tests inside `src/app/` — route files there are thin pass-throughs only.
 - Path alias `@/*` → `./src/*` (already configured in `tsconfig.json`).
 - `tsc --noEmit` and `npx jest` must be clean after every task.
-- `typedRoutes` is enabled (`app.json`), so `tsc` validates route hrefs against `.expo/types/router.d.ts`, which is only regenerated when Expo scans `src/app/`. Whenever a task adds a new route file, run `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check` **before** `npx tsc --noEmit`, so the new route's typed href exists before type-checking.
+- `typedRoutes` is enabled (`app.json`), so `tsc` validates route hrefs against `.expo/types/router.d.ts`, which is only regenerated when Expo scans `src/app/`. Whenever a task adds a new route file, run `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check` **before** `npx tsc --noEmit`, so the new route's typed href exists before type-checking.
 - Test files are colocated next to the file they test, named `<Name>.test.ts`/`.test.tsx` (matches existing `testMatch` in `package.json`). Route files under `src/app/` are the one exception — they're untested directly (see per-task notes); overall correctness is verified via `tsc` + `expo export` + one manual run-through in Task 8.
 
 ---
@@ -59,7 +59,7 @@ describe('useOnboarding', () => {
   });
 
   it('resolves hasSeenOnboarding to true when already stored', async () => {
-    await AsyncStorage.setItem('cometa:hasSeenOnboarding', 'true');
+    await AsyncStorage.setItem('kometa:hasSeenOnboarding', 'true');
     const { result } = renderHook(() => useOnboarding());
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.hasSeenOnboarding).toBe(true);
@@ -74,7 +74,7 @@ describe('useOnboarding', () => {
     });
 
     expect(result.current.hasSeenOnboarding).toBe(true);
-    expect(await AsyncStorage.getItem('cometa:hasSeenOnboarding')).toBe('true');
+    expect(await AsyncStorage.getItem('kometa:hasSeenOnboarding')).toBe('true');
   });
 });
 ```
@@ -92,7 +92,7 @@ Expected: FAIL — `Cannot find module './useOnboarding'`.
 import { useCallback, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const STORAGE_KEY = 'cometa:hasSeenOnboarding';
+const STORAGE_KEY = 'kometa:hasSeenOnboarding';
 
 export type UseOnboardingResult = {
   hasSeenOnboarding: boolean;
@@ -394,7 +394,7 @@ export default function Onboarding() {
 
 - [ ] **Step 2: Regenerate typed routes and verify the bundle**
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully (this also regenerates `.expo/types/router.d.ts` to include `/onboarding`).
 
 - [ ] **Step 3: Verify types**
@@ -483,7 +483,7 @@ export default function Signup() {
 
 - [ ] **Step 4: Regenerate typed routes and verify the bundle**
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully (regenerates `.expo/types/router.d.ts` to include `/login` and `/signup`).
 
 - [ ] **Step 5: Verify types**
@@ -614,7 +614,7 @@ export default function Profile() {
 
 - [ ] **Step 9: Regenerate typed routes and verify the bundle**
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully.
 
 - [ ] **Step 10: Verify types**
@@ -676,7 +676,7 @@ export default function TabsLayout() {
 
 - [ ] **Step 2: Regenerate typed routes and verify the bundle**
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully.
 
 - [ ] **Step 3: Verify types**
@@ -819,7 +819,7 @@ Expected: no output (clean).
 
 - [ ] **Step 6: Verify the bundle still exports**
 
-Run: `npx expo export --platform ios --output-dir /tmp/cometa-export-check && rm -rf /tmp/cometa-export-check`
+Run: `npx expo export --platform ios --output-dir /tmp/kometa-export-check && rm -rf /tmp/kometa-export-check`
 Expected: exports successfully.
 
 - [ ] **Step 7: Run the full test suite**

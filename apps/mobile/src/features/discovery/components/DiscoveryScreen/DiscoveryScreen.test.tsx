@@ -29,7 +29,7 @@ describe('DiscoveryScreen', () => {
       discovery.broadCategories,
       discovery.trending,
       discovery.popular,
-      discovery.newOnCometa,
+      discovery.newOnKometa,
       discovery.offers,
       discovery.nearby,
     ]) {

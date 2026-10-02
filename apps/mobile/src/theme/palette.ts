@@ -11,7 +11,7 @@
  */
 
 /**
- * Cometa brand — deep jade green, hue ~158°.
+ * Kometa brand — deep jade green, hue ~158°.
  *
  * Deliberately deeper and slightly cooler than a stock "delivery green": the
  * 600 step hosts white text at 5.16:1 and the 700 step reads as text on white
@@ -105,7 +105,7 @@ export const blue = {
  * Promotional "featured" accent.
  *
  * Intentionally a violet: it carries forward a trace of the outgoing
- * #6E5DE7 primary, so the palette change reads as an evolution of Cometa
+ * #6E5DE7 primary, so the palette change reads as an evolution of Kometa
  * rather than an erasure of it. Reserved for editorial/featured placement —
  * never for interactive state, which is the brand's job.
  */

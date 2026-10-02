@@ -23,7 +23,7 @@ export function getRestaurantById(id: string): Restaurant | undefined {
 const SECTION_CASTING = {
   trending: ['d1', 'd2'],
   popular: 'd3',
-  newOnCometa: 'd4',
+  newOnKometa: 'd4',
   offers: 'd5',
 } as const;
 
@@ -44,9 +44,9 @@ export function getPopularRestaurant(): Restaurant | undefined {
   return getRestaurantById(SECTION_CASTING.popular);
 }
 
-/** "New on Cometa" (node 48:20331) — one full-width card. */
+/** "New on Kometa" (node 48:20331) — one full-width card. */
 export function getNewRestaurant(): Restaurant | undefined {
-  return getRestaurantById(SECTION_CASTING.newOnCometa);
+  return getRestaurantById(SECTION_CASTING.newOnKometa);
 }
 
 /** "Offers" (node 48:20345) — one full-width card, carrying its discount. */

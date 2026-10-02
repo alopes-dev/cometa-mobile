@@ -5,4 +5,4 @@
  * when a second workspace needs them; feature logic such as cart pricing or
  * modifier selection stays in apps/mobile/src/features.
  */
-export const PACKAGE_NAME = '@cometa/utils';
+export const PACKAGE_NAME = '@kometa/utils';

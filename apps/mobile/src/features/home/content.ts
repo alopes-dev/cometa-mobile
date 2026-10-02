@@ -31,7 +31,7 @@ export const home = {
   lastOrder: 'Último pedido',
 
   /** Assistant, node 48:19921. */
-  assistantTitle: 'Hi Cometa',
+  assistantTitle: 'Hi Kometa',
   assistantBody: 'Ainda com fome? Tenho ideias rápidas para ti.',
 
   /** Shown in place of the sections when a search returns nothing. */

@@ -1,9 +1,9 @@
-# @cometa/api
+# @kometa/api
 
 **Status: reserved. There is no backend code here yet.**
 
 This directory is a workspace slot, not an application. As of the monorepo
-migration (2026-10-01) Cometa had no backend of any kind: no Fastify server, no
+migration (2026-10-01) Kometa had no backend of any kind: no Fastify server, no
 Prisma schema, no migrations, no database, and no real authentication. The
 mobile app runs entirely on mock data in `apps/mobile/src/features/*/mockData.ts`,
 and `apps/mobile/src/hooks/AuthProvider.tsx` is a local boolean.
