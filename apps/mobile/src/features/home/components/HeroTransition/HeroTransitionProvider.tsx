@@ -4,10 +4,11 @@ import { Image } from 'expo-image';
 import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import type { ScreenOrigin } from '@/hooks/useMeasureOnTap';
+import type { ImageRef } from '@/features/home/types';
 
 type HeroTransitionContextValue = {
   /** Morphs a ghost image from `from` to `to` (both in window coordinates) while the real navigation happens underneath. */
-  startTransition: (imageUrl: string, from: ScreenOrigin, to: ScreenOrigin) => void;
+  startTransition: (imageUrl: ImageRef, from: ScreenOrigin, to: ScreenOrigin) => void;
 };
 
 const HeroTransitionContext = createContext<HeroTransitionContextValue>({
@@ -18,7 +19,7 @@ export function useHeroTransition() {
   return useContext(HeroTransitionContext);
 }
 
-type Flight = { id: number; imageUrl: string; from: ScreenOrigin; to: ScreenOrigin };
+type Flight = { id: number; imageUrl: ImageRef; from: ScreenOrigin; to: ScreenOrigin };
 
 const DURATION = 360;
 const SOURCE_RADIUS = 16;
@@ -53,7 +54,7 @@ function HeroGhost({ imageUrl, from, to, onComplete }: Omit<Flight, 'id'> & { on
 
   return (
     <Animated.View style={style} pointerEvents="none">
-      <Image source={{ uri: imageUrl }} style={{ width: '100%', height: '100%' }} contentFit="cover" />
+      <Image source={imageUrl} style={{ width: '100%', height: '100%' }} contentFit="cover" />
     </Animated.View>
   );
 }
@@ -63,7 +64,7 @@ export function HeroTransitionProvider({ children }: { children: ReactNode }) {
   const [flight, setFlight] = useState<Flight | null>(null);
   const flightId = useRef(0);
 
-  const startTransition = (imageUrl: string, from: ScreenOrigin, to: ScreenOrigin) => {
+  const startTransition = (imageUrl: ImageRef, from: ScreenOrigin, to: ScreenOrigin) => {
     if (reducedMotion || from.width === 0 || to.width === 0) return;
     setFlight({ id: flightId.current++, imageUrl, from, to });
   };

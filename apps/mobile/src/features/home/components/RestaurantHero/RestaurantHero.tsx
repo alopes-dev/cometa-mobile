@@ -180,7 +180,7 @@ export function RestaurantHero({
       />
       <Animated.View style={[StyleSheet.absoluteFill, imageAndScrimStyle]}>
         <Image
-          source={{ uri: restaurant.imageUrl }}
+          source={restaurant.imageUrl}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
         />

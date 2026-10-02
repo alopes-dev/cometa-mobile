@@ -1,4 +1,13 @@
-import type { MenuItem, ModifierGroup, Offer, Restaurant } from './types';
+import { activeOrderPhoto, promotionPhoto, restaurantPhoto } from './assets';
+import type {
+  ActiveOrder,
+  HomeCategory,
+  MenuItem,
+  ModifierGroup,
+  Offer,
+  Promotion,
+  Restaurant,
+} from './types';
 
 const BURGER_MODIFIER_GROUPS: ModifierGroup[] = [
   {
@@ -33,85 +42,102 @@ const BURGER_MODIFIER_GROUPS: ModifierGroup[] = [
   },
 ];
 
+/**
+ * The catalogue, written to the Home board's content (frame 48:19762).
+ *
+ * The ids are unchanged so the menus below still attach to the right
+ * restaurant; only the presentation the board specifies — name, locality,
+ * rating, delivery and photograph — was brought over, and each cuisine still
+ * matches the menu it carries.
+ */
 export const mockRestaurants: Restaurant[] = [
   {
-    id: 'r1',
-    name: 'Sabores de Cabinda',
-    imageUrl: 'https://loremflickr.com/400/300/food,stew?lock=101',
-    rating: 4.7,
-    cuisine: 'Angolana',
+    id: 'r4',
+    name: 'Burger House',
+    imageUrl: restaurantPhoto.burgerHouse,
+    rating: 4.8,
+    cuisine: 'Hambúrgueres',
     deliveryTimeMinutes: 25,
-    deliveryFee: 500,
-    description: 'Sabores autênticos de Cabinda, direto para a sua mesa.',
-    distanceKm: 2.4,
+    deliveryFee: 1000,
+    description: 'Hambúrgueres suculentos e batatas crocantes em Talatona.',
+    distanceKm: 1.2,
+    neighbourhood: 'Talatona',
     hasPromotion: true,
+    promotionLabel: '-20%',
   },
   {
-    id: 'r2',
-    name: 'Marisqueira do Kinaxixe',
-    imageUrl: 'https://loremflickr.com/400/300/food,seafood?lock=102',
-    rating: 4.5,
-    cuisine: 'Marisco',
-    deliveryTimeMinutes: 35,
-    deliveryFee: 700,
-    description: 'Marisco fresco do dia, preparado à moda da casa.',
-    distanceKm: 4.8,
+    id: 'r1',
+    name: 'Sabores da Banda',
+    imageUrl: restaurantPhoto.saboresDaBanda,
+    rating: 4.8,
+    cuisine: 'Angolana',
+    deliveryTimeMinutes: 25,
+    deliveryFee: 1000,
+    description: 'Sabores autênticos da Banda, direto para a sua mesa.',
+    distanceKm: 2.4,
+    neighbourhood: 'Maianga',
   },
   {
     id: 'r3',
-    name: 'Pizza Talatona',
-    imageUrl: 'https://loremflickr.com/400/300/food,pizza?lock=103',
-    rating: 4.3,
-    cuisine: 'Italiana',
-    deliveryTimeMinutes: 30,
-    deliveryFee: 600,
-    description: 'Pizzas artesanais assadas em forno a lenha em Talatona.',
+    name: 'Forno 27',
+    imageUrl: restaurantPhoto.forno27,
+    rating: 4.8,
+    cuisine: 'Pizza',
+    deliveryTimeMinutes: 25,
+    deliveryFee: 1000,
+    description: 'Pizzas artesanais assadas em forno a lenha no Morro Bento.',
     distanceKm: 1.5,
-    hasPromotion: true,
-  },
-  {
-    id: 'r4',
-    name: 'Burger Ingombota',
-    imageUrl: 'https://loremflickr.com/400/300/food,burger?lock=104',
-    rating: 4.2,
-    cuisine: 'Fast Food',
-    deliveryTimeMinutes: 20,
-    deliveryFee: 400,
-    description: 'Hambúrgueres suculentos e batatas crocantes em Ingombota.',
-    distanceKm: 3.1,
+    neighbourhood: 'Morro Bento',
   },
   {
     id: 'r5',
-    name: 'Muxima Grill',
-    imageUrl: 'https://loremflickr.com/400/300/food,bbq?lock=105',
+    name: 'Brasa do Sul',
+    imageUrl: restaurantPhoto.saboresDaBanda,
     rating: 4.8,
     cuisine: 'Grelhados',
-    deliveryTimeMinutes: 40,
-    deliveryFee: 800,
+    deliveryTimeMinutes: 25,
+    deliveryFee: 1000,
     description: 'Grelhados na brasa com o sabor tradicional angolano.',
-    distanceKm: 5.6,
+    distanceKm: 3.4,
+    neighbourhood: 'Benfica',
+    hasPromotion: true,
+    promotionLabel: 'Entrega grátis',
+  },
+  {
+    id: 'r2',
+    name: 'Cantinho da Kianda',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
+    rating: 4.8,
+    cuisine: 'Peixe',
+    deliveryTimeMinutes: 20,
+    deliveryFee: 1500,
+    description: 'Peixe fresco do dia, preparado à moda da casa.',
+    distanceKm: 0.9,
+    neighbourhood: 'Ingombota',
+  },
+  {
+    id: 'r7',
+    name: 'Frango & Companhia',
+    imageUrl: restaurantPhoto.frangoECompanhia,
+    rating: 4.8,
+    cuisine: 'Frango',
+    deliveryTimeMinutes: 25,
+    deliveryFee: 1000,
+    description: 'Frango grelhado e acompanhamentos no Kilamba.',
+    distanceKm: 2.9,
+    neighbourhood: 'Kilamba',
   },
   {
     id: 'r6',
     name: 'Sushi Luanda',
-    imageUrl: 'https://loremflickr.com/400/300/food,sushi?lock=106',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
     rating: 4.6,
     cuisine: 'Japonesa',
     deliveryTimeMinutes: 45,
     deliveryFee: 900,
     description: 'Sushi fresco e combinados japoneses no coração de Luanda.',
     distanceKm: 6.2,
-  },
-  {
-    id: 'r7',
-    name: 'Moamba de Galinha Tradicional',
-    imageUrl: 'https://loremflickr.com/400/300/food,chicken?lock=107',
-    rating: 4.4,
-    cuisine: 'Angolana',
-    deliveryTimeMinutes: 35,
-    deliveryFee: 650,
-    description: 'Moamba de galinha tradicional, feita como em casa.',
-    distanceKm: 2.9,
+    neighbourhood: 'Talatona',
   },
 ];
 
@@ -384,3 +410,66 @@ export const mockOffers: Offer[] = [
     subtitle: 'Só esta semana no Kinaxixe',
   },
 ];
+
+/**
+ * The order the board draws in flight at the top of Home (node 48:19785).
+ *
+ * Four steps, three done: the segmented bar is the one place Home shows
+ * progress, so the stage count lives with the data rather than being
+ * hardcoded into the bar.
+ */
+export const mockActiveOrder: ActiveOrder = {
+  id: 'o-active-1',
+  restaurantName: 'Burger House',
+  imageUrl: activeOrderPhoto,
+  statusLabel: 'A caminho',
+  etaLabel: '25–30 min',
+  completedSteps: 3,
+  totalSteps: 4,
+};
+
+/** The two merchandised banners (nodes 48:19819 and 48:19885). */
+export const mockPromotions: Promotion[] = [
+  {
+    id: 'p1',
+    title: '20% no almoço',
+    subtitle: 'Sabores de Talatona até às 14h',
+    ctaLabel: 'Ver opções',
+    imageUrl: promotionPhoto,
+    tone: 'featured',
+  },
+  {
+    id: 'p2',
+    title: 'Combos desde 7.500 Kz',
+    subtitle: 'Partilha mais, paga menos',
+    ctaLabel: 'Ver combos',
+    imageUrl: promotionPhoto,
+    tone: 'limited',
+  },
+];
+
+/**
+ * The craving tiles (node 48:19801).
+ *
+ * Deliberately not derived from `cuisine`: the board curates four appetites
+ * ("Hambúrguer", "Pizza", "Frango", "Sushi"), which is a shorter and more
+ * concrete list than the cuisines the catalogue happens to contain.
+ */
+export const mockHomeCategories: HomeCategory[] = [
+  { id: 'hamburguer', label: 'Hambúrguer', keywords: ['burger', 'fast food', 'hambúrguer'] },
+  { id: 'pizza', label: 'Pizza', keywords: ['pizza', 'italiana'] },
+  { id: 'frango', label: 'Frango', keywords: ['frango', 'galinha', 'grelhado'] },
+  { id: 'sushi', label: 'Sushi', keywords: ['sushi', 'japonesa', 'marisco'] },
+];
+
+/**
+ * The last order, for "Pedir novamente" (node 48:19910).
+ *
+ * Stored as a restaurant reference plus a total rather than as a second copy
+ * of the restaurant, so the card renders the same catalogue entry every other
+ * section does.
+ */
+export const mockLastOrder = {
+  restaurantId: 'r7',
+  total: 12000,
+} as const;

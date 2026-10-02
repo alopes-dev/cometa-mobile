@@ -60,6 +60,27 @@ export const typography = {
     lineHeight: 25,
     letterSpacing: 0.38,
   },
+  /**
+   * Section headings on a dense feed — "Para ti", "Perto de ti"
+   * (node 48:19800). Keeps the Poppins voice at a size the HIG ramp has no
+   * step for: `h4` at 20 is a screen title and overpowers a scrolling feed.
+   */
+  h5: {
+    fontFamily: fontFamily.display.semibold,
+    fontSize: 16,
+    lineHeight: 24,
+    letterSpacing: 0,
+  },
+  /**
+   * Card and row names inside a feed — a restaurant, an order, a merchant
+   * (node 48:19839). The smallest step still set in the display face.
+   */
+  h6: {
+    fontFamily: fontFamily.display.semibold,
+    fontSize: 14,
+    lineHeight: 21,
+    letterSpacing: 0,
+  },
   /** Section and row titles. The heaviest step still set in Inter. */
   title: {
     fontFamily: fontFamily.text.semibold,

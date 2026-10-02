@@ -11,6 +11,8 @@ export type TextFieldProps = TextInputProps & {
   helperText?: string;
   disabled?: boolean;
   shape?: 'default' | 'pill';
+  /** Row height. Defaults to the 44pt minimum target. */
+  height?: number;
   leadingIcon?: { name: IconProps['name']; sf?: IconProps['sf'] };
   backgroundColor?: keyof Theme['colors']['surface'];
 };
@@ -22,6 +24,7 @@ export function TextField({
   disabled,
   editable,
   shape = 'default',
+  height = 44,
   leadingIcon,
   backgroundColor,
   ...rest
@@ -40,6 +43,7 @@ export function TextField({
         hasError={!!error}
         disabled={!!disabled}
         shape={shape}
+        height={height}
         backgroundColor={backgroundColor}
       >
         {leadingIcon ? (

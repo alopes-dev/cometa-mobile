@@ -90,3 +90,19 @@ export function buildMenuSections(items: MenuItem[]): MenuDetailSection[] {
 
   return sections;
 }
+
+/**
+ * Narrows the catalogue to a craving tile (node 48:19802).
+ *
+ * Kept separate from `filterRestaurants`'s `category`, which matches a
+ * cuisine exactly. A craving like "Frango" is not a cuisine — it spans
+ * "Angolana" and "Grelhados" — so it matches on keywords across the name,
+ * cuisine and description instead.
+ */
+export function filterByCraving(restaurants: Restaurant[], keywords: string[]): Restaurant[] {
+  if (keywords.length === 0) return restaurants;
+  return restaurants.filter((restaurant) => {
+    const haystack = `${restaurant.name} ${restaurant.cuisine} ${restaurant.description}`.toLowerCase();
+    return keywords.some((keyword) => haystack.includes(keyword));
+  });
+}

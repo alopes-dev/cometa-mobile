@@ -11,13 +11,14 @@ export const FieldRow = styled.View<{
   hasError: boolean;
   disabled: boolean;
   shape: 'default' | 'pill';
+  height: number;
   backgroundColor?: keyof Theme['colors']['surface'];
 }>`
   flex-direction: row;
   align-items: center;
   gap: ${({ theme }) => theme.spacing[8]}px;
-  height: 44px;
-  border-radius: ${({ theme, shape }) => (shape === 'pill' ? theme.radius.full : theme.radius.md)}px;
+  height: ${({ height }) => height}px;
+  border-radius: ${({ theme, shape }) => (shape === 'pill' ? theme.radius.full : theme.radius.lg)}px;
   padding-horizontal: ${({ theme }) => theme.spacing[16]}px;
   background-color: ${({ theme, backgroundColor }) => theme.colors.surface[backgroundColor ?? 'secondary']};
   border-width: 1px;

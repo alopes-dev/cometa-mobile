@@ -1,14 +1,28 @@
+/**
+ * Either a bundled asset from `require(...)` (a module id) or a remote URL.
+ * `expo-image` accepts both directly, so a slot can take whichever it has.
+ */
+export type ImageRef = string | number;
+
 export type Restaurant = {
   id: string;
   name: string;
-  imageUrl: string;
+  imageUrl: ImageRef;
   rating: number;
   cuisine: string;
   deliveryTimeMinutes: number;
   deliveryFee: number;
   description: string;
   distanceKm: number;
+  /** Locality shown beside the cuisine — "Hambúrgueres · Talatona" (node 48:19841). */
+  neighbourhood?: string;
   hasPromotion?: boolean;
+  /**
+   * Copy for the badge over the card media (node 48:19834) — "-20%",
+   * "Entrega grátis". `hasPromotion` says a promotion exists; this says what
+   * it is, so the badge never has to invent its own wording.
+   */
+  promotionLabel?: string;
 };
 
 export type ModifierOption = {
@@ -42,4 +56,48 @@ export type Offer = {
   badgeLabel: string;
   title: string;
   subtitle: string;
+};
+
+/** An order still in flight, surfaced at the top of Home (node 48:19785). */
+export type ActiveOrder = {
+  id: string;
+  restaurantName: string;
+  imageUrl: ImageRef;
+  /** "A caminho" — the stage, already localised. */
+  statusLabel: string;
+  /** "25–30 min" — the remaining window. */
+  etaLabel: string;
+  /** How many of `totalSteps` are done; drives the segmented progress bar. */
+  completedSteps: number;
+  totalSteps: number;
+};
+
+/**
+ * A merchandised banner (nodes 48:19819, 48:19885).
+ *
+ * `tone` picks a promo role rather than a colour: `featured` is the brand
+ * fill the board draws green, `limited` the amber one it draws for
+ * time-boxed combos.
+ */
+export type PromotionTone = 'featured' | 'limited';
+
+export type Promotion = {
+  id: string;
+  title: string;
+  subtitle: string;
+  ctaLabel: string;
+  imageUrl: ImageRef;
+  tone: PromotionTone;
+};
+
+/** One tile in the "O que te apetece?" row (node 48:19802). */
+export type HomeCategory = {
+  id: string;
+  label: string;
+  /**
+   * Lowercase terms that place a restaurant under this craving. A craving is
+   * broader than a cuisine, so it matches across name, cuisine and
+   * description rather than on one field.
+   */
+  keywords: string[];
 };

@@ -12,6 +12,9 @@ const KEYWORD_ICONS: Array<{ keyword: string; icon: CategoryIcon }> = [
   { keyword: 'sushi', icon: { name: 'fish-outline', sf: 'fish' } },
   { keyword: 'marisco', icon: { name: 'fish-outline', sf: 'fish' } },
   { keyword: 'fast food', icon: { name: 'fast-food-outline', sf: 'takeoutbag.and.cup.and.straw.fill' } },
+  { keyword: 'hamb', icon: { name: 'fast-food-outline', sf: 'takeoutbag.and.cup.and.straw.fill' } },
+  { keyword: 'burger', icon: { name: 'fast-food-outline', sf: 'takeoutbag.and.cup.and.straw.fill' } },
+  { keyword: 'frango', icon: { name: 'flame-outline', sf: 'flame' } },
   { keyword: 'grelhado', icon: { name: 'flame-outline', sf: 'flame' } },
   { keyword: 'saud', icon: { name: 'leaf-outline', sf: 'leaf' } },
 ];
