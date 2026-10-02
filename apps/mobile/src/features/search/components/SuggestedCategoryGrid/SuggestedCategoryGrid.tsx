@@ -1,21 +1,26 @@
-import { Pressable } from 'react-native';
+import { Pressable, useWindowDimensions } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import Animated from 'react-native-reanimated';
 import { Icon, Text } from '@/components/design-system/atoms';
 import { useBounceAnimation } from '@/hooks/useBounceAnimation';
+import { layout } from '@/theme';
 import type { SuggestedCategory } from '../../types';
-import { Column, ICON_SIZE, Row, Tile } from './SuggestedCategoryGrid.styles';
+import { COLUMNS, Column, ICON_SIZE, Row, Tile } from './SuggestedCategoryGrid.styles';
 
 export type SuggestedCategoryGridProps = {
   categories: SuggestedCategory[];
   onSelect: (category: SuggestedCategory) => void;
+  /** Padding between the grid and each screen edge; used to size the columns. */
+  horizontalInset?: number;
 };
 
 function SuggestedCategoryTile({
   category,
+  width,
   onPress,
 }: {
   category: SuggestedCategory;
+  width: number;
   onPress: () => void;
 }) {
   const { style: bounceStyle, bounce } = useBounceAnimation(0.94);
@@ -36,11 +41,11 @@ function SuggestedCategoryTile({
       testID={`suggested-category-${category.id}`}
     >
       <Animated.View style={bounceStyle}>
-        <Column>
+        <Column width={width}>
           <Tile>
             <Icon name={category.icon.name} sf={category.icon.sf} size={ICON_SIZE} color="primary" />
           </Tile>
-          <Text variant="micro" numberOfLines={1} style={{ textAlign: 'center' }}>
+          <Text variant="micro" numberOfLines={2} style={{ textAlign: 'center' }}>
             {category.label}
           </Text>
         </Column>
@@ -52,17 +57,28 @@ function SuggestedCategoryTile({
 /**
  * "Categorias sugeridas" — node 48:20136.
  *
- * Four columns spread edge to edge, the way the board spaces them, rather
- * than a fixed gap: the tiles are a fixed 58pt and the row has to hold its
- * composition from a 390pt phone up to a 430pt one.
+ * The column is derived from the window rather than fixed at the board's
+ * 68pt, the same call `BroadCategoryGrid` makes and for the same reason: at
+ * 68pt the widest label — "Hambúrguer" — has nowhere to go but an ellipsis,
+ * because the ramp's smallest step is 12 and the board sets these at 10. Four
+ * equal columns across the content width keep the composition the board drew
+ * on every screen size and give the word room to set.
  */
-export function SuggestedCategoryGrid({ categories, onSelect }: SuggestedCategoryGridProps) {
+export function SuggestedCategoryGrid({
+  categories,
+  onSelect,
+  horizontalInset = layout.screenPadding,
+}: SuggestedCategoryGridProps) {
+  const { width: windowWidth } = useWindowDimensions();
+  const columnWidth = Math.floor((windowWidth - horizontalInset * 2) / COLUMNS);
+
   return (
     <Row>
       {categories.map((category) => (
         <SuggestedCategoryTile
           key={category.id}
           category={category}
+          width={columnWidth}
           onPress={() => onSelect(category)}
         />
       ))}

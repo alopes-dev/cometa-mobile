@@ -157,6 +157,7 @@ export function SearchScreen({ onSubmit, onBack, initialQuery = '' }: SearchScre
           <SectionHeader title={search.suggestedCategories} />
           <SuggestedCategoryGrid
             categories={categories}
+            horizontalInset={GUTTER}
             // A category is a query, not a filter: it fills the field and runs,
             // so the customer lands where typing the same word would land them.
             onSelect={(category) => runQuery(category.label)}

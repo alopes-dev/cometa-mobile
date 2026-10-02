@@ -33,15 +33,19 @@ const DELIVERY_ADDRESS = 'Talatona, Luanda';
  *
  * Every section the board draws renders unconditionally and in the board's
  * order. Search and the craving tiles are entry points here, not filters: the
- * board gives searching and refinement their own screens (frames 62:343 and
+ * board gives searching and refinement their own screens (frames 48:20081 and
  * 62:560), so narrowing the feed in place would hide sections the design
  * always shows.
  */
-export function HomeScreen() {
+export type HomeScreenProps = {
+  /** Opens the search screen (frame 48:20081), which is where searching happens. */
+  onPressSearch?: () => void;
+};
+
+export function HomeScreen({ onPressSearch = () => {} }: HomeScreenProps = {}) {
   const insets = useSafeAreaInsets();
   const { count: cartCount } = useCart();
 
-  const [query, setQuery] = useState('');
   const [craving, setCraving] = useState<string | null>(null);
   const [favoriteIds, setFavoriteIds] = useState<ReadonlySet<string>>(() => new Set());
 
@@ -107,9 +111,14 @@ export function HomeScreen() {
         </Gutter>
 
         <Gutter>
+          {/*
+            A doorway, not a filter: searching has its own screen, and the
+            feed below it is the one the board always draws in full.
+          */}
           <SearchBar
-            value={query}
-            onChangeText={setQuery}
+            value=""
+            onChangeText={() => {}}
+            onPress={onPressSearch}
             placeholder={home.searchPlaceholder}
             shape="default"
             height={52}

@@ -22,4 +22,18 @@ describe("Chip", () => {
     );
     expect(getByRole("button").props.accessibilityState.selected).toBe(true);
   });
+
+  it("takes the board's smaller outlined shape without losing its label", () => {
+    const { getByText } = renderWithTheme(
+      <Chip label="Mais rápidos" size="sm" variant="outlined" onPress={() => {}} />,
+    );
+    expect(getByText("Mais rápidos")).toBeTruthy();
+  });
+
+  it("stays selectable in every shape", () => {
+    const { getByRole } = renderWithTheme(
+      <Chip label="Tudo" size="sm" variant="outlined" selected onPress={() => {}} />,
+    );
+    expect(getByRole("button").props.accessibilityState.selected).toBe(true);
+  });
 });

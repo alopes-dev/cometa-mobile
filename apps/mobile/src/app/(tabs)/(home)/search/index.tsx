@@ -7,7 +7,7 @@ export default function Search() {
   return (
     <SearchRoute
       onSubmit={(query) =>
-        router.push({ pathname: '/(tabs)/(discovery)/search/results', params: { q: query } })
+        router.push({ pathname: '/(tabs)/(home)/search/results', params: { q: query } })
       }
     />
   );

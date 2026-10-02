@@ -7,17 +7,16 @@ export const TILE_SIZE = 58;
 /** Node 48:21828. */
 export const ICON_SIZE = 25;
 
-/** Node 48:20137 — wide enough for "Hambúrguer" to set on one line. */
-const COLUMN_WIDTH = 68;
+/** Four to a row, as the board lays them out (node 48:20136). */
+export const COLUMNS = 4;
 
 export const Row = styled.View`
   flex-direction: row;
   align-items: flex-start;
-  justify-content: space-between;
 `;
 
-export const Column = styled.View`
-  width: ${COLUMN_WIDTH}px;
+export const Column = styled.View<{ width: number }>`
+  width: ${({ width }) => width}px;
   align-items: center;
   gap: ${({ theme }) => theme.spacing[8]}px;
 `;
