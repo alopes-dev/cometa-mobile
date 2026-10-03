@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
 import { Image } from 'expo-image';
 import Animated, { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import type { ImageRef } from '@/features/home/types';
 
 export type FlyToCartGhostProps = {
-  imageUrl: string;
+  imageUrl: ImageRef;
   from: { x: number; y: number };
   to: { x: number; y: number };
   onComplete: () => void;
@@ -41,7 +42,7 @@ export function FlyToCartGhost({ imageUrl, from, to, onComplete }: FlyToCartGhos
   return (
     <Animated.View style={style} pointerEvents="none">
       <Image
-        source={{ uri: imageUrl }}
+        source={imageUrl}
         style={{ width: GHOST_SIZE, height: GHOST_SIZE, borderRadius: GHOST_SIZE / 2 }}
         contentFit="cover"
       />

@@ -28,3 +28,33 @@ const DELIVERY_SPREAD_MINUTES = 10;
 export function formatDeliveryWindow(minutes: number): string {
   return `${minutes}–${minutes + DELIVERY_SPREAD_MINUTES} min`;
 }
+
+/**
+ * The minimum basket, as the business board writes it — "Mín. 4.500 Kz"
+ * (node 48:20630). Abbreviated rather than spelled out because the three
+ * delivery facts share one row and must not wrap.
+ */
+export function formatMinimumOrder(value: number): string {
+  return `Mín. ${formatKwanza(value)}`;
+}
+
+/**
+ * The review count beside the rating — "(1.248 avaliações)" (node 48:20620).
+ * Parenthesised here rather than at the call site so the two readings of the
+ * same number — the figure and its label — can never disagree.
+ */
+export function formatReviewCount(count: number): string {
+  const withSeparators = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return `(${withSeparators} ${count === 1 ? 'avaliação' : 'avaliações'})`;
+}
+
+/**
+ * The saving badge beside a discounted item's name — "-17%" (node 48:20656).
+ *
+ * Returns `null` rather than "0%" when there is nothing to advertise, so the
+ * badge is absent from the layout instead of present and empty.
+ */
+export function formatDiscountPercent(previousPrice: number, price: number): string | null {
+  if (previousPrice <= price) return null;
+  return `-${Math.round(((previousPrice - price) / previousPrice) * 100)}%`;
+}

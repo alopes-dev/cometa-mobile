@@ -26,15 +26,16 @@ describe('ModifierGroupSelector', () => {
     expect(getByText('Escolha o pão')).toBeTruthy();
     expect(getByText('Obrigatório')).toBeTruthy();
     expect(getByText('Tradicional')).toBeTruthy();
-    expect(getByText('Brioche')).toBeTruthy();
-    expect(getByText('+300 Kz')).toBeTruthy();
+    // The surcharge rides inside the name, per node 48:20718.
+    expect(getByText('Brioche · +300 Kz')).toBeTruthy();
   });
 
   it('does not show a price for a zero-delta option', () => {
-    const { queryByText } = renderWithTheme(
+    const { getByText, queryByText } = renderWithTheme(
       <ModifierGroupSelector group={breadGroup} selectedOptionIds={[]} onToggle={() => {}} />
     );
-    expect(queryByText('+0 Kz')).toBeNull();
+    expect(getByText('Tradicional')).toBeTruthy();
+    expect(queryByText(/\+0 Kz/)).toBeNull();
   });
 
   it('fires onToggle with the pressed option id', () => {

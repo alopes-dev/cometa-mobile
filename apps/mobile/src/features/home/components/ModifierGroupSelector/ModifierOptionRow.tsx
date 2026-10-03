@@ -8,13 +8,13 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { useTheme } from 'styled-components/native';
-import { Text, Icon } from '@/components/design-system/atoms';
+import { Icon } from '@/components/design-system/atoms';
 import { useBounceAnimation } from '@/hooks/useBounceAnimation';
 import { usePressScale } from '@/hooks/usePressScale';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { formatKwanza } from '../../format';
 import type { ModifierOption } from '../../types';
-import { OptionRow, circleShape, squareShape } from './ModifierGroupSelector.styles';
+import { OptionLabel, OptionRow, circleShape, squareShape } from './ModifierGroupSelector.styles';
 
 export type ModifierOptionRowProps = {
   option: ModifierOption;
@@ -48,8 +48,11 @@ export function ModifierOptionRow({ option, type, selected, onToggle }: Modifier
 
   const colorStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(progress.value, [0, 1], ['transparent', theme.colors.brand.base]),
-    borderWidth: interpolate(progress.value, [0, 1], [1.5, 0]),
-    borderColor: theme.colors.border.default,
+    // The board draws the resting box as a 1px hairline in `border/subtle`
+    // (nodes 48:20716 onwards); the fill replaces it rather than sitting
+    // inside it, so the stroke goes to 0 as the brand fill arrives.
+    borderWidth: interpolate(progress.value, [0, 1], [1, 0]),
+    borderColor: theme.colors.border.subtle,
   }));
 
   const shape = type === 'single' ? circleShape : squareShape;
@@ -65,19 +68,21 @@ export function ModifierOptionRow({ option, type, selected, onToggle }: Modifier
     >
       <Animated.View style={pressStyle}>
         <OptionRow>
+          {/*
+            The board carries the surcharge inside the name, separated by a
+            middot — "Queijo extra · +800 Kz" (node 48:20718) — rather than in
+            a column of its own, so the row is one label and one control.
+          */}
+          <OptionLabel numberOfLines={1}>
+            {option.priceDelta > 0
+              ? `${option.label} · +${formatKwanza(option.priceDelta)}`
+              : option.label}
+          </OptionLabel>
           <Animated.View style={bounceStyle}>
             <Animated.View style={[shape, colorStyle]}>
               {selected ? <Icon name="checkmark" sf="checkmark" size={12} color="onBrand" /> : null}
             </Animated.View>
           </Animated.View>
-          <Text variant="bodyLarge" style={{ flex: 1 }}>
-            {option.label}
-          </Text>
-          {option.priceDelta > 0 ? (
-            <Text variant="caption" color="secondary">
-              +{formatKwanza(option.priceDelta)}
-            </Text>
-          ) : null}
         </OptionRow>
       </Animated.View>
     </Pressable>

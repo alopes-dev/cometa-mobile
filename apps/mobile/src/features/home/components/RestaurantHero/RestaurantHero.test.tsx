@@ -27,27 +27,24 @@ const restaurant: Restaurant = {
   deliveryFee: 500,
   description: 'Sabores autênticos de Cabinda, direto para a sua mesa.',
   distanceKm: 2.4,
+  reviewCount: 312,
+  minOrderValue: 5000,
+  reviews: [{ id: 'r1-rev1', author: 'Eunice', comment: 'Porções generosas.', rating: 5 }],
 };
 
 describe('RestaurantHero', () => {
-  it('renders the restaurant name, description, and rating', () => {
-    const { getAllByText, getByText } = renderHero({ restaurant, topInset: 0, onBack: () => {} });
-    // The name renders twice: once in the large hero title, once in the
-    // compact sticky title that fades in on collapse — both coexist in the
-    // tree regardless of scroll position, only their opacity differs.
-    expect(getAllByText('Sabores de Cabinda').length).toBe(2);
-    expect(getByText(restaurant.description)).toBeTruthy();
-    expect(getByText('4.7')).toBeTruthy();
+  // The board keeps the photograph clean (node 48:20602) — the name, rating
+  // and description belong to the profile block below it. The only name the
+  // hero carries is the compact one that fades in once the photo collapses.
+  it('carries the name once, for the collapsed header', () => {
+    const { getAllByText } = renderHero({ restaurant, topInset: 0, onBack: () => {} });
+    expect(getAllByText('Sabores de Cabinda')).toHaveLength(1);
   });
 
-  it('shows the "top rated" badge when rating is at or above the threshold', () => {
-    const { getByText } = renderHero({ restaurant: { ...restaurant, rating: 4.5 }, topInset: 0, onBack: () => {} });
-    expect(getByText('MAIS BEM AVALIADO')).toBeTruthy();
-  });
-
-  it('hides the "top rated" badge when rating is below the threshold', () => {
-    const { queryByText } = renderHero({ restaurant: { ...restaurant, rating: 4.4 }, topInset: 0, onBack: () => {} });
-    expect(queryByText('MAIS BEM AVALIADO')).toBeNull();
+  it('leaves the rating and description off the photograph', () => {
+    const { queryByText } = renderHero({ restaurant, topInset: 0, onBack: () => {} });
+    expect(queryByText(restaurant.description)).toBeNull();
+    expect(queryByText('4.7')).toBeNull();
   });
 
   it('fires onBack when the back button is pressed', () => {
@@ -57,13 +54,40 @@ describe('RestaurantHero', () => {
     expect(onBack).toHaveBeenCalledTimes(1);
   });
 
-  it('renders search and share buttons and fires their handlers when provided', () => {
-    const onSearch = jest.fn();
+  it('fires onShare when the share button is pressed', () => {
     const onShare = jest.fn();
-    const { getByLabelText } = renderHero({ restaurant, topInset: 0, onBack: () => {}, onSearch, onShare });
-    fireEvent.press(getByLabelText('Buscar no menu'));
+    const { getByLabelText } = renderHero({ restaurant, topInset: 0, onBack: () => {}, onShare });
     fireEvent.press(getByLabelText('Partilhar'));
-    expect(onSearch).toHaveBeenCalledTimes(1);
     expect(onShare).toHaveBeenCalledTimes(1);
+  });
+
+  it('fires onToggleFavorite when the favourite button is pressed', () => {
+    const onToggleFavorite = jest.fn();
+    const { getByLabelText } = renderHero({
+      restaurant,
+      topInset: 0,
+      onBack: () => {},
+      isFavorite: false,
+      onToggleFavorite,
+    });
+    fireEvent.press(getByLabelText('Adicionar aos favoritos'));
+    expect(onToggleFavorite).toHaveBeenCalledTimes(1);
+  });
+
+  it('announces the favourite button by its current state', () => {
+    const { getByLabelText } = renderHero({
+      restaurant,
+      topInset: 0,
+      onBack: () => {},
+      isFavorite: true,
+      onToggleFavorite: () => {},
+    });
+    expect(getByLabelText('Remover dos favoritos')).toBeTruthy();
+  });
+
+  it('omits the share and favourite buttons when no handler is given', () => {
+    const { queryByLabelText } = renderHero({ restaurant, topInset: 0, onBack: () => {} });
+    expect(queryByLabelText('Partilhar')).toBeNull();
+    expect(queryByLabelText('Adicionar aos favoritos')).toBeNull();
   });
 });

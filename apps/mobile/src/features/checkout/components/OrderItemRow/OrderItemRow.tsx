@@ -16,7 +16,7 @@ export function OrderItemRow({ entry, onIncrement, onDecrement }: OrderItemRowPr
   return (
     <Container>
       <Thumbnail>
-        <Image source={{ uri: item.imageUrl }} style={{ width: '100%', height: '100%' }} contentFit="cover" />
+        <Image source={item.imageUrl} style={{ width: '100%', height: '100%' }} contentFit="cover" />
       </Thumbnail>
       <Info>
         <Text variant="title" numberOfLines={1}>

@@ -1,67 +1,61 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
-import { Image } from 'expo-image';
-import Animated from 'react-native-reanimated';
+import { ScrollView } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import * as Haptics from 'expo-haptics';
-import { Button, Icon, QuantityStepper, Text, TextField } from '@/components/design-system/atoms';
-import { useBounceAnimation } from '@/hooks/useBounceAnimation';
+import { Text, TextField } from '@/components/design-system/atoms';
 import { useCart } from '@/hooks/useCart';
 import type { CartSelection } from '@/hooks/CartProvider';
 import { getMenuItemById } from '@/features/home/data';
 import { formatKwanza } from '@/features/home/format';
 import { computeUnitPrice, hasRequiredSelections } from '@/features/home/modifierPricing';
 import { ModifierGroupSelector } from '@/features/home/components/ModifierGroupSelector';
+import { ProductActionRow } from '@/features/home/components/ProductActionRow';
+import { ProductCartBar } from '@/features/home/components/ProductCartBar';
+import { ProductHero } from '@/features/home/components/ProductHero';
+import { product, productTextStyle } from '@/theme';
 
-const ADDED_CONFIRMATION_DELAY = 550;
+/**
+ * How long "Adicionado ✓" (node 48:20770) holds before the button returns to
+ * its resting label. The board draws the added state as a frame of its own,
+ * not an end state: the screen stays put — the floating cart is what persists
+ * — so the button has to become addable again for a second helping.
+ */
+const ADDED_CONFIRMATION_DURATION = 1500;
 
 const Screen = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background.primary};
 `;
 
-const HeroImage = styled(Image)`
-  width: 100%;
-  height: 260px;
+/** `Detalhe` — node 48:20707. */
+const Detail = styled.View`
+  padding-horizontal: ${({ theme }) => theme.product.metrics.detailPaddingHorizontal}px;
+  padding-vertical: ${({ theme }) => theme.product.metrics.detailPaddingVertical}px;
+  gap: ${({ theme }) => theme.product.metrics.detailGap}px;
 `;
 
-const BackButton = styled.View`
-  width: 36px;
-  height: 36px;
-  border-radius: 18px;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.colors.background.primary};
-`;
-
-const BackButtonWrapper = styled.View<{ topInset: number }>`
-  position: absolute;
-  top: ${({ theme, topInset }) => theme.spacing[8] + topInset}px;
-  left: ${({ theme }) => theme.spacing[16]}px;
-`;
-
-const Content = styled.View`
-  padding: ${({ theme }) => theme.spacing[16]}px;
-  gap: ${({ theme }) => theme.spacing[24]}px;
-`;
-
+/** `Título e preço` — node 48:20708. */
 const TitleGroup = styled.View`
-  gap: 4px;
+  gap: ${({ theme }) => theme.product.metrics.titleGap}px;
 `;
 
-const QuantityRow = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+/** `Descrição` — node 48:20710. */
+const Description = styled.Text`
+  ${productTextStyle('description')}
+  color: ${({ theme }) => theme.colors.text.secondary};
 `;
 
-const BottomBar = styled.View<{ bottomInset: number }>`
-  position: absolute;
-  left: ${({ theme }) => theme.spacing[16]}px;
-  right: ${({ theme }) => theme.spacing[16]}px;
-  bottom: ${({ theme, bottomInset }) => bottomInset + theme.spacing[8]}px;
+/** `Preço` — node 48:20711. */
+const Price = styled.Text`
+  ${productTextStyle('price')}
+  color: ${({ theme }) => theme.colors.text.brand};
+`;
+
+/** `Personalizar` — node 48:20712. */
+const Customize = styled.View`
+  gap: ${({ theme }) => theme.product.metrics.customizeGap}px;
 `;
 
 const NotFoundScreen = styled.View`
@@ -71,11 +65,12 @@ const NotFoundScreen = styled.View`
   background-color: ${({ theme }) => theme.colors.background.primary};
 `;
 
+/** `Produto — Classic Burger` — frame 48:20693. */
 export default function ProductDetail() {
   const { itemId } = useLocalSearchParams<{ itemId: string }>();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { addItem } = useCart();
+  const { addItem, count: cartCount, subtotal: cartSubtotal } = useCart();
 
   const item = useMemo(() => getMenuItemById(itemId), [itemId]);
   const groups = item?.modifierGroups ?? [];
@@ -87,9 +82,9 @@ export default function ProductDetail() {
   );
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState('');
+  const [isFavorite, setIsFavorite] = useState(false);
   const [justAdded, setJustAdded] = useState(false);
   const addedTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const { style: bounceStyle, bounce } = useBounceAnimation();
 
   useEffect(() => () => clearTimeout(addedTimeout.current), []);
 
@@ -142,50 +137,65 @@ export default function ProductDetail() {
       addItem(item, { selections, notes: trimmedNotes });
     }
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-    bounce();
     setJustAdded(true);
-    addedTimeout.current = setTimeout(() => router.back(), ADDED_CONFIRMATION_DELAY);
+    addedTimeout.current = setTimeout(() => setJustAdded(false), ADDED_CONFIRMATION_DURATION);
   };
+
+  // Clears the floating cart (node 48:20772), which overlaps the scroll.
+  const scrollBottomPadding =
+    product.metrics.cartBarHeight + product.metrics.cartBarBottom * 2 + insets.bottom;
 
   return (
     <Screen>
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 96 + insets.bottom }}
+        contentContainerStyle={{ paddingBottom: scrollBottomPadding }}
         showsVerticalScrollIndicator={false}
       >
-        <View>
-          <HeroImage source={{ uri: item.imageUrl }} contentFit="cover" />
-          <BackButtonWrapper topInset={insets.top}>
-            <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Voltar" hitSlop={8}>
-              <BackButton>
-                <Icon name="chevron-back" sf="chevron.left" size={18} color="primary" />
-              </BackButton>
-            </Pressable>
-          </BackButtonWrapper>
-        </View>
-        <Content>
+        <ProductHero
+          source={item.imageUrl}
+          topInset={insets.top}
+          onBack={() => router.back()}
+          isFavorite={isFavorite}
+          onToggleFavorite={() => setIsFavorite((current) => !current)}
+        />
+
+        <Detail>
           <TitleGroup>
-            <Text variant="h2">{item.name}</Text>
-            <Text variant="bodyStrong" color="brand">
-              {formatKwanza(item.price)}
-            </Text>
-            <Text variant="body" color="secondary">
-              {item.description}
-            </Text>
+            <Text variant="h1">{item.name}</Text>
+            <Description>{item.description}</Description>
+            {/*
+              The unit price, not `item.price`: the board shows the two as the
+              same number because nothing is selected yet, and keeping it at
+              the base price would quietly disagree with the total on the
+              button the moment a paid extra is ticked.
+            */}
+            <Price>{formatKwanza(unitPrice)}</Price>
           </TitleGroup>
 
-          {groups.map((group) => {
-            const selection = selections.find((candidate) => candidate.groupId === group.id);
-            return (
-              <ModifierGroupSelector
-                key={group.id}
-                group={group}
-                selectedOptionIds={selection?.optionIds ?? []}
-                onToggle={(optionId) => toggleOption(group.id, optionId, group.type)}
-              />
-            );
-          })}
+          {groups.length > 0 ? (
+            <Customize>
+              {/* `Título` — node 48:20713. */}
+              <Text variant="h5">Personaliza o teu</Text>
+              {groups.map((group) => {
+                const selection = selections.find((candidate) => candidate.groupId === group.id);
+                return (
+                  <ModifierGroupSelector
+                    key={group.id}
+                    group={group}
+                    selectedOptionIds={selection?.optionIds ?? []}
+                    onToggle={(optionId) => toggleOption(group.id, optionId, group.type)}
+                  />
+                );
+              })}
+            </Customize>
+          ) : null}
 
+          {/*
+            Not on the board, which mocks an item with no note attached. Kept
+            because the cart already carries notes through to the kitchen, and
+            dropping the field would remove a working capability rather than
+            restyle one.
+          */}
           <TextField
             label="Observação"
             placeholder="Ex: Sem cebola"
@@ -194,30 +204,24 @@ export default function ProductDetail() {
             multiline
           />
 
-          <QuantityRow>
-            <Text variant="bodyStrong">Quantidade</Text>
-            <QuantityStepper
-              quantity={quantity}
-              onIncrement={() => setQuantity((current) => current + 1)}
-              onDecrement={() => setQuantity((current) => Math.max(1, current - 1))}
-            />
-          </QuantityRow>
-        </Content>
-      </ScrollView>
-      <BottomBar bottomInset={insets.bottom}>
-        <Animated.View style={bounceStyle}>
-          <Button
-            variant="primary"
-            size="lg"
-            shape="pill"
+          <ProductActionRow
+            quantity={quantity}
+            onIncrement={() => setQuantity((current) => current + 1)}
+            onDecrement={() => setQuantity((current) => Math.max(1, current - 1))}
+            addLabel={`Adicionar · ${formatKwanza(totalPrice)}`}
+            added={justAdded}
             disabled={!canAdd}
-            icon={justAdded ? <Icon name="checkmark" sf="checkmark" size={18} color="onBrand" /> : undefined}
-            onPress={handleAdd}
-          >
-            {justAdded ? 'Adicionado ao carrinho' : `Adicionar — ${formatKwanza(totalPrice)}`}
-          </Button>
-        </Animated.View>
-      </BottomBar>
+            onAdd={handleAdd}
+          />
+        </Detail>
+      </ScrollView>
+
+      <ProductCartBar
+        count={cartCount}
+        total={cartSubtotal}
+        bottomInset={insets.bottom}
+        onPress={() => router.push('/cart')}
+      />
     </Screen>
   );
 }

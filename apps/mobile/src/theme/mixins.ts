@@ -34,6 +34,39 @@ export const textStyle = (variant: keyof import('./typography').Typography) => c
 `;
 
 /**
+ * Applies a step from a board-scoped type scale — see `theme/business.ts`.
+ *
+ * Separate from `textStyle` because those steps are the shared ramp, which a
+ * component should reach for first; this one is for the sizes a single Figma
+ * board sets that the ramp deliberately has no step for.
+ */
+export const boardTextStyle = (step: import('./business').BusinessTypeStep) => css`
+  font-family: ${({ theme }) => theme.business.type[step].fontFamily};
+  font-size: ${({ theme }) => theme.business.type[step].fontSize}px;
+  ${({ theme }) => {
+    const resolved = theme.business.type[step];
+    return 'lineHeight' in resolved ? `line-height: ${resolved.lineHeight}px;` : '';
+  }}
+`;
+
+/**
+ * Applies a step from the product board's type scale — see `theme/product.ts`.
+ *
+ * A twin of `boardTextStyle` rather than a generalisation of it: each board
+ * file transcribes its own board, and keeping the two accessors separate is
+ * what makes `productTextStyle('price')` fail to compile against a business
+ * step, so a value can never be read off the wrong board.
+ */
+export const productTextStyle = (step: import('./product').ProductTypeStep) => css`
+  font-family: ${({ theme }) => theme.product.type[step].fontFamily};
+  font-size: ${({ theme }) => theme.product.type[step].fontSize}px;
+  ${({ theme }) => {
+    const resolved = theme.product.type[step];
+    return 'lineHeight' in resolved ? `line-height: ${resolved.lineHeight}px;` : '';
+  }}
+`;
+
+/**
  * iOS squircle corners. Pair with any non-capsule radius; `continuous` is a
  * no-op on Android, so it is safe to apply unconditionally.
  */

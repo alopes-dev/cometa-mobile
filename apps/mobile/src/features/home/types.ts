@@ -4,6 +4,19 @@
  */
 export type ImageRef = string | number;
 
+/**
+ * One customer review, as the business board shows it (node 48:20689) — an
+ * author, the stars they gave, and what they wrote. No date: the board does
+ * not draw one, and an invented timestamp would read as real data.
+ */
+export type Review = {
+  id: string;
+  author: string;
+  /** Whole stars, 1–5. */
+  rating: number;
+  comment: string;
+};
+
 export type Restaurant = {
   id: string;
   name: string;
@@ -14,6 +27,12 @@ export type Restaurant = {
   deliveryFee: number;
   description: string;
   distanceKm: number;
+  /** How many reviews the rating averages — "(1.248 avaliações)" (node 48:20620). */
+  reviewCount: number;
+  /** Smallest basket the merchant accepts — "Mín. 4.500 Kz" (node 48:20630). */
+  minOrderValue: number;
+  /** What customers wrote, for the "Avaliações" section (node 48:20688). */
+  reviews: Review[];
   /** Locality shown beside the cuisine — "Hambúrgueres · Talatona" (node 48:19841). */
   neighbourhood?: string;
   hasPromotion?: boolean;
@@ -45,8 +64,14 @@ export type MenuItem = {
   name: string;
   description: string;
   price: number;
-  imageUrl: string;
+  imageUrl: ImageRef;
   category: string;
+  /**
+   * What the item cost before the current promotion (node 48:20660). Present
+   * only on discounted items; the struck-through price and the "-17%" badge
+   * are both derived from it, so there is one number to keep honest.
+   */
+  previousPrice?: number;
   modifierGroups?: ModifierGroup[];
 };
 

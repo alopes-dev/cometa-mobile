@@ -12,6 +12,9 @@ function makeRestaurant(overrides: Partial<Restaurant>): Restaurant {
     deliveryFee: 500,
     description: 'The best pizza in town.',
     distanceKm: 2.5,
+    reviewCount: 120,
+    minOrderValue: 3000,
+    reviews: [{ id: 'rev1', author: 'Ana', rating: 5, comment: 'Muito bom.' }],
     ...overrides,
   };
 }
@@ -148,7 +151,7 @@ describe('groupMenuItemsByCategory', () => {
 });
 
 describe('buildMenuSections', () => {
-  it('cross-lists the first two items as a "Populares agora" section ahead of the category sections', () => {
+  it('cross-lists the first two items as a "Mais pedidos" section ahead of the category sections', () => {
     const items: MenuItem[] = [
       makeMenuItem({ id: '1', name: 'Margherita', category: 'Pizzas' }),
       makeMenuItem({ id: '2', name: 'Pepperoni', category: 'Pizzas' }),
@@ -158,15 +161,16 @@ describe('buildMenuSections', () => {
     const sections = buildMenuSections(items);
 
     expect(sections.map((section) => section.key)).toEqual(['popular', 'Pizzas', 'Bebidas']);
-    expect(sections[0].title).toBe('Populares agora');
-    expect(sections[0].icon).toBe('🔥');
-    expect(sections[0].layout).toBe('list');
+    expect(sections[0].title).toBe('Mais pedidos');
     expect(sections[0].data.map((item) => item.id)).toEqual(['1', '2']);
     expect(sections[1].data.map((item) => item.id)).toEqual(['1', '2']);
     expect(sections[2].data.map((item) => item.id)).toEqual(['3']);
   });
 
-  it('renders the "Entradas" category as a grid section and every other section as a list', () => {
+  // The board presents every dish the same way (nodes 48:20641 onwards):
+  // details on the left, a 96px photograph with its add button on the right.
+  // No category gets a layout of its own.
+  it('gives every category the same section shape', () => {
     const items: MenuItem[] = [
       makeMenuItem({ id: '1', category: 'Pizzas' }),
       makeMenuItem({ id: '2', category: 'Entradas' }),
@@ -174,9 +178,11 @@ describe('buildMenuSections', () => {
     ];
 
     const sections = buildMenuSections(items);
-    const byKey = Object.fromEntries(sections.map((section) => [section.key, section.layout]));
 
-    expect(byKey).toEqual({ popular: 'list', Pizzas: 'list', Entradas: 'grid', Bebidas: 'list' });
+    expect(sections.map((section) => section.key)).toEqual(['popular', 'Pizzas', 'Entradas', 'Bebidas']);
+    for (const section of sections) {
+      expect(section).not.toHaveProperty('layout');
+    }
   });
 
   it('caps the popular section at two items even with a larger menu', () => {

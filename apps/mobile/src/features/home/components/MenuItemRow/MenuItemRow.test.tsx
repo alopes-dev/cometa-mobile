@@ -44,3 +44,26 @@ describe('MenuItemRow', () => {
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 });
+
+// A discounted dish — node 48:20652. The board shows three things at once:
+// the saving, the price now, and the price before it struck through.
+describe('MenuItemRow with a previous price', () => {
+  const discounted: MenuItem = { ...item, price: 3800, previousPrice: 4600 };
+
+  it('shows the saving as a percentage beside the name', () => {
+    const { getByText } = renderWithTheme(<MenuItemRow item={discounted} />);
+    expect(getByText('-17%')).toBeTruthy();
+  });
+
+  it('shows the previous price struck through beside the current one', () => {
+    const { getByText } = renderWithTheme(<MenuItemRow item={discounted} />);
+    expect(getByText('3.800 Kz')).toBeTruthy();
+    expect(getByText('4.600 Kz')).toHaveStyle({ textDecorationLine: 'line-through' });
+  });
+
+  it('shows neither on an item that is not discounted', () => {
+    const { queryByText } = renderWithTheme(<MenuItemRow item={item} />);
+    expect(queryByText('-17%')).toBeNull();
+    expect(queryByText('4.600 Kz')).toBeNull();
+  });
+});

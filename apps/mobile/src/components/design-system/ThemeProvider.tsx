@@ -15,6 +15,8 @@ import {
   fillRoles,
   onboarding,
   auth,
+  business,
+  product,
   type SemanticColors,
   type ShadowGeometry,
   type ShadowLevel,
@@ -22,6 +24,8 @@ import {
   type FillRole,
   type OnboardingTokens,
   type AuthTokens,
+  type BusinessTokens,
+  type ProductTokens,
 } from '@/theme';
 
 /**
@@ -61,12 +65,26 @@ export interface Theme {
    * `onboarding`: the sign-in boards are drawn light-only.
    */
   auth: AuthTokens;
+  /**
+   * Figma business-board tokens — the restaurant detail. Scheme-independent
+   * for the same reason as the two above; its colours are not frozen here,
+   * they come from `colors`, so the screen still follows the active scheme.
+   */
+  business: BusinessTokens;
+  /**
+   * Figma product-board tokens — the product detail. Scheme-independent for
+   * the same reason as `business`, and its colours likewise come from
+   * `colors` rather than being frozen here.
+   */
+  product: ProductTokens;
 }
 
 const shared = {
   typography,
   onboarding,
   auth,
+  business,
+  product,
   spacing,
   layout,
   radius,

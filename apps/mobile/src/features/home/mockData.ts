@@ -1,4 +1,4 @@
-import { activeOrderPhoto, promotionPhoto, restaurantPhoto } from './assets';
+import { activeOrderPhoto, dishPhoto, promotionPhoto, restaurantPhoto } from './assets';
 import type {
   ActiveOrder,
   HomeCategory,
@@ -61,6 +61,22 @@ export const mockRestaurants: Restaurant[] = [
     deliveryFee: 1000,
     description: 'Hambúrgueres suculentos e batatas crocantes em Talatona.',
     distanceKm: 1.2,
+    reviewCount: 1248,
+    minOrderValue: 4500,
+    reviews: [
+      {
+        id: 'r4-rev1',
+        author: 'Mário',
+        rating: 5,
+        comment: 'Chegou quente e o molho é mesmo especial. Vou pedir outra vez.',
+      },
+      {
+        id: 'r4-rev2',
+        author: 'Tânia',
+        rating: 4,
+        comment: 'Hambúrguer no ponto. A batata podia vir mais crocante.',
+      },
+    ],
     neighbourhood: 'Talatona',
     hasPromotion: true,
     promotionLabel: '-20%',
@@ -75,6 +91,22 @@ export const mockRestaurants: Restaurant[] = [
     deliveryFee: 1000,
     description: 'Sabores autênticos da Banda, direto para a sua mesa.',
     distanceKm: 2.4,
+    reviewCount: 864,
+    minOrderValue: 5000,
+    reviews: [
+      {
+        id: 'r1-rev1',
+        author: 'Eunice',
+        rating: 5,
+        comment: 'O calulu sabe mesmo a casa da avó. Porções generosas.',
+      },
+      {
+        id: 'r1-rev2',
+        author: 'Paulo',
+        rating: 4,
+        comment: 'Entrega dentro do tempo e comida bem embalada.',
+      },
+    ],
     neighbourhood: 'Maianga',
   },
   {
@@ -87,6 +119,22 @@ export const mockRestaurants: Restaurant[] = [
     deliveryFee: 1000,
     description: 'Pizzas artesanais assadas em forno a lenha no Morro Bento.',
     distanceKm: 1.5,
+    reviewCount: 1032,
+    minOrderValue: 4000,
+    reviews: [
+      {
+        id: 'r3-rev1',
+        author: 'Hélder',
+        rating: 5,
+        comment: 'Massa fina e bem assada, dá para sentir o forno a lenha.',
+      },
+      {
+        id: 'r3-rev2',
+        author: 'Marta',
+        rating: 4,
+        comment: 'Boa pizza, só achei o queijo um pouco escasso.',
+      },
+    ],
     neighbourhood: 'Morro Bento',
   },
   {
@@ -99,6 +147,22 @@ export const mockRestaurants: Restaurant[] = [
     deliveryFee: 1000,
     description: 'Grelhados na brasa com o sabor tradicional angolano.',
     distanceKm: 3.4,
+    reviewCount: 517,
+    minOrderValue: 6000,
+    reviews: [
+      {
+        id: 'r5-rev1',
+        author: 'Nelson',
+        rating: 5,
+        comment: 'A picanha vem no ponto que pedi. Recomendo o combo.',
+      },
+      {
+        id: 'r5-rev2',
+        author: 'Isabel',
+        rating: 4,
+        comment: 'Grelhados muito bons, mas demorou um pouco mais do que o previsto.',
+      },
+    ],
     neighbourhood: 'Benfica',
     hasPromotion: true,
     promotionLabel: 'Entrega grátis',
@@ -113,6 +177,22 @@ export const mockRestaurants: Restaurant[] = [
     deliveryFee: 1500,
     description: 'Peixe fresco do dia, preparado à moda da casa.',
     distanceKm: 0.9,
+    reviewCount: 743,
+    minOrderValue: 5500,
+    reviews: [
+      {
+        id: 'r2-rev1',
+        author: 'Domingos',
+        rating: 5,
+        comment: 'Peixe fresco mesmo, dá para notar logo na primeira garfada.',
+      },
+      {
+        id: 'r2-rev2',
+        author: 'Luísa',
+        rating: 5,
+        comment: 'Já é a terceira vez que peço. Nunca desilude.',
+      },
+    ],
     neighbourhood: 'Ingombota',
   },
   {
@@ -125,6 +205,22 @@ export const mockRestaurants: Restaurant[] = [
     deliveryFee: 1000,
     description: 'Frango grelhado e acompanhamentos no Kilamba.',
     distanceKm: 2.9,
+    reviewCount: 926,
+    minOrderValue: 3500,
+    reviews: [
+      {
+        id: 'r7-rev1',
+        author: 'Kiesse',
+        rating: 5,
+        comment: 'Frango bem temperado e o molho pirí-pirí é na medida certa.',
+      },
+      {
+        id: 'r7-rev2',
+        author: 'Rita',
+        rating: 4,
+        comment: 'Boa relação qualidade-preço para a família toda.',
+      },
+    ],
     neighbourhood: 'Kilamba',
   },
   {
@@ -137,6 +233,22 @@ export const mockRestaurants: Restaurant[] = [
     deliveryFee: 900,
     description: 'Sushi fresco e combinados japoneses no coração de Luanda.',
     distanceKm: 6.2,
+    reviewCount: 388,
+    minOrderValue: 8000,
+    reviews: [
+      {
+        id: 'r6-rev1',
+        author: 'André',
+        rating: 5,
+        comment: 'Peixe cortado na hora e arroz bem temperado. Surpreendeu.',
+      },
+      {
+        id: 'r6-rev2',
+        author: 'Sofia',
+        rating: 4,
+        comment: 'Combinado bonito e fresco, só a entrega é que tarda.',
+      },
+    ],
     neighbourhood: 'Talatona',
   },
 ];
@@ -148,7 +260,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Calulu de Peixe',
     description: 'Peixe seco cozinhado com quiabo, jinguba e óleo de palma.',
     price: 4500,
-    imageUrl: 'https://loremflickr.com/200/200/food,fish?lock=1',
+    imageUrl: restaurantPhoto.saboresDaBanda,
     category: 'Pratos Principais',
   },
   {
@@ -157,7 +269,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Funge com Feijão',
     description: 'Funge de bombó acompanhado de feijão de óleo de palma.',
     price: 3200,
-    imageUrl: 'https://loremflickr.com/200/200/food,beans?lock=2',
+    imageUrl: restaurantPhoto.saboresDaBanda,
     category: 'Pratos Principais',
   },
   {
@@ -166,7 +278,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Gindungo Frito',
     description: 'Entrada picante de pimenta gindungo frita.',
     price: 1500,
-    imageUrl: 'https://loremflickr.com/200/200/food,pepper?lock=3',
+    imageUrl: restaurantPhoto.saboresDaBanda,
     category: 'Entradas',
   },
   {
@@ -175,7 +287,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Kissangua',
     description: 'Bebida tradicional fermentada de milho.',
     price: 1000,
-    imageUrl: 'https://loremflickr.com/200/200/food,drink?lock=4',
+    imageUrl: restaurantPhoto.saboresDaBanda,
     category: 'Bebidas',
   },
   {
@@ -184,7 +296,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Camarão Grelhado',
     description: 'Camarão fresco grelhado com alho e limão.',
     price: 6500,
-    imageUrl: 'https://loremflickr.com/200/200/food,shrimp?lock=5',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
     category: 'Pratos Principais',
   },
   {
@@ -193,7 +305,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Caranguejo à Moda da Casa',
     description: 'Caranguejo cozido no molho da casa.',
     price: 7200,
-    imageUrl: 'https://loremflickr.com/200/200/food,crab?lock=6',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
     category: 'Pratos Principais',
   },
   {
@@ -202,7 +314,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Salada de Polvo',
     description: 'Polvo cozido com cebola, azeite e coentros.',
     price: 3800,
-    imageUrl: 'https://loremflickr.com/200/200/food,octopus?lock=7',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
     category: 'Entradas',
   },
   {
@@ -211,7 +323,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Sumo de Maboque',
     description: 'Sumo natural de fruta maboque.',
     price: 1200,
-    imageUrl: 'https://loremflickr.com/200/200/food,juice?lock=8',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
     category: 'Bebidas',
   },
   {
@@ -220,7 +332,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Pizza Margherita',
     description: 'Molho de tomate, mozzarella e manjericão fresco.',
     price: 4000,
-    imageUrl: 'https://loremflickr.com/200/200/food,pizza?lock=9',
+    imageUrl: restaurantPhoto.forno27,
     category: 'Pratos Principais',
   },
   {
@@ -229,7 +341,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Pizza Pepperoni',
     description: 'Molho de tomate, mozzarella e pepperoni.',
     price: 4800,
-    imageUrl: 'https://loremflickr.com/200/200/food,pizza?lock=10',
+    imageUrl: restaurantPhoto.forno27,
     category: 'Pratos Principais',
   },
   {
@@ -238,7 +350,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Bruschetta',
     description: 'Pão tostado com tomate, alho e azeite.',
     price: 2000,
-    imageUrl: 'https://loremflickr.com/200/200/food,bruschetta?lock=11',
+    imageUrl: restaurantPhoto.forno27,
     category: 'Entradas',
   },
   {
@@ -247,7 +359,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Tiramisu',
     description: 'Sobremesa italiana com café e mascarpone.',
     price: 2500,
-    imageUrl: 'https://loremflickr.com/200/200/food,dessert?lock=12',
+    imageUrl: restaurantPhoto.forno27,
     category: 'Sobremesas',
   },
   {
@@ -256,7 +368,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Cheeseburger Clássico',
     description: 'Hambúrguer de carne, queijo cheddar, alface e tomate.',
     price: 3000,
-    imageUrl: 'https://loremflickr.com/200/200/food,burger?lock=13',
+    imageUrl: dishPhoto.classicBurger,
     category: 'Pratos Principais',
     modifierGroups: BURGER_MODIFIER_GROUPS,
   },
@@ -266,7 +378,8 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Burger Duplo Bacon',
     description: 'Duas carnes, bacon crocante e molho especial.',
     price: 3800,
-    imageUrl: 'https://loremflickr.com/200/200/food,burger?lock=14',
+    previousPrice: 4600,
+    imageUrl: dishPhoto.doubleBurger,
     category: 'Pratos Principais',
     modifierGroups: BURGER_MODIFIER_GROUPS,
   },
@@ -276,7 +389,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Batata Frita',
     description: 'Porção de batata frita crocante.',
     price: 1200,
-    imageUrl: 'https://loremflickr.com/200/200/food,fries?lock=15',
+    imageUrl: dishPhoto.fries,
     category: 'Entradas',
   },
   {
@@ -285,7 +398,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Milkshake de Chocolate',
     description: 'Milkshake cremoso de chocolate.',
     price: 1800,
-    imageUrl: 'https://loremflickr.com/200/200/food,milkshake?lock=16',
+    imageUrl: dishPhoto.combo,
     category: 'Bebidas',
   },
   {
@@ -294,7 +407,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Espetada de Frango',
     description: 'Espetada de frango grelhado com pimentos.',
     price: 4200,
-    imageUrl: 'https://loremflickr.com/200/200/food,chicken?lock=17',
+    imageUrl: restaurantPhoto.saboresDaBanda,
     category: 'Pratos Principais',
   },
   {
@@ -303,7 +416,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Costela de Porco Grelhada',
     description: 'Costela suína grelhada com molho barbecue.',
     price: 5200,
-    imageUrl: 'https://loremflickr.com/200/200/food,ribs?lock=18',
+    imageUrl: restaurantPhoto.saboresDaBanda,
     category: 'Pratos Principais',
   },
   {
@@ -312,7 +425,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Salada Mista',
     description: 'Alface, tomate, cebola e pepino.',
     price: 1500,
-    imageUrl: 'https://loremflickr.com/200/200/food,salad?lock=19',
+    imageUrl: restaurantPhoto.saboresDaBanda,
     category: 'Entradas',
   },
   {
@@ -321,7 +434,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Cerveja Cuca',
     description: 'Cerveja angolana gelada.',
     price: 1000,
-    imageUrl: 'https://loremflickr.com/200/200/food,beer?lock=20',
+    imageUrl: restaurantPhoto.saboresDaBanda,
     category: 'Bebidas',
   },
   {
@@ -330,7 +443,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Combo Sashimi',
     description: '12 peças variadas de sashimi fresco.',
     price: 7500,
-    imageUrl: 'https://loremflickr.com/200/200/food,sashimi?lock=21',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
     category: 'Pratos Principais',
   },
   {
@@ -339,7 +452,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Uramaki Philadelphia',
     description: 'Salmão, queijo creme e pepino.',
     price: 5500,
-    imageUrl: 'https://loremflickr.com/200/200/food,sushi?lock=22',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
     category: 'Pratos Principais',
   },
   {
@@ -348,7 +461,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Edamame',
     description: 'Vagens de soja cozidas com sal marinho.',
     price: 1800,
-    imageUrl: 'https://loremflickr.com/200/200/food,edamame?lock=23',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
     category: 'Entradas',
   },
   {
@@ -357,7 +470,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Chá Verde Gelado',
     description: 'Chá verde japonês servido gelado.',
     price: 1100,
-    imageUrl: 'https://loremflickr.com/200/200/food,tea?lock=24',
+    imageUrl: restaurantPhoto.cantinhoDaKianda,
     category: 'Bebidas',
   },
   {
@@ -366,7 +479,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Moamba de Galinha',
     description: 'Galinha cozida em molho de ginguba com quiabo.',
     price: 3800,
-    imageUrl: 'https://loremflickr.com/200/200/food,chicken?lock=25',
+    imageUrl: restaurantPhoto.frangoECompanhia,
     category: 'Pratos Principais',
   },
   {
@@ -375,7 +488,7 @@ export const mockMenuItems: MenuItem[] = [
     name: 'Cacimba de Peixe',
     description: 'Caldo tradicional de peixe com gengibre e alho.',
     price: 4200,
-    imageUrl: 'https://loremflickr.com/200/200/food,soup?lock=26',
+    imageUrl: restaurantPhoto.frangoECompanhia,
     category: 'Pratos Principais',
   },
 ];

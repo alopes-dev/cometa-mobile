@@ -2,13 +2,27 @@ import { Pressable } from 'react-native';
 import { Image } from 'expo-image';
 import Animated from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
-import { Text, Icon } from '@/components/design-system/atoms';
+import { useTheme } from 'styled-components/native';
+import { Icon } from '@/components/design-system/atoms';
 import { useBounceAnimation } from '@/hooks/useBounceAnimation';
 import { usePressScale } from '@/hooks/usePressScale';
 import { useMeasureOnTap, type ScreenOrigin } from '@/hooks/useMeasureOnTap';
-import { formatKwanza } from '../../format';
+import { formatDiscountPercent, formatKwanza } from '../../format';
 import type { MenuItem } from '../../types';
-import { AddButton, Container, Info, PriceText, Thumbnail, ThumbnailClip } from './MenuItemRow.styles';
+import {
+  AddButton,
+  AddButtonSlot,
+  Container,
+  Description,
+  Discount,
+  Info,
+  Media,
+  Name,
+  NameRow,
+  PreviousPriceText,
+  PriceRow,
+  PriceText,
+} from './MenuItemRow.styles';
 
 export type MenuItemRowProps = {
   item: MenuItem;
@@ -20,6 +34,9 @@ export function MenuItemRow({ item, onAdd, onPress }: MenuItemRowProps) {
   const { style: bounceStyle, bounce } = useBounceAnimation();
   const { style: pressStyle, onPressIn, onPressOut } = usePressScale();
   const { ref: addButtonRef, measure } = useMeasureOnTap();
+  const theme = useTheme();
+  const discount =
+    item.previousPrice === undefined ? null : formatDiscountPercent(item.previousPrice, item.price);
 
   const handleAdd = async () => {
     bounce();
@@ -31,26 +48,46 @@ export function MenuItemRow({ item, onAdd, onPress }: MenuItemRowProps) {
   const content = (
     <Container>
       <Info>
-        <Text variant="title">{item.name}</Text>
-        <Text variant="caption" color="secondary" numberOfLines={2}>
-          {item.description}
-        </Text>
-        <PriceText>{formatKwanza(item.price)}</PriceText>
+        <NameRow>
+          <Name>{item.name}</Name>
+          {discount ? <Discount>{discount}</Discount> : null}
+        </NameRow>
+        <Description numberOfLines={2}>{item.description}</Description>
+        <PriceRow>
+          <PriceText>{formatKwanza(item.price)}</PriceText>
+          {item.previousPrice !== undefined ? (
+            <PreviousPriceText>{formatKwanza(item.previousPrice)}</PreviousPriceText>
+          ) : null}
+        </PriceRow>
       </Info>
-      {onAdd ? (
-        <Pressable onPress={handleAdd} accessibilityRole="button" accessibilityLabel={`Adicionar ${item.name}`} hitSlop={8}>
-          <Animated.View ref={addButtonRef} style={bounceStyle}>
-            <AddButton>
-              <Icon name="add" sf="plus" size={16} color="onBrand" />
-            </AddButton>
-          </Animated.View>
-        </Pressable>
-      ) : null}
-      <Thumbnail>
-        <ThumbnailClip>
-          <Image source={{ uri: item.imageUrl }} style={{ width: '100%', height: '100%' }} contentFit="cover" />
-        </ThumbnailClip>
-      </Thumbnail>
+      <Media>
+        <Image
+          source={item.imageUrl}
+          style={{ width: '100%', height: '100%' }}
+          contentFit="cover"
+        />
+        {onAdd ? (
+          <AddButtonSlot>
+            <Pressable
+              onPress={handleAdd}
+              accessibilityRole="button"
+              accessibilityLabel={`Adicionar ${item.name}`}
+              hitSlop={8}
+            >
+              <Animated.View ref={addButtonRef} style={bounceStyle}>
+                <AddButton>
+                  <Icon
+                    name="add"
+                    sf="plus"
+                    size={theme.business.metrics.addIconSize}
+                    color="onBrand"
+                  />
+                </AddButton>
+              </Animated.View>
+            </Pressable>
+          </AddButtonSlot>
+        ) : null}
+      </Media>
     </Container>
   );
 

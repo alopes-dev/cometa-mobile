@@ -33,7 +33,7 @@ export function MenuGridCard({ item, onAdd, onPress }: MenuGridCardProps) {
     <Container>
       <ImageWrapper>
         <Image
-          source={{ uri: item.imageUrl }}
+          source={item.imageUrl}
           style={{ width: '100%', height: 120, borderRadius: radius.md }}
           contentFit="cover"
         />

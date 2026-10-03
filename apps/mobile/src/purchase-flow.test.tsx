@@ -148,3 +148,32 @@ describe('purchase path', () => {
     expect(() => mount(<Screen />)).not.toThrow();
   });
 });
+
+/**
+ * The business board (frame 48:20601) draws the green add button on every
+ * product it shows — the cross-listed ones under "Mais pedidos" included, and
+ * regardless of whether the dish has choices to make. A dish the customer
+ * cannot act on from the menu is a dish the board does not have.
+ */
+describe('restaurant detail', () => {
+  it('offers every product an add control', () => {
+    setParams({ id: 'r4' });
+    const Screen = require('./app/(tabs)/(home)/restaurant/[id]').default;
+    const { getAllByLabelText } = mount(<Screen />);
+
+    const { getMenuItems } = require('./features/home/data');
+    const { buildMenuSections } = require('./features/home/selectors');
+    const rendered: { name: string }[] = buildMenuSections(getMenuItems('r4')).flatMap(
+      (section: { data: { name: string }[] }) => section.data
+    );
+
+    // Counted per dish rather than in total: "Mais pedidos" cross-lists its
+    // items, so a dish that appears in two sections owes two buttons.
+    const expected = new Map<string, number>();
+    for (const item of rendered) expected.set(item.name, (expected.get(item.name) ?? 0) + 1);
+
+    for (const [name, count] of expected) {
+      expect(getAllByLabelText(`Adicionar ${name}`)).toHaveLength(count);
+    }
+  });
+});

@@ -32,6 +32,9 @@ const restaurant: Restaurant = {
   deliveryFee: 500,
   description: 'Sabores autênticos de Cabinda, direto para a sua mesa.',
   distanceKm: 2.4,
+  reviewCount: 312,
+  minOrderValue: 5000,
+  reviews: [{ id: 'r1-rev1', author: 'Eunice', rating: 5, comment: 'Porções generosas.' }],
   neighbourhood: 'Cabinda',
 };
 

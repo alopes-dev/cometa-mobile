@@ -118,3 +118,57 @@ describe('home sections', () => {
     expect(getHomeCategories().map((c) => c.label)).toEqual(['Hambúrguer', 'Pizza', 'Frango', 'Sushi']);
   });
 });
+
+/**
+ * The business board (frame 48:20601) draws facts the Home board never did —
+ * a review count, a minimum basket and customer reviews. The detail screen
+ * renders them for whichever restaurant is opened, so every entry in the
+ * catalogue has to carry them, not just the one the board was drawn from.
+ */
+describe('business board facts', () => {
+  it('gives every restaurant a review count and a minimum basket', () => {
+    for (const restaurant of getRestaurants()) {
+      expect(restaurant.reviewCount).toBeGreaterThan(0);
+      expect(restaurant.minOrderValue).toBeGreaterThan(0);
+    }
+  });
+
+  it('gives every restaurant at least one review to show', () => {
+    for (const restaurant of getRestaurants()) {
+      expect(restaurant.reviews.length).toBeGreaterThan(0);
+      for (const review of restaurant.reviews) {
+        expect(review.author).not.toHaveLength(0);
+        expect(review.comment).not.toHaveLength(0);
+        expect(review.rating).toBeGreaterThanOrEqual(1);
+        expect(review.rating).toBeLessThanOrEqual(5);
+      }
+    }
+  });
+
+  it('never prices a discounted item at or above its previous price', () => {
+    for (const restaurant of getRestaurants()) {
+      for (const item of getMenuItems(restaurant.id)) {
+        if (item.previousPrice === undefined) continue;
+        expect(item.previousPrice).toBeGreaterThan(item.price);
+      }
+    }
+  });
+});
+
+/**
+ * `assets.ts` bundles the board's photography rather than fetching it,
+ * "because a placeholder service can be slow or unreachable, which leaves the
+ * feed looking like it failed to load". Menu photographs were the one thing
+ * left on such a service, and when it started answering 401 every dish on the
+ * detail screen lost its picture. This holds the rule for them too.
+ */
+describe('menu photography', () => {
+  it('bundles every menu photograph rather than fetching it', () => {
+    for (const restaurant of getRestaurants()) {
+      for (const item of getMenuItems(restaurant.id)) {
+        const isRemote = typeof item.imageUrl === 'string' && item.imageUrl.startsWith('http');
+        expect({ item: item.name, isRemote }).toEqual({ item: item.name, isRemote: false });
+      }
+    }
+  });
+});

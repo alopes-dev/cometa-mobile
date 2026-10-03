@@ -22,6 +22,21 @@ export const restaurantPhoto = {
   frangoECompanhia: require('../../../assets/home/frango-e-companhia.jpg'),
 } as const;
 
+/**
+ * Dish photography from the business board (frame 48:20601), in the 96px
+ * slots beside each product — nodes 48:20649, 48:20661, 48:20672, 48:20684.
+ */
+export const dishPhoto = {
+  /** Node 48:20649 — "Classic Burger". */
+  classicBurger: require('../../../assets/home/dishes/classic-burger.jpg'),
+  /** Node 48:20661 — "Double Cometa". */
+  doubleBurger: require('../../../assets/home/dishes/double-burger.jpg'),
+  /** Node 48:20672 — "Combo Casa": burger, fries and a drink. */
+  combo: require('../../../assets/home/dishes/combo.jpg'),
+  /** Node 48:20684 — "Batata crocante". */
+  fries: require('../../../assets/home/dishes/fries.jpg'),
+} as const;
+
 /** Node 48:19787 — the 52px thumbnail on the in-flight order card. */
 export const activeOrderPhoto = require('../../../assets/home/order-burger-house.jpg');
 
