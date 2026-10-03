@@ -15,3 +15,4 @@ export { motion, pressed, opacity } from './motion';
 export { elevate, textStyle, continuousCorners } from './mixins';
 export { foregroundRoles, fillRoles, type ForegroundRole, type FillRole } from './roles';
 export { onboarding, type OnboardingTokens, type OnboardingTypeStep } from './onboarding';
+export { auth, type AuthTokens } from './auth';

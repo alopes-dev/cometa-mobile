@@ -17,7 +17,10 @@ export function CartSummaryBar({ count, total, onPress }: CartSummaryBarProps) {
   const { style: bounceStyle, bounce } = useBounceAnimation();
   const previousCount = useRef(count);
   const hasEntered = useRef(count > 0);
-  const translateY = useSharedValue(hasEntered.current || reducedMotion ? 0 : 40);
+  // Reads `count`, not `hasEntered.current`: the initial argument is only
+  // consumed on the first render, where the ref still holds `count > 0`, so
+  // this is the same value without reading a ref during render.
+  const translateY = useSharedValue(count > 0 || reducedMotion ? 0 : 40);
 
   useEffect(() => {
     // First transition from empty to non-empty: slide the bar in (§20). Any

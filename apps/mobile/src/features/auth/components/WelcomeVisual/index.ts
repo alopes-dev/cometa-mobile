@@ -1,0 +1,1 @@
+export { WelcomeVisual } from './WelcomeVisual';

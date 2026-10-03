@@ -14,12 +14,14 @@ import {
   foregroundRoles,
   fillRoles,
   onboarding,
+  auth,
   type SemanticColors,
   type ShadowGeometry,
   type ShadowLevel,
   type ForegroundRole,
   type FillRole,
   type OnboardingTokens,
+  type AuthTokens,
 } from '@/theme';
 
 /**
@@ -54,11 +56,17 @@ export interface Theme {
    * inventing a dark variant the design does not specify.
    */
   onboarding: OnboardingTokens;
+  /**
+   * Figma authentication tokens. Scheme-independent for the same reason as
+   * `onboarding`: the sign-in boards are drawn light-only.
+   */
+  auth: AuthTokens;
 }
 
 const shared = {
   typography,
   onboarding,
+  auth,
   spacing,
   layout,
   radius,

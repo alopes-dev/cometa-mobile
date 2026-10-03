@@ -40,9 +40,29 @@ const DELIVERY_ADDRESS = 'Talatona, Luanda';
 export type HomeScreenProps = {
   /** Opens the search screen (frame 48:20081), which is where searching happens. */
   onPressSearch?: () => void;
+  /** Opens a restaurant's detail screen (frame 48:20601). */
+  onPressRestaurant?: (id: string) => void;
+  /** Opens tracking for the order in flight. */
+  onPressActiveOrder?: () => void;
+  /** Opens the cart. */
+  onPressCart?: () => void;
+  /** Opens the notification centre. */
+  onPressNotifications?: () => void;
+  /** "Ver todos" on a restaurant section — opens the full, filterable list. */
+  onPressAllRestaurants?: () => void;
+  /** "Ver todos" on the offers section. */
+  onPressOffers?: () => void;
 };
 
-export function HomeScreen({ onPressSearch = () => {} }: HomeScreenProps = {}) {
+export function HomeScreen({
+  onPressSearch = () => {},
+  onPressRestaurant,
+  onPressActiveOrder = () => {},
+  onPressCart,
+  onPressNotifications,
+  onPressAllRestaurants,
+  onPressOffers,
+}: HomeScreenProps = {}) {
   const insets = useSafeAreaInsets();
   const { count: cartCount } = useCart();
 
@@ -72,9 +92,10 @@ export function HomeScreen({ onPressSearch = () => {} }: HomeScreenProps = {}) {
       footnote={options?.footnote}
       isFavorite={favoriteIds.has(restaurant.id)}
       onToggleFavorite={() => toggleFavorite(restaurant.id)}
-      // No restaurant detail route exists yet, so there is no hero to fly into.
-      enableHeroTransition={false}
-      onPress={() => {}}
+      // The detail screen opens with a hero that receives the card's image,
+      // so the ghost has somewhere to land.
+      enableHeroTransition={Boolean(onPressRestaurant)}
+      onPress={() => onPressRestaurant?.(restaurant.id)}
     />
   );
 
@@ -107,7 +128,12 @@ export function HomeScreen({ onPressSearch = () => {} }: HomeScreenProps = {}) {
         }}
       >
         <Gutter>
-          <DiscoverHeader address={DELIVERY_ADDRESS} cartCount={cartCount} />
+          <DiscoverHeader
+            address={DELIVERY_ADDRESS}
+            cartCount={cartCount}
+            onPressCart={onPressCart}
+            onPressNotifications={onPressNotifications}
+          />
         </Gutter>
 
         <Gutter>
@@ -127,7 +153,7 @@ export function HomeScreen({ onPressSearch = () => {} }: HomeScreenProps = {}) {
 
         {activeOrder ? (
           <Gutter>
-            <ActiveOrderCard order={activeOrder} onPress={() => {}} />
+            <ActiveOrderCard order={activeOrder} onPress={onPressActiveOrder} />
           </Gutter>
         ) : null}
 
@@ -148,14 +174,22 @@ export function HomeScreen({ onPressSearch = () => {} }: HomeScreenProps = {}) {
 
         <Section>
           <Gutter>
-            <SectionHeader title={home.forYou} actionLabel={home.seeAll} />
+            <SectionHeader
+              title={home.forYou}
+              actionLabel={home.seeAll}
+              onPressAction={onPressAllRestaurants}
+            />
           </Gutter>
           {renderCarousel(getForYouRestaurants())}
         </Section>
 
         <Section>
           <Gutter>
-            <SectionHeader title={home.popularNearby} actionLabel={home.seeAll} />
+            <SectionHeader
+              title={home.popularNearby}
+              actionLabel={home.seeAll}
+              onPressAction={onPressAllRestaurants}
+            />
           </Gutter>
           {renderCarousel(getPopularNearbyRestaurants())}
         </Section>
@@ -163,7 +197,7 @@ export function HomeScreen({ onPressSearch = () => {} }: HomeScreenProps = {}) {
         {limitedPromotion ? (
           <Section>
             <Gutter>
-              <SectionHeader title={home.offers} actionLabel={home.seeAll} />
+              <SectionHeader title={home.offers} actionLabel={home.seeAll} onPressAction={onPressOffers} />
             </Gutter>
             <Gutter>
               <PromoBanner promotion={limitedPromotion} />
@@ -174,7 +208,11 @@ export function HomeScreen({ onPressSearch = () => {} }: HomeScreenProps = {}) {
         {nearest ? (
           <Section>
             <Gutter>
-              <SectionHeader title={home.nearby} actionLabel={home.seeAll} />
+              <SectionHeader
+                title={home.nearby}
+                actionLabel={home.seeAll}
+                onPressAction={onPressAllRestaurants}
+              />
             </Gutter>
             <Gutter>{renderCard(nearest, 0)}</Gutter>
           </Section>
@@ -183,7 +221,11 @@ export function HomeScreen({ onPressSearch = () => {} }: HomeScreenProps = {}) {
         {lastOrder ? (
           <Section>
             <Gutter>
-              <SectionHeader title={home.orderAgain} actionLabel={home.seeAll} />
+              <SectionHeader
+                title={home.orderAgain}
+                actionLabel={home.seeAll}
+                onPressAction={onPressAllRestaurants}
+              />
             </Gutter>
             <Gutter>
               {renderCard(lastOrder.restaurant, 0, {
