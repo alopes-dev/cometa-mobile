@@ -21,8 +21,8 @@ export function ProductHero({
   onToggleFavorite,
 }: ProductHeroProps) {
   return (
-    <Wrapper topInset={topInset}>
-      <HeroImage source={source} contentFit="cover" />
+    <Wrapper>
+      <HeroImage source={source} topInset={topInset} contentFit="cover" />
       <Actions topInset={topInset}>
         <Pressable onPress={onBack} accessibilityRole="button" accessibilityLabel="Voltar" hitSlop={8}>
           <ActionShadow>

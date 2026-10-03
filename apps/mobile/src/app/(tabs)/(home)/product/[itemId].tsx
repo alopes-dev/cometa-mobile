@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
 import * as Haptics from 'expo-haptics';
 import { Text, TextField } from '@/components/design-system/atoms';
 import { useCart } from '@/hooks/useCart';
+import { useTabBarVisibility } from '@/hooks/useTabBarVisibility';
 import type { CartSelection } from '@/hooks/CartProvider';
 import { getMenuItemById } from '@/features/home/data';
 import { formatKwanza } from '@/features/home/format';
@@ -71,6 +72,7 @@ export default function ProductDetail() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { addItem, count: cartCount, subtotal: cartSubtotal } = useCart();
+  const { setIsTabBarHidden } = useTabBarVisibility();
 
   const item = useMemo(() => getMenuItemById(itemId), [itemId]);
   const groups = item?.modifierGroups ?? [];
@@ -87,6 +89,16 @@ export default function ProductDetail() {
   const addedTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => () => clearTimeout(addedTimeout.current), []);
+
+  // The board draws no tab bar over the product (frame 48:20693), and the
+  // floating cart would otherwise stack on top of one. Every other screen the
+  // purchase path pushes already hides it the same way.
+  useFocusEffect(
+    useCallback(() => {
+      setIsTabBarHidden(true);
+      return () => setIsTabBarHidden(false);
+    }, [setIsTabBarHidden])
+  );
 
   if (!item) {
     return (

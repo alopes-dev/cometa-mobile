@@ -1,20 +1,23 @@
 import { Image } from 'expo-image';
 import styled from 'styled-components/native';
 
-/**
- * The board draws an opaque status bar above the photograph rather than
- * letting the image run under it (frame 48:20694), so the safe area is a
- * padded white band and the image starts below it at its full 310px.
- */
-export const Wrapper = styled.View<{ topInset: number }>`
-  padding-top: ${({ topInset }) => topInset}px;
+export const Wrapper = styled.View`
   background-color: ${({ theme }) => theme.colors.background.primary};
 `;
 
-/** `Imagem` — node 48:20701. */
-export const HeroImage = styled(Image)`
+/**
+ * `Imagem` — node 48:20701.
+ *
+ * The board mocks an opaque status bar above the photograph (frame 48:20694),
+ * but the app hides the status bar outright (`<StatusBar hidden />` in the
+ * root layout), so reproducing that band would leave a dead white strip. The
+ * photograph runs to the top edge instead, the way the restaurant hero does,
+ * and the inset is added to its height so the 310px the board composes below
+ * the bar is still the 310px that sits below the notch.
+ */
+export const HeroImage = styled(Image)<{ topInset: number }>`
   width: 100%;
-  height: ${({ theme }) => theme.product.metrics.heroHeight}px;
+  height: ${({ theme, topInset }) => theme.product.metrics.heroHeight + topInset}px;
 `;
 
 /** `Ações` — node 48:20702, inset 18 from both edges and 12 below the bar. */
